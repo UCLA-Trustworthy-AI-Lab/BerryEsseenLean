@@ -1,0 +1,14 @@
+BerryEsseen.CurrentRecheck.bounded_extremizers_full_manuscript_statement (H : ClassicalBerryEsseenBounds)
+  (A : PublishedEsseenFixedLawAsymptotic) (hviol : ∀ (K : ℕ), ∃ n ≥ K, cE < extremalConstant n) :
+  ∃ n P t,
+    StrictMono n ∧
+      (∀ (j : ℕ),
+          2 ≤ n j ∧
+            signedRatio (P j) (n j - 1) (t j) = extremalConstant (n j) ∧
+              sSup (range (normalizedDiscrepancy (P j) (n j))) = extremalConstant (n j) ∧
+                cE < extremalConstant (n j) ∧
+                  1 ≤ thirdMoment (P j) ∧ thirdMoment (P j) < momentCutoff ∧ (P j).measure.support ⊆ Ioo (-10) 10) ∧
+        Tendsto (fun j => scaledDrop extremalConstant (n j)) atTop (𝓝 0)
+'BerryEsseen.CurrentRecheck.bounded_extremizers_full_manuscript_statement' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

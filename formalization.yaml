@@ -1,0 +1,352 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: v0.4
+project:
+  name: BerryEsseenLean
+  description: Lean 4 proofs of the eventual sharp Berry–Esseen bound, its explicit sample-size threshold,
+    and sharpness, conditional on explicitly stated literature results.
+  authors:
+  - Codex (AI-assisted formalization under the manuscript author’s direction)
+  license: Unspecified; no code distribution license has been selected.
+sources:
+- title: The Berry–Esseen Bound is Sharp for All Sufficiently Large Sample Sizes
+  authors:
+  - Hengzhi He
+  - Guang Cheng
+  id: https://arxiv.org/abs/2609.06358
+  type: preprint
+  relationship: formalizes
+  location: Bundled reference/aop-sample.tex; see docs/STATEMENT_MAP.md
+  note: The exact uploaded manuscript is the alignment target; see its SHA-256 in verification/release-check.json.
+- title: Moment-type estimates with asymptotically optimal structure for the accuracy of the normal approximation
+  authors:
+  - Irina Shevtsova
+  id: https://ami.uni-eszterhazy.hu/uploads/papers/finalpdf/AMI_39_from241to307.pdf
+  type: journal article
+  relationship: background
+  location: 2012, Corollary 4.18, printed p. 303
+- title: On the absolute constants in the Berry–Esseen inequality and its structural and nonuniform improvements
+  authors:
+  - Irina Shevtsova
+  id: https://www.mathnet.ru/eng/ia252
+  type: published results announcement
+  relationship: background
+  location: 2013, printed pp. 124–125
+- title: An optimal Berry–Esseen type theorem for integrals of smooth functions
+  authors:
+  - Lutz Mattner
+  - Irina Shevtsova
+  id: https://doi.org/10.30757/ALEA.v16-19
+  type: journal article
+  relationship: background
+  location: ALEA 16 (2019), printed p. 491, equations (1.5)–(1.8)
+  note: Published precise restatements of Esseen results; no claim of rechecking the original 1956 proof.
+- title: The optimal Berry-Esseen constant in the binomial case
+  authors:
+  - Jona Schulz
+  id: https://d-nb.info/1197702695/34
+  type: public doctoral dissertation
+  relationship: background
+  location: 2016, Theorem 1, printed p. 1
+- title: Optimal Transport, Old and New
+  authors:
+  - Cédric Villani
+  id: http://elenaher.dinauz.org/B07D.StFlour.pdf
+  type: author manuscript
+  relationship: background
+  location: 13 June 2008; Definition 6.8(i) and Theorem 6.9, printed p. 108; Remark 6.5 (6.3), printed
+    p. 107
+  note: Exact checked version identified in reference/villani-2008-source.json. These locators refer to
+    the 2008 manuscript.
+status:
+  scope: 361 mathematical modules; 31 named manuscript statement groups and 16 supplementary conjunct
+    endpoints; see docs/VERIFICATION.md for the source-to-interface review boundary.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms:
+  - propext
+  - Classical.choice
+  - Quot.sound
+  main_results:
+  - declaration: BerryEsseen.strict_main_theorem
+    file: BerryEsseen/StrictResults.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies:
+    - &id001
+      statement: ClassicalBerryEsseenBounds.structural
+      source: https://www.mathnet.ru/eng/ia252
+    - &id002
+      statement: ClassicalBerryEsseenBounds.remainder
+      source: https://ami.uni-eszterhazy.hu/uploads/papers/finalpdf/AMI_39_from241to307.pdf
+    - &id006
+      statement: PublishedEsseenFixedLawAsymptotic.limit
+      source: https://doi.org/10.30757/ALEA.v16-19
+    - &id003
+      statement: PublishedEsseenMoment.bound and equality
+      source: https://doi.org/10.30757/ALEA.v16-19
+    - &id004
+      statement: PublishedBernoulliBound.strict_bound
+      source: https://d-nb.info/1197702695/34
+    - &id005
+      statement: PublishedNonIIDBound.bound
+      source: https://www.mathnet.ru/eng/ia252
+    - statement: PublishedWassersteinThreeTopology.tendsto_iff
+      source: http://elenaher.dinauz.org/B07D.StFlour.pdf
+  - declaration: BerryEsseen.strict_explicit_theorem
+    file: BerryEsseen/StrictResults.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies:
+    - *id001
+    - *id002
+    - *id003
+    - *id004
+    - *id005
+    - statement: PublishedNonuniformBound.bound
+      source: https://www.mathnet.ru/eng/ia252
+    - statement: PublishedWassersteinDuality.eq_dual
+      source: http://elenaher.dinauz.org/B07D.StFlour.pdf
+  - declaration: BerryEsseen.strict_sharpness
+    file: BerryEsseen/StrictResults.lean
+    sorry_count: 0
+    axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    literature_dependencies:
+    - *id006
+automation:
+  methods:
+  - method: agent
+    framework: Codex
+    tool_setup: Lean 4.28.0, pinned mathlib, exact-type/axiom/proof-expression audits; scripts/verify.py
+  notes: Revised under the manuscript author’s instructions to follow the original proof routes.
+fidelity:
+  divergences: Probability-law formulation using actual convolutions, with no separate arbitrary-probability-space
+    iIndepFun wrapper. Literature inputs are explicitly parameterized standard reformulations. Some manuscript
+    conjunctions use several endpoints; the bounded-extremizers full-conjunction wrapper is in Checks/BoundedFullStatementAudit.lean.
+    See docs/ASSUMPTIONS.md and docs/STATEMENT_MAP.md.
+review:
+  status: agent-reviewed
+  notes: Lean compilation and executable audits plus separate mathematical source/alignment review. No
+    independent Comparator certificate or machine proof of equivalence with natural-language prose is
+    claimed. Fresh release evidence is in verification/release-check.json.
+alignment:
+  namespaces:
+  - BerryEsseen
+  statements:
+  - source: thm:main
+    lean: BerryEsseen.strict_main_theorem
+    module: BerryEsseen.StrictResults
+    status: proved conditional on the explicit parameters
+    conjuncts:
+    - endpoint: BerryEsseen.strict_explicit_theorem
+      source: BerryEsseen/StrictResults.lean
+      part: 原显式阈值
+    - endpoint: BerryEsseen.strict_sharpness
+      source: BerryEsseen/StrictResults.lean
+      part: 紧随主定理的最优性论证
+  - source: lem:signed-smoothing
+    lean: BerryEsseen.manuscript_signed_smoothing_sup
+    module: BerryEsseen.ManuscriptSignedSmoothing
+    status: proved conditional on the explicit parameters
+    conjuncts: []
+  - source: lem:jitter
+    lean: BerryEsseen.maximal_span_wassersteinThree_jitter_expansion
+    module: BerryEsseen.GeneralJitterExpansion
+    status: proved conditional on the explicit parameters
+    conjuncts: []
+  - source: rem:jitter-width
+    lean: BerryEsseen.raw_wassersteinThree_variable_jitter_expansion_at_raw
+    module: BerryEsseen.RawJitterWidth
+    status: proved conditional on the explicit parameters
+    conjuncts: []
+  - source: cor:jitter-envelopes
+    lean: BerryEsseen.wassersteinThree_jitter_envelopes
+    module: BerryEsseen.GeneralWassersteinEnvelopes
+    status: proved conditional on the explicit parameters
+    conjuncts:
+    - endpoint: BerryEsseen.wassersteinThree_jitter_limsup
+      source: BerryEsseen/GeneralWassersteinEnvelopes.lean
+      part: 原limsup结论
+  - source: lem:binomial-estimates
+    lean: BerryEsseen.manuscript_binomial_estimates
+    module: BerryEsseen.ManuscriptBinomialLemma
+    status: proved conditional on the explicit parameters
+    conjuncts: []
+  - source: prop:clusters
+    lean: BerryEsseen.manuscript_two_interval_cluster_stability
+    module: BerryEsseen.ManuscriptClusters
+    status: proved conditional on the explicit parameters
+    conjuncts: []
+  - source: lem:one-sided-loss
+    lean: BerryEsseen.manuscript_one_sided_loss
+    module: BerryEsseen.ManuscriptOneSidedLoss
+    status: proved conditional on the explicit parameters
+    conjuncts: []
+  - source: lem:small-cluster-variance
+    lean: BerryEsseen.manuscript_small_cluster_variance_original_parameters
+    module: BerryEsseen.ManuscriptSmallVarianceOriginalParameters
+    status: proved conditional on the explicit parameters
+    conjuncts: []
+  - source: lem:two-cluster-local-mass
+    lean: BerryEsseen.compact_centered_measure_local_mass
+    module: BerryEsseen.GeneralTwoClusterLocalMass
+    status: proved conditional on the explicit parameters
+    conjuncts: []
+  - source: lem:accumulated-cluster-variance
+    lean: BerryEsseen.general_cluster_macroscopic_gap
+    module: BerryEsseen.GeneralAccumulatedVariance
+    status: proved conditional on the explicit parameters
+    conjuncts:
+    - endpoint: BerryEsseen.accumulated_cluster_variance_tendsto_zero
+      source: BerryEsseen/GeneralAccumulatedVarianceCorollary.lean
+      part: 原Consequently结论
+  - source: lem:attainment
+    lean: BerryEsseen.manuscript_extremal_attainment_full
+    module: BerryEsseen.Attainment
+    status: proved conditional on the explicit parameters
+    conjuncts: []
+  - source: lem:selection
+    lean: BerryEsseen.manuscript_harmonic_selection
+    module: BerryEsseen.ManuscriptSelection
+    status: proved conditional on the explicit parameters
+    conjuncts: []
+  - source: lem:influence
+    lean: BerryEsseen.contamination_influence
+    module: BerryEsseen.RawInfluence
+    status: proved conditional on the explicit parameters
+    conjuncts:
+    - endpoint: BerryEsseen.influence_nonpos_at_extremizer
+      source: BerryEsseen/VariationalExtremizer.lean
+      part: 全域非正
+    - endpoint: BerryEsseen.influence_contact_at_extremizer
+      source: BerryEsseen/VariationalExtremizer.lean
+      part: 支撑上的零接触
+    - endpoint: BerryEsseen.influence_contact_equation
+      source: BerryEsseen/VariationalExtremizer.lean
+      part: 原接触等式
+  - source: lem:gaussian-expansion
+    lean: BerryEsseen.gaussianHn_uniform_remainder
+    module: BerryEsseen.GaussianCancellation
+    status: proved conditional on the explicit parameters
+    conjuncts:
+    - endpoint: BerryEsseen.gaussianHn_global_bound
+      source: BerryEsseen/GaussianCancellation.lean
+      part: 全域三次项加线性余项界
+    - endpoint: BerryEsseen.gaussianHn_uniform_limit
+      source: BerryEsseen/GaussianCancellation.lean
+      part: 紧集一致极限
+  - source: prop:bounded-extremizers
+    lean: BerryEsseen.manuscript_bounded_extremizing_sequence
+    module: BerryEsseen.BoundedExtremizers
+    status: proved conditional on the explicit parameters
+    conjuncts: []
+  - source: lem:limit-extremizer
+    lean: BerryEsseen.selected_extremizer_wassersteinThree_subsequence
+    module: BerryEsseen.GeneralSupportLimits
+    status: proved conditional on the explicit parameters
+    conjuncts: []
+  - source: lem:support-interval
+    lean: BerryEsseen.extremizer_support_limit_interval_general
+    module: BerryEsseen.GeneralSupportLimits
+    status: proved conditional on the explicit parameters
+    conjuncts: []
+  - source: lem:support-separation
+    lean: BerryEsseen.extremizer_support_limit_separation_general
+    module: BerryEsseen.GeneralSupportLimits
+    status: proved conditional on the explicit parameters
+    conjuncts: []
+  - source: lem:effective-selection
+    lean: BerryEsseen.effective_selection
+    module: BerryEsseen.EffectiveSelection
+    status: proved conditional on the explicit parameters
+    conjuncts: []
+  - source: lem:effective-low-frequency
+    lean: BerryEsseen.effectiveLowFrequencyIntegral_bound
+    module: BerryEsseen.EffectiveLowFrequencyIntegral
+    status: proved conditional on the explicit parameters
+    conjuncts:
+    - endpoint: BerryEsseen.effective_charFun_edgeworth_low_frequency
+      source: BerryEsseen/EffectiveLowFrequency.lean
+      part: 原0.61与0.048逐点误差界
+  - source: lem:effective-near-lattice
+    lean: BerryEsseen.effective_near_lattice
+    module: BerryEsseen.EffectiveNearLattice
+    status: proved conditional on the explicit parameters
+    conjuncts: []
+  - source: lem:effective-cluster-jitter
+    lean: BerryEsseen.effective_cluster_jitter
+    module: BerryEsseen.EffectiveClusterJitter
+    status: proved conditional on the explicit parameters
+    conjuncts: []
+  - source: lem:effective-binomial
+    lean: BerryEsseen.manuscript_effective_binomial_branches
+    module: BerryEsseen.ManuscriptBinomialTheorem
+    status: proved conditional on the explicit parameters
+    conjuncts:
+    - endpoint: BerryEsseen.manuscript_effective_binomial_mass_sup
+      source: BerryEsseen/ManuscriptBinomialTheorem.lean
+      part: 任意整数质量上确界
+    - endpoint: BerryEsseen.manuscript_effective_binomial_integer_central
+      source: BerryEsseen/ManuscriptBinomialTheorem.lean
+      part: 任意整数中央支
+    - endpoint: BerryEsseen.manuscript_effective_binomial_integer_wide
+      source: BerryEsseen/ManuscriptBinomialTheorem.lean
+      part: 任意整数宽区间支
+    - endpoint: BerryEsseen.manuscript_effective_binomial_constant_lower
+      source: BerryEsseen/ManuscriptBinomialTheorem.lean
+      part: 原常数下界
+  - source: lem:effective-small-variance
+    lean: BerryEsseen.manuscript_effective_small_variance
+    module: BerryEsseen.ManuscriptEffectiveSmallVariance
+    status: proved conditional on the explicit parameters
+    conjuncts:
+    - endpoint: BerryEsseen.manuscript_effective_small_variance_positive
+      source: BerryEsseen/ManuscriptEffectiveSmallVariance.lean
+      part: 原明确量化gap
+  - source: lem:effective-local-mass
+    lean: BerryEsseen.manuscript_effective_local_mass
+    module: BerryEsseen.ManuscriptLocalMass
+    status: proved conditional on the explicit parameters
+    conjuncts: []
+  - source: prop:effective-clusters
+    lean: BerryEsseen.manuscript_effective_cluster_stability
+    module: BerryEsseen.ManuscriptEffectiveClusters
+    status: proved conditional on the explicit parameters
+    conjuncts:
+    - endpoint: BerryEsseen.manuscript_effective_interval_stability_support
+      source: BerryEsseen/ManuscriptExplicitTheorem.lean
+      part: 原双区间与两种参数的结论
+  - source: lem:effective-lattice-stability
+    lean: BerryEsseen.effective_lattice_stability
+    module: BerryEsseen.EffectiveLatticeStability
+    status: proved conditional on the explicit parameters
+    conjuncts: []
+  - source: lem:effective-global-jitter
+    lean: BerryEsseen.effective_global_jitter
+    module: BerryEsseen.EffectiveGlobalJitter
+    status: proved conditional on the explicit parameters
+    conjuncts: []
+  - source: lem:effective-identification
+    lean: BerryEsseen.effective_identification_with_global_jitter
+    module: BerryEsseen.EffectiveIdentification
+    status: proved conditional on the explicit parameters
+    conjuncts: []
+  - source: prop:effective-confinement
+    lean: BerryEsseen.manuscript_effective_full_support
+    module: BerryEsseen.ManuscriptConfinement
+    status: proved conditional on the explicit parameters
+    conjuncts: []
+  supplementary_endpoint_index: notes/manuscript-endpoints.json
+  full_bounded_extremizers_statement:
+    declaration: BerryEsseen.CurrentRecheck.bounded_extremizers_full_manuscript_statement
+    file: Checks/BoundedFullStatementAudit.lean
+acknowledgements: Built with Lean, Lake, and mathlib. Repository organization was inspired by https://github.com/openai/NavierStokesAndEuler;
+  its theorem claims and independent-checker certificates are not part of this project.

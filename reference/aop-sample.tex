@@ -1,0 +1,3349 @@
+\documentclass[aop]{imsart}
+
+%% Packages required by the original manuscript and the AoP template.
+\RequirePackage{amsthm,amsmath,amsfonts,amssymb,mathtools}
+\RequirePackage[numbers]{natbib}
+\RequirePackage{microtype}
+\RequirePackage{xcolor}
+\RequirePackage[colorlinks=true,hyperfootnotes=false,linkcolor=blue!60!black,citecolor=blue,urlcolor=blue!60!black]{hyperref}
+\hypersetup{
+  pdftitle={The Berry--Esseen Bound is Sharp for All Sufficiently Large Sample Sizes}
+}
+
+\startlocaldefs
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+% The IMS class requires the definition style for remarks.
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\PP}{\mathbb P}
+\newcommand{\EE}{\mathbb E}
+\newcommand{\R}{\mathbb R}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Pthree}{\mathcal P_3}
+\newcommand{\ce}{c_{\mathrm E}}
+\newcommand{\pe}{p_{\mathrm E}}
+\newcommand{\qe}{q_{\mathrm E}}
+\newcommand{\se}{\sigma_{\mathrm E}}
+\newcommand{\be}{\beta_{\mathrm E}}
+\newcommand{\ke}{\kappa_{\mathrm E}}
+\newcommand{\Pe}{P_{\mathrm E}}
+\newcommand{\aE}{a_{\mathrm E}}
+\newcommand{\bE}{b_{\mathrm E}}
+\newcommand{\ind}{\mathbf 1}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\sinc}{sinc}
+
+\allowdisplaybreaks
+\endlocaldefs
+
+\begin{document}
+
+\begin{frontmatter}
+\title{The Berry--Esseen Bound is Sharp for All Sufficiently Large Sample Sizes}
+\runtitle{The Berry--Esseen Bound is Sharp for All Sufficiently Large Sample Sizes}
+
+\begin{aug}
+\author[A]{\fnms{Hengzhi}~\snm{He}
+  \ead[label=e1]{hengzhihe@ucla.edu}}
+\author[A]{\fnms{Guang}~\snm{Cheng}
+  \ead[label=e2]{guangcheng@ucla.edu}}
+\address[A]{Department of Statistics and Data Science,
+  University of California, Los Angeles
+  \printead[presep={,\ }]{e2,e1}}
+\end{aug}
+
+% Retain the original manuscript date; imsart does not print \date.
+
+
+\begin{abstract}
+We prove that the Esseen's constant $0.4097$ is sharp in the iid Berry--Esseen inequality as long as the sample sizes $n\ge N$. The threshold $N$ is universal over all real summand distributions with positive variance and a finite third absolute moment. In particular, one may take $N=2\left\lceil\exp(10^{17})\right\rceil.
+$
+\end{abstract}
+
+\begin{keyword}[class=MSC2020]
+\kwdgroup[type=primary]{\kwd{60F05}}
+\kwdgroup[type=secondary]{\kwd{60E15}}
+\end{keyword}
+
+\begin{keyword}
+\kwd{Berry--Esseen inequality}
+\kwd{Edgeworth expansion}
+\kwd{Esseen constant}
+\kwd{Extremal distributions}
+\kwd{Lattice distributions}
+\kwd{Normal approximation}
+\end{keyword}
+
+\end{frontmatter}
+
+% ===== introduction =====
+\section{Introduction}\label{sec:introduction}
+
+Let \(X_1,X_2,\ldots\) be independent identically distributed real random variables with mean zero, variance one and finite third absolute moment \(\beta=\EE|X_1|^3\). The Berry--Esseen theorem asserts that
+\begin{equation}\label{eq:berry-esseen}
+ \sup_{x\in\R}\left|
+ \PP\left\{\frac{X_1+\cdots+X_n}{\sqrt n}\le x\right\}-\Phi(x)
+ \right|\le C\frac{\beta}{\sqrt n}
+\end{equation}
+for an absolute constant \(C\), where \(\Phi\) is the standard normal distribution function~\cite{Berry1941,Esseen1942}. Determining the smallest possible constant $C$ in \eqref{eq:berry-esseen} is a classical problem in normal approximation. Esseen proved that any such constant is at least
+\begin{equation}\label{eq:ce}
+ \ce=\frac{3+\sqrt{10}}{6\sqrt{2\pi}}=0.4097321837\ldots,
+\end{equation}
+and identified the two-point distributions that attain this value asymptotically~\cite{Esseen1956}. 
+
+The conjecture is that \eqref{eq:berry-esseen} holds with \(C=\ce\)
+for every summand distribution and every positive integer \(n\) \cite{Zolotarev1966,ZolotukhinNagaevChebotarev2018}.
+We establish this bound for every sample size above a universal threshold.
+
+Earlier work on refining Berry--Esseen bounds and their remainder
+terms includes Prawitz~\cite{Prawitz1975} and Bentkus~\cite{Bentkus1994}.
+Esseen's fixed-distribution asymptotics were subsequently strengthened to uniform asymptotic results by Chistyakov~\cite{Chistyakov2002a,Chistyakov2002b,Chistyakov2003}; see also the account in Mattner and Shevtsova~\cite{MattnerShevtsova2019}. In the identically distributed case, a consequence of Shevtsova's estimates is
+\[
+ \Delta_n\le \ce\frac{\beta}{\sqrt n}+3\frac{\beta^2}{n},
+\]
+where \(\Delta_n\) denotes the left side of \eqref{eq:berry-esseen}~\cite[Corollary~4.18, p.~302]{Shevtsova2012}. For two-point distributions, Schulz proved the strict bound \(\Delta_n<\ce\beta/\sqrt n\) for every \(n\)~\cite[Theorem~1, p.~1]{Schulz2016}.
+Complementary analytic and computational estimates in the binomial
+case were developed in \cite{ZolotukhinNagaevChebotarev2018}.
+
+The Theorem below summarizes our main result of this paper. 
+\begin{theorem}\label{thm:main}
+There exists an integer \(N\ge1\) such that, for every probability distribution \(P\) with mean zero, variance one and finite third absolute moment \(\beta\), every integer \(n\ge N\), and independent random variables \(X_1,\ldots,X_n\) with common law \(P\),
+\[
+ \sup_{x\in\R}\left|
+ \PP\left\{\frac{X_1+\cdots+X_n}{\sqrt n}\le x\right\}-\Phi(x)
+ \right|
+ \le \ce\frac{\beta}{\sqrt n}.
+\]
+The integer \(N\) is independent of the summand distribution. In particular, one may take
+\begin{equation}\label{eq:explicit-threshold}
+ N=2\left\lceil\exp(10^{17})\right\rceil.
+\end{equation}
+\end{theorem}
+
+The theorem allows the summand distribution to vary with \(n\), and imposes no common bound on the third absolute moment. The coefficient \(\ce\) cannot be decreased, even if \(N\) is increased, because a fixed Esseen two-point distribution attains it in the limit. The explicit threshold \eqref{eq:explicit-threshold} is a sufficient bound, with no attempt at optimization. The sharp bound at all sample sizes remains a separate problem.
+
+The distinction between a uniform asymptotic bound and Theorem~\ref{thm:main} concerns arbitrarily small excesses above \(\ce\). A first-order asymptotic estimate does not exclude a sequence of distributions whose normalized errors approach \(\ce\) from above. Near an extremal two-point law, a distribution may also place arbitrarily little mass outside neighborhoods of the two principal atoms. Weak convergence, even together with convergence of third moments, does not control the locations of all such support points.
+
+Our proof uses the variational conditions at a maximizing distribution to control these points. Suppose that arbitrarily large sample sizes admit a violation, and let \(C_n\) be the largest normalized error at sample size \(n\). We select a sequence of violating indices for which \(n(C_{n-1}-C_n)_+\) tends to zero. An exact contamination derivative then bounds the supports of the corresponding maximizing distributions by one common compact interval. After taking a subsequence, a uniform smoothing expansion and Esseen's equality characterization identify the limiting distribution.
+
+The remaining argument concerns the support rather than only its limiting probability mass. At every support point of a maximizing law, the contamination derivative vanishes. Consequently, each such point determines a threshold at which the \((n-1)\)-fold convolution attains the same first-order error as the \(n\)-fold convolution. Equality in the uniform smoothing bound forces the probability of a neighboring interval shorter than the limiting lattice span to be negligible at order \(n^{-1/2}\). Two support points at a limiting distance strictly between zero and that span would contradict the difference of their variational identities. This separation property, together with a more precise support bound, forces the entire support into two small neighborhoods of the Esseen atoms. We complete the proof with an exact local comparison for arbitrary distributions supported in these two neighborhoods.
+
+The proof thus combines sample-size selection and variational contact to control the entire support, followed by a local comparison whose error terms are absorbed even when the conditional variance is arbitrarily small. This last comparison supplies an exact inequality beyond the first-order asymptotic information.
+
+Section~\ref{sec:smoothing} establishes the uniform smoothing expansion and its binomial consequences. Section~\ref{sec:clusters} proves the local two-cluster comparison. In Section~\ref{sec:extremizers}, we derive the variational identities and extract a sequence of maximizing laws with uniformly bounded support. Section~\ref{sec:completion} proves the separation property and the existence assertion in Theorem~\ref{thm:main}. Appendix~\ref{app:effective} gives quantitative versions of the required estimates and proves the explicit threshold \eqref{eq:explicit-threshold}.
+
+\subsection{Notation and classical estimates}\label{subsec:notation}
+
+Write \(\phi=\Phi'\) and \(\phi_0=\phi(0)\). Let \(\Pthree\) be the set of probability laws \(P\) on \(\R\) satisfying
+\[
+ \int x\,P(dx)=0,\qquad \int x^2\,P(dx)=1,
+ \qquad \beta(P):=\int |x|^3\,P(dx)<\infty.
+\]
+For an arbitrary law \(Q\) with mean \(m\), variance \(v>0\) and third absolute central moment \(\rho\), define
+\begin{equation}\label{eq:raw-normalization}
+\begin{split}
+ \Delta_n(Q)&=\sup_{t\in\R}
+ \left|Q^{*n}(({-\infty},t])-
+ \Phi\left(\frac{t-nm}{\sqrt{nv}}\right)\right|,\\
+ \beta(Q)&=\rho/v^{3/2},\qquad
+ R_n(Q)=\frac{\sqrt n\,\Delta_n(Q)}{\beta(Q)}.
+\end{split}
+\end{equation}
+These quantities are invariant under nonzero affine changes of the summands. For \(P\in\Pthree\), let \(F_{k,P}\) denote the distribution function of the unnormalized \(k\)-fold convolution \(P^{*k}\). Put
+\begin{equation}\label{eq:cn}
+ C_n=\sup_{P\in\Pthree}R_n(P)
+ =\sup_{P\in\Pthree,\,t\in\R}
+ \frac{\sqrt n\,[F_{n,P}(t)-\Phi(t/\sqrt n)]}{\beta(P)}.
+\end{equation}
+For the second equality, reflection converts a negative discrepancy into a limit of positive discrepancies, and \(\Phi\) is continuous. Throughout, distribution functions are right-continuous; a value at \(t-\) denotes the left limit. We use \(x_+=\max(x,0)\), and write \(\|f\|_\infty=\sup_x|f(x)|\).
+
+We write \(P_j\to P\) in \(W_3\) if the third Wasserstein distance tends to zero. Equivalently, \(P_j\) converges weakly to \(P\) and its third absolute moments converge. In particular, weak convergence of laws supported in one common compact interval implies \(W_3\) convergence.
+
+The estimates of Shevtsova that we use are
+\begin{equation}\label{eq:structural}
+ \Delta_n(P)\le\frac1{\sqrt n}
+ \min\{0.4690\beta(P),\;0.3031(\beta(P)+0.646)\}
+ \qquad(P\in\Pthree),
+\end{equation}
+and
+\begin{equation}\label{eq:asymptotic}
+ \Delta_n(P)\le \ce\frac{\beta(P)}{\sqrt n}
+                  +3\frac{\beta(P)^2}{n}.
+\end{equation}
+The first follows from~\cite[pp.~124--125]{Shevtsova2013}: for
+standardized iid summands, the quantities in that paper are
+\(\ell_n=\beta(P)/\sqrt n\) and \(\tau_n=1/\sqrt n\).
+The coefficient \(3\) in the second is a convenient enlargement of
+\(2.5786\) in~\cite[Corollary~4.18, p.~302]{Shevtsova2012}. We also use the usual Berry--Esseen inequality for independent, not necessarily identically distributed centered variables, with any finite universal constant; such a bound is included in~\cite{Shevtsova2013}.
+
+For \(P\in\Pthree\), let \(\kappa(P)=\int x^3\,P(dx)\). Let \(h(P)\) be its maximal lattice span when \(P\) is supported on a translate of a lattice, and put \(h(P)=0\) otherwise. Esseen's moment inequality and fixed-law asymptotic formula are
+\begin{equation}\label{eq:esseen-moment}
+ |\kappa(P)|+3h(P)\le(3+\sqrt{10})\beta(P),
+\end{equation}
+and
+\begin{equation}\label{eq:esseen-limit}
+ \lim_{n\to\infty}\sqrt n\,\Delta_n(P)
+ =\frac{\phi_0}{6}\bigl(|\kappa(P)|+3h(P)\bigr).
+\end{equation}
+See~\cite{Esseen1945,Esseen1956} and
+\cite[Section~1.1, equations~(1.5)--(1.9), p.~491]{MattnerShevtsova2019}. Equality in \eqref{eq:esseen-moment} holds exactly for the standardizations of the Bernoulli laws with parameters \(\pe\) and \(1-\pe\), where
+\begin{equation}\label{eq:esseen-parameters}
+ \pe=\frac{4-\sqrt{10}}2,\qquad \qe=1-\pe,
+ \qquad \se=\sqrt{\pe\qe}.
+\end{equation}
+We use the positive-skew representative
+\begin{equation}\label{eq:esseen-law}
+ \Pe=\qe\delta_{-\aE}+\pe\delta_{\bE},
+ \qquad \aE=\pe/\se,\quad \bE=\qe/\se.
+\end{equation}
+Its span is \(h_{\mathrm E}=1/\se=\aE+\bE\), and
+\begin{equation}\label{eq:esseen-identities}
+ \be=\frac{\pe^2+\qe^2}{\se},\qquad
+ \ke=\frac{\qe-\pe}{\se},\qquad
+ \int x|x|\,\Pe(dx)=\qe-\pe=\sqrt{10}-3.
+\end{equation}
+
+An immediate consequence of \eqref{eq:structural} is that every violation \(R_n(P)>\ce\) satisfies
+\begin{equation}\label{eq:moment-cutoff}
+ \beta(P)<B_*:=\frac{0.3031\cdot0.646}{\ce-0.3031}
+ =1.83624299\ldots.
+\end{equation}
+For \(\beta(P)\ge B_*\), the same bound already gives \(R_n(P)\le\ce\). For \(\beta(P)<B_*\), equation~\eqref{eq:asymptotic} gives \(R_n(P)\le\ce+3B_*/\sqrt n\). Since \eqref{eq:esseen-limit} applied to \(\Pe\) gives \(R_n(\Pe)\to\ce\), it follows that
+\begin{equation}\label{eq:cn-limit}
+ C_n\longrightarrow\ce,\qquad C_n\le0.4690.
+\end{equation}
+Constants denoted by \(C\) or \(c\) in estimates may change from line to line; their uniformity will be specified when it is needed.
+For a specified convergent array, an \(o(1)\) term is understood along
+that array and uniformly over the variables explicitly indicated.
+No common rate over all convergent arrays is asserted. In the
+finite-sample estimates below, the constants are uniform over the
+laws satisfying the stated fixed bounds.
+
+% ===== smoothing =====
+\section{Uniform smoothing along convergent arrays}\label{sec:smoothing}
+
+We first establish the expansion needed when the summand distribution varies
+with the sample size.  A single uniform random variable, added to the entire
+sum, eliminates the first-order lattice contribution.  Its width is determined
+by the limiting distribution, so the approximating distributions need not
+have a common lattice.  We use the Fourier convention
+\(\widehat\nu(t)=\int e^{itx}\,d\nu(x)\).
+
+For explicit finite-sample bounds on the distance to the first-order
+Edgeworth expansion under fourth-moment assumptions, see
+Derumigny, Girard and Guyonvarch~\cite{DerumignyGirardGuyonvarch2024}.
+
+\begin{lemma}\label{lem:signed-smoothing}
+Let \(F\) be the distribution function of a probability measure with finite
+first absolute moment.  Let \(\nu\) be a finite signed measure of total mass
+one such that \(\int |x|\,d|\nu|(x)<\infty\), and suppose that
+\(G(x)=\nu(( -\infty,x])\) is globally Lipschitz with constant \(M\).
+There are numerical constants \(C_1,C_2\) such that, for every \(L>0\),
+\begin{equation}\label{eq:signed-smoothing}
+ \|F-G\|_\infty
+ \le C_1\int_{-L}^{L}
+       \frac{|\widehat F(t)-\widehat\nu(t)|}{|t|}\,dt
+       +\frac{C_2M}{L}.
+\end{equation}
+Here \(\widehat F\) denotes the characteristic function of the probability
+measure associated with \(F\).
+\end{lemma}
+
+\begin{proof}
+Choose the even probability density
+\[
+ K(x)=c\left(\frac{\sin(x/4)}{x/4}\right)^4,
+ \qquad
+ c^{-1}=\int_{\R}\left(\frac{\sin(x/4)}{x/4}\right)^4dx.
+\]
+This density has a finite first absolute moment, and its characteristic
+function is supported in \([-1,1]\).  Indeed,
+\[
+ \frac{\sin(x/4)}{x/4}=2\int_{-1/4}^{1/4}e^{iux}\,du,
+\]
+so its fourth power is the Fourier transform of the convolution of four
+uniform densities on \([-1/4,1/4]\); Fourier inversion gives the asserted
+support.  Also \(|\widehat K|\le1\).  For \(Z\) with density \(K\), fix a
+numerical \(a>0\) such that
+\[
+ \varepsilon=\PP(Z>a)=\PP(Z<-a)<\tfrac14,
+ \qquad C_a=\EE(a-Z)_+<\infty.
+\]
+By symmetry, \(\EE(a+Z)_+=C_a\).
+
+Set \(K_L(y)=LK(Ly)\), \(d=F-G\), and
+\[
+ D_+=\sup_xd(x),\qquad D_-=\sup_x[-d(x)],\qquad
+ D=\max(D_+,D_-),\qquad R=\|d*K_L\|_\infty.
+\]
+The quantities \(D_+,D_-\) are nonnegative because \(d\) tends to zero at
+both infinities.  For \(y\ge x\), monotonicity of \(F\) and the Lipschitz
+bound for \(G\) give \(d(y)\ge d(x)-M(y-x)\).  Splitting the following
+expectation according to \(Z\le a\) consequently gives
+\[
+ \begin{split}
+ (d*K_L)(x+a/L)
+ &=\EE\,d\bigl(x+(a-Z)/L\bigr)\\
+ &\ge(1-\varepsilon)d(x)-\varepsilon D_- -MC_a/L.
+ \end{split}
+\]
+Taking a sequence of points at which \(d\) tends to \(D_+\) yields
+\[
+ (1-\varepsilon)D_+-\varepsilon D_-\le R+MC_a/L.
+\]
+Similarly, \(y\le x\) implies \(d(y)\le d(x)+M(x-y)\), and splitting
+according to \(Z\ge-a\) gives
+\[
+ (d*K_L)(x-a/L)
+ \le(1-\varepsilon)d(x)+\varepsilon D_++MC_a/L.
+\]
+Taking points at which \(d\) tends to \(-D_-\), we obtain
+\[
+ (1-\varepsilon)D_--\varepsilon D_+\le R+MC_a/L.
+\]
+Use the first inequality if \(D=D_+\) and the second if \(D=D_-\).  In
+either case,
+\[
+ (1-2\varepsilon)D\le R+MC_a/L.
+\]
+
+The moment assumptions imply \(d\in L^1(\R)\).  More explicitly, the
+\(L^1\) distance from a distribution function to the distribution function
+of the point mass at zero is its first absolute moment.  For the primitive
+of \(\nu\), the corresponding distance is at most
+\(\int|x|\,d|\nu|(x)\).  In the distributional sense \(d'=dF-\nu\), so
+\[
+ \widehat d(t)=\frac{\widehat\nu(t)-\widehat F(t)}{it},\qquad t\ne0.
+\]
+The numerator is \(O(|t|)\) near zero, since \(dF-\nu\) has total mass
+zero and a finite first absolute moment.  The Fourier transform of
+\(d*K_L\) is therefore integrable and supported in \([-L,L]\).  Fourier
+inversion, and continuity of this convolution, show that
+\[
+ R\le\frac1{2\pi}\int_{-L}^{L}
+             \frac{|\widehat F(t)-\widehat\nu(t)|}{|t|}\,dt.
+\]
+The result follows with
+\(C_1=[2\pi(1-2\varepsilon)]^{-1}\) and
+\(C_2=C_a/(1-2\varepsilon)\).
+\end{proof}
+
+For a nondegenerate lattice distribution, its maximal span is the largest
+\(h>0\) for which its support is contained in a translate of \(h\mathbb Z\).
+We assign span zero to a nonlattice distribution.  Convergence in \(W_3\)
+means convergence in the Wasserstein distance of order three.
+
+\begin{lemma}\label{lem:jitter}
+Let \(P_j\) be distributions of mean zero and variance one, and suppose
+that \(P_j\to P\) in \(W_3\).  Let \(n_j\to\infty\) be positive integers,
+and let \(X_{j,1},\ldots,X_{j,n_j}\) be independent with common law
+\(P_j\).  Write
+\[
+ S_j=\frac1{\sqrt{n_j}}\sum_{r=1}^{n_j}X_{j,r},\qquad
+ \mu_j=\int x^3\,dP_j(x).
+\]
+Let \(h\) be the maximal span of \(P\), with the convention just stated,
+and let \(U\), independent of the row, be uniform on \([-h/2,h/2]\);
+when \(h=0\), set \(U=0\).  Then
+\begin{equation}\label{eq:jitter-expansion}
+ \sup_{x\in\R}\left|
+ \PP\{S_j+U/\sqrt{n_j}\le x\}
+ -\Phi(x)-\frac{\mu_j}{6\sqrt{n_j}}(1-x^2)\phi(x)
+ \right|=o(n_j^{-1/2}).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Write \(n=n_j\) within the proof, and put
+\[
+\begin{aligned}
+ f_j(u)&=\int e^{iux}\,dP_j(x),&
+ f(u)&=\int e^{iux}\,dP(x),\\
+ q_j(u)&=|f_j(u)|^2,& q(u)&=|f(u)|^2.
+\end{aligned}
+\]
+The limit has mean zero and variance one, and \(\mu_j\to\mu=\int x^3dP\).
+Let
+\[
+ H(u)=\EE e^{iuU}=\sinc(hu/2),\qquad \sinc(0)=1,
+\]
+where \(\sinc(v)=\sin(v)/v\) for \(v\ne0\), and \(H\equiv1\) when \(h=0\).  The characteristic function of the
+jittered sum is
+\[
+ a_j(t)=H(t/\sqrt n)f_j(t/\sqrt n)^n.
+\]
+The approximation on the right side of \eqref{eq:jitter-expansion} has
+primitive, signed density, and Fourier transform
+\[
+ \begin{split}
+ G_j(x)&=\Phi(x)+\frac{\mu_j}{6\sqrt n}(1-x^2)\phi(x),\\
+ g_j(x)&=\phi(x)\left[1+\frac{\mu_j}{6\sqrt n}(x^3-3x)\right],\\
+ b_j(t)&=e^{-t^2/2}\left[1+\frac{\mu_j(it)^3}{6\sqrt n}\right].
+ \end{split}
+\]
+In particular, the signed measures \(g_j(x)dx\) have total mass one and
+finite first absolute moments, and \(\sup_j\|g_j\|_\infty<\infty\).
+
+Convergence in \(W_3\) implies bounded third absolute moments and their
+uniform integrability.  The elementary Taylor estimate
+\[
+ \left|e^{iy}-1-iy-\frac{(iy)^2}{2}-\frac{(iy)^3}{6}\right|
+ \le C|y|^3\min\{|y|,1\}
+\]
+therefore gives, uniformly in \(j\),
+\[
+ f_j(u)=1-u^2/2+\mu_j(iu)^3/6+r_j(u),
+ \qquad |r_j(u)|\le |u|^3\omega(|u|),
+\]
+where \(\omega\) is nondecreasing and \(\omega(r)\to0\) as \(r\downarrow0\).
+For example, one may take
+\[
+ \omega(r)=C\sup_j\EE\bigl[|X_{j,1}|^3
+                                  \min\{r|X_{j,1}|,1\}\bigr].
+\]
+Splitting this expectation at a fixed truncation level verifies the claimed
+limit by uniform integrability.  On a fixed sufficiently small interval
+\(|u|\le\delta\), the principal logarithms are defined and satisfy
+\[
+ \log f_j(u)=-u^2/2+\mu_j(iu)^3/6+\widetilde r_j(u),
+ \qquad
+ |\widetilde r_j(u)|\le |u|^3\widetilde\omega(|u|),
+\]
+where \(\widetilde\omega(r)\to0\).  The uniform \(O(u^4)\) error from
+taking the logarithm is absorbed into this modulus.  Reducing \(\delta\)
+if necessary gives
+\[
+ |f_j(u)|\le e^{-u^2/4},\qquad
+ \delta\widetilde\omega(\delta)\le\tfrac18,
+ \qquad |u|\le\delta.
+\]
+
+For \(|t|\le\delta\sqrt n\), set
+\[
+ z=\frac{\mu_j(it)^3}{6\sqrt n},\qquad
+ r=n\widetilde r_j(t/\sqrt n).
+\]
+Then \(z\) is purely imaginary and
+\[
+ |r|\le\frac{|t|^3}{\sqrt n}\widetilde\omega(|t|/\sqrt n)
+ \le t^2/8.
+\]
+Using \(|e^r-1|\le|r|e^{|r|}\) and
+\(|e^z-1-z|\le|z|^2/2\), we obtain
+\[
+ |f_j(t/\sqrt n)^n-b_j(t)|
+ \le Ce^{-ct^2}\left[
+ \frac{|t|^3}{\sqrt n}\widetilde\omega(|t|/\sqrt n)
+ +\frac{|t|^6}{n}\right].
+\]
+After multiplication by \(\sqrt n/|t|\), this bound converges pointwise
+to zero and is dominated by
+\(Ce^{-ct^2}[t^2\widetilde\omega(\delta)+|t|^5]\).  Dominated convergence
+thus gives
+\[
+ \int_{|t|\le\delta\sqrt n}
+   \frac{|f_j(t/\sqrt n)^n-b_j(t)|}{|t|}\,dt=o(n^{-1/2}).
+\]
+Moreover, \(|H(u)-1|\le h^2u^2/24\).  The additional contribution from
+\((H-1)f_j^n\) is at most
+\[
+ \frac{h^2}{24n}\int_{\R}|t|e^{-t^2/4}dt=O_h(n^{-1}),
+\]
+and is zero if \(h=0\).
+
+We next record the compact convergence needed away from zero.  Couple
+\(X_j\) with law \(P_j\) and \(X\) with law \(P\) so that
+\(X_j\to X\) in \(L^2\), and take an independent copy of these pairs.
+Then \(D_j=X_j-X'_j\to D=X-X'\) in \(L^2\), and
+\(D_j^2\to D^2\) in \(L^1\).  It follows that \(q_j\to q\) uniformly
+on every compact interval.  Also
+\[
+ q_j''(u)=-\EE[D_j^2\cos(uD_j)],
+\]
+and, for every fixed \(T<\infty\),
+\[
+ \sup_{|u|\le T}|q_j''(u)-q''(u)|
+ \le\EE|D_j^2-D^2|
+   +\EE\left[D^2\min\{2,T|D_j-D|\}\right]\longrightarrow0.
+\]
+For the second term, truncate the integrable factor \(D^2\) and use
+bounded convergence in probability for the remaining factor.  Thus this
+argument requires no fourth moments.
+
+The resonance set \(\{u:q(u)=1\}\) is a closed additive subgroup of
+\(\R\).  Indeed, equality in \(|\EE e^{iuX}|\le1\) means that
+\(e^{iuX}\) is almost surely constant, or equivalently that
+\(e^{iuD}=1\) almost surely.  Since \(q''(0)=-2\), zero is isolated in
+this subgroup.  The subgroup is therefore either \(\{0\}\) or
+\(a\mathbb Z\) for some \(a>0\).  In the latter case the distribution
+is supported on a translate of \((2\pi/a)\mathbb Z\); any other span
+\(d\) satisfies \(2\pi/d\in a\mathbb Z\), so \(d\le2\pi/a\).
+Consequently the nonlattice case has no nonzero resonances, and in the
+lattice case the resonances are exactly
+\[
+ u_k=2\pi k/h,\qquad k\in\mathbb Z.
+\]
+At each of them, \(q''(u_k)=-\EE D^2=-2\).
+
+Fix \(T>\delta\) whose endpoints are not resonances.  In the lattice
+case reduce \(\delta\), if necessary, so that zero is its only resonance.
+Around the finitely many nonzero resonances in \((-T,T)\), choose
+disjoint closed intervals \(I_k\), disjoint from \([-\delta,\delta]\)
+and contained in \((-T,T)\), such that \(q''\le-3/2\) throughout
+each \(I_k\).  The intervals may be chosen to contain no other
+resonances.  The compact convergence just proved gives \(q_j''\le-1\)
+on every \(I_k\) for all sufficiently large \(j\).
+
+Uniform convergence of \(q_j\) ensures that each \(I_k\) contains an
+interior maximizer \(u_{j,k}\) of \(q_j\): the value at \(u_k\)
+eventually exceeds both endpoint values.  Strict concavity makes the
+maximizer unique, and uniform convergence gives \(u_{j,k}\to u_k\).
+Taylor's theorem at this maximizer gives
+\[
+ q_j(u)\le q_j(u_{j,k})-\tfrac12(u-u_{j,k})^2
+        \le1-\tfrac12(u-u_{j,k})^2,
+\]
+whence
+\[
+ |f_j(u)|^n\le e^{-n(u-u_{j,k})^2/4},\qquad u\in I_k.
+\]
+At every nonzero limiting resonance, \(H(u_k)=\sinc(\pi k)=0\).
+The bound \(|H(u)-H(v)|\le(h/4)|u-v|\) therefore yields
+\[
+ \begin{split}
+ \int_{I_k}\frac{|H(u)||f_j(u)|^n}{|u|}\,du
+ &\le C\int_{\R}
+       \bigl(|u-u_{j,k}|+|u_{j,k}-u_k|\bigr)
+       e^{-n(u-u_{j,k})^2/4}\,du\\
+ &\le C\left(n^{-1}+|u_{j,k}-u_k|n^{-1/2}\right)
+   =o(n^{-1/2}).
+ \end{split}
+\]
+Only convergence of the displaced maxima is used; no rate is required.
+
+On the compact set \(\delta\le|u|\le T\) outside the interiors of
+these intervals, \(q\le1-\kappa\) for some \(\kappa>0\).
+Uniform convergence makes its contribution exponentially small in \(n\).
+When \(h=0\), the same statement holds on the entire compact set away
+from zero, and there are no resonance intervals to consider.  The
+Gaussian factor in \(b_j\) also gives
+\[
+ \int_{\delta\sqrt n\le|t|\le T\sqrt n}
+      \frac{|b_j(t)|}{|t|}\,dt=o(n^{-1/2}).
+\]
+Changing variables \(t=u\sqrt n\) in the other term and combining
+these estimates with the estimate near zero, we have proved that, for
+every fixed such \(T\),
+\begin{equation}\label{eq:compact-fourier-jitter}
+ \int_{-T\sqrt n}^{T\sqrt n}
+       \frac{|a_j(t)-b_j(t)|}{|t|}\,dt=o(n^{-1/2}).
+\end{equation}
+
+Apply Lemma~\ref{lem:signed-smoothing} with \(L=T\sqrt n\), the
+distribution function of the jittered sum, and the signed measure with
+density \(g_j\).  Since \(M=\sup_j\|g_j\|_\infty<\infty\),
+\eqref{eq:compact-fourier-jitter} gives
+\[
+ \limsup_j\sqrt{n_j}\,
+ \left\|\PP\{S_j+U/\sqrt{n_j}\le\cdot\}-G_j\right\|_\infty
+ \le C_2M/T.
+\]
+The constant on the right is independent of \(T\).  Letting \(T\)
+tend to infinity through nonresonant endpoints proves
+\eqref{eq:jitter-expansion}.  All spectral gaps and index thresholds
+above were needed only for each fixed \(T\); no interchange of the
+two limits has been made.
+\end{proof}
+
+\begin{remark}\label{rem:jitter-width}
+The conclusion of Lemma~\ref{lem:jitter} remains valid if the jitter
+width is \(h_j\ge0\) with \(h_j\to h\).  To see this, use a common
+\(V\), uniform on \([-1/2,1/2]\), for the jitters \(hV\) and
+\(h_jV\).  Their standardized difference is at most
+\(|h_j-h|/(2\sqrt{n_j})\).  The distribution functions are consequently
+bounded by shifts of each other, and the uniformly bounded derivatives
+of \(G_j\), together with \eqref{eq:jitter-expansion}, give an additional
+error \(O(|h_j-h|/\sqrt{n_j})=o(n_j^{-1/2})\).
+
+In particular, suppose that unstandardized laws \(Q_j\to Q\) in
+\(W_3\), where \(Q\) has positive variance, and write their means and
+standard deviations as \(m_j\) and \(\sigma_j\).  If \(d\) is the
+maximal span of \(Q\), with \(d=0\) in the nonlattice case, a single
+jitter of raw width \(d_j\to d\) has standardized width
+\(d_j/\sigma_j\to d/\sigma\).  Thus the same expansion applies after
+centering the sum by \(n_jm_j\) and dividing by
+\(\sigma_j\sqrt{n_j}\).  This observation also covers \(d=0\).
+\end{remark}
+
+\begin{corollary}\label{cor:jitter-envelopes}
+Under the assumptions of Lemma~\ref{lem:jitter}, let
+\(F_j(x)=\PP(S_j\le x)\).  Uniformly in \(x\in\R\),
+\begin{align}
+ F_j(x)-\Phi(x)
+ &\le\frac1{\sqrt{n_j}}
+       \left[\frac h2+\frac{\mu_j}{6}(1-x^2)\right]\phi(x)
+       +o(n_j^{-1/2}),\label{eq:jitter-upper}\\
+ F_j(x)-\Phi(x)
+ &\ge\frac1{\sqrt{n_j}}
+       \left[-\frac h2+\frac{\mu_j}{6}(1-x^2)\right]\phi(x)
+       +o(n_j^{-1/2}).\label{eq:jitter-lower}
+\end{align}
+Consequently, with \(\mu=\int x^3dP(x)\),
+\begin{equation}\label{eq:triangular-upper}
+ \limsup_j\sqrt{n_j}\,\|F_j-\Phi\|_\infty
+ \le\frac{|\mu|+3h}{6\sqrt{2\pi}}.
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+Let \(J_j\) be the distribution function in
+\eqref{eq:jitter-expansion}, and put \(a_j=h/(2\sqrt{n_j})\).
+Bounded support of the jitter gives
+\[
+ J_j(x-a_j)\le F_j(x)\le J_j(x+a_j).
+\]
+Uniform Taylor expansion of \(G_j(x\pm a_j)\), using boundedness of
+\(\Phi''\) and of the derivative of \((1-x^2)\phi(x)\), gives
+\eqref{eq:jitter-upper} and \eqref{eq:jitter-lower}, with a Taylor
+error \(O_h(n_j^{-1})\).  This also applies with \(a_j=0\).
+Finally,
+\[
+ \sup_x\phi(x)=\sup_x|1-x^2|\phi(x)=(2\pi)^{-1/2},
+\]
+and \(\mu_j\to\mu\), proving \eqref{eq:triangular-upper}.
+\end{proof}
+
+We record the binomial consequences, including the parameter uniformity
+that will be used below.  For a Bernoulli random variable \(B_p\) with
+success probability \(p\), put
+\[
+ q=1-p,\qquad v=pq,\qquad \tau=p^2+q^2,\qquad d=1-2p.
+\]
+Its standardized third absolute moment is
+\(\beta(B_p)=\tau/\sqrt v\), and its standardized third moment is
+\(d/\sqrt v\).
+
+\begin{lemma}\label{lem:binomial-estimates}
+Fix a compact interval \(I\subset(0,1)\).  Let \(K\sim\mathrm{Bin}(n,p)\)
+with \(p\in I\), and define
+\[
+ b_{n,k}(p)=\PP(K=k),\qquad F_{n,p}(k)=\PP(K\le k),\qquad
+ z_k=\frac{k-np}{\sqrt{nv}},\qquad k\in\mathbb Z.
+\]
+There is a constant \(C_I\) such that
+\begin{equation}\label{eq:binomial-mass-bound}
+ \sup_{p\in I}\sup_{k\in\mathbb Z}b_{n,k}(p)
+ \le C_I n^{-1/2},\qquad n\ge1.
+\end{equation}
+As \(n\to\infty\), uniformly over \(p\in I\) and \(k\in\mathbb Z\),
+\begin{equation}\label{eq:binomial-local}
+ b_{n,k}(p)=\frac{\phi(z_k)}{\sqrt{nv}}+o(n^{-1/2}).
+\end{equation}
+In particular, for every fixed \(M<\infty\),
+\[
+ \sup_{\substack{p\in I,\ k\in\mathbb Z\\ |z_k|\le M}}
+ \left|
+ \frac{\sqrt{np(1-p)}\,b_{n,k}(p)}{\phi(z_k)}-1
+ \right|\longrightarrow0.
+\]
+
+Define the normalized discrepancies at the two sides of a jump by
+\[
+ \begin{split}
+ R^+_{n,k}(B_p)
+ &=\frac{\sqrt n}{\beta(B_p)}
+        [F_{n,p}(k)-\Phi(z_k)],\\
+ R^-_{n,k}(B_p)
+ &=\frac{\sqrt n}{\beta(B_p)}
+        [\Phi(z_k)-F_{n,p}(k-1)].
+ \end{split}
+\]
+Then, uniformly over the same parameter and index sets,
+\begin{equation}\label{eq:binomial-envelopes}
+ R^\pm_{n,k}(B_p)=A_p^\pm(z_k)+o(1),
+\end{equation}
+where
+\[
+ A_p^+(z)=\frac{\phi(z)}{6\tau}(3+d-dz^2),\qquad
+ A_p^-(z)=\frac{\phi(z)}{6\tau}(3-d+dz^2).
+\]
+These functions tend uniformly to zero as \(|z|\to\infty\), for
+\(p\in I\).  If \(k\) is an integer nearest to \(np\), then
+\begin{equation}\label{eq:binomial-central-branch}
+ R^+_{n,k}(B_p)=g(p)+o(1),\qquad
+ g(p)=\frac{\phi(0)(2-p)}{3[p^2+(1-p)^2]},
+\end{equation}
+uniformly over \(p\in I\).
+\end{lemma}
+
+\begin{proof}
+Fourier inversion of the binomial polynomial gives
+\[
+ b_{n,k}(p)\le\frac1{2\pi}\int_{-\pi}^{\pi}|q+pe^{it}|^n\,dt.
+\]
+Since
+\[
+ |q+pe^{it}|^2=1-4v\sin^2(t/2),\qquad
+ \sin(|t|/2)\ge |t|/\pi\quad (|t|\le\pi),
+\]
+the integral is bounded by
+\[
+ \frac1{2\pi}\int_{\R}e^{-2nvt^2/\pi^2}dt
+ \le C_I n^{-1/2},
+\]
+proving \eqref{eq:binomial-mass-bound}.
+
+Let \(H_0\), independent of \(K\), be uniform on \([-1/2,1/2]\), and
+write
+\[
+ \mathcal J_{n,p}(x)=
+ \PP\left\{\frac{K-np+H_0}{\sqrt{nv}}\le x\right\}.
+\]
+Lemma~\ref{lem:jitter} and Remark~\ref{rem:jitter-width} give
+\begin{equation}\label{eq:binomial-jitter}
+ \mathcal J_{n,p}(x)
+ =\Phi(x)+\frac{d}{6\sqrt{nv}}(1-x^2)\phi(x)
+   +o(n^{-1/2}),
+\end{equation}
+uniformly in \(x\in\R\) and \(p\in I\).  To justify the latter
+uniformity, if it failed there would be \(n_j\to\infty\) and
+\(p_j\in I\) for which the scaled supremum error stayed bounded away
+from zero.  A subsequence has \(p_j\to p\in I\).  The standardized
+Bernoulli laws then converge in \(W_3\), and their standardized jitter
+widths \(1/\sqrt{p_j(1-p_j)}\) tend to the maximal span of the limit.
+The lemma and the remark give a contradiction.
+
+The uniform jitter gives the exact identities, for every integer \(k\),
+\[
+ F_{n,p}(k)=\mathcal J_{n,p}
+       \left(z_k+\frac1{2\sqrt{nv}}\right),\qquad
+ F_{n,p}(k-1)=\mathcal J_{n,p}
+       \left(z_k-\frac1{2\sqrt{nv}}\right).
+\]
+Taylor expansion in \eqref{eq:binomial-jitter}, with bounded Gaussian
+derivatives and \(v\) bounded away from zero, consequently gives,
+uniformly over all \(p\in I\) and \(k\in\mathbb Z\),
+\[
+ \begin{split}
+ F_{n,p}(k)-\Phi(z_k)
+ &=\frac{\phi(z_k)}{\sqrt{nv}}
+       \left[\frac12+\frac d6(1-z_k^2)\right]+o(n^{-1/2}),\\
+ \Phi(z_k)-F_{n,p}(k-1)
+ &=\frac{\phi(z_k)}{\sqrt{nv}}
+       \left[\frac12-\frac d6(1-z_k^2)\right]+o(n^{-1/2}).
+ \end{split}
+\]
+Adding these two equations proves \eqref{eq:binomial-local}, including
+its relative version on each fixed central window.  Multiplication
+by \(\sqrt n/\beta(B_p)\) proves
+\eqref{eq:binomial-envelopes}.  The claimed uniform tail decay follows
+from the Gaussian factor and the lower bound on \(\tau\).  Finally, an
+integer nearest to \(np\) has \(z_k=O_I(n^{-1/2})\), so
+\(A_p^+(z_k)=A_p^+(0)+o(1)=g(p)+o(1)\), proving
+\eqref{eq:binomial-central-branch}.
+\end{proof}
+
+% ===== clusters =====
+\section{Stability near the Esseen two-point law}
+\label{sec:clusters}
+
+We prove an exact inequality for laws supported in two sufficiently small
+intervals around the atoms of the Esseen law. The conditional distributions
+inside these intervals may be arbitrary and may differ between the two
+intervals.
+
+\begin{proposition}\label{prop:clusters}
+There exist $\eta\in(0,1/4)$ and $N<\infty$ such that, whenever a law $Q$
+satisfies
+\[
+ \supp Q\subset[-\eta,\eta]\cup[1-\eta,1+\eta],\qquad
+ \bigl|Q([1-\eta,1+\eta])-\pe\bigr|<\eta,
+\]
+one has $R_n(Q)\le\ce$ for every integer $n\ge N$.
+The same assertion holds with $\pe$ replaced by $1-\pe$.
+\end{proposition}
+
+The proof separates small and macroscopic accumulated conditional
+variance. In the first regime we compare directly with the Bernoulli law;
+in the second, smoothing gives a strict first-order deficit.
+
+\begin{lemma}\label{lem:one-sided-loss}
+There exist absolute constants $c_0,C,\kappa>0$ such that, for every centered
+real random variable $W$ with $\EE W^4\le\kappa$ and every continuously
+differentiable function $f$ on $[-3/5,3/5]$ satisfying
+$f(0)=0$ and $3/4\le f'\le5/4$, one has, for $|u|\le1/2$,
+\begin{align}
+ \PP(W>u)+f(u)&\ge c_0\EE|W|-C\EE W^4,
+ \label{eq:loss-upper}\\
+ \PP(W<u)-f(u)&\ge c_0\EE|W|-C\EE W^4.
+ \label{eq:loss-lower}
+\end{align}
+\end{lemma}
+
+\begin{proof}
+First suppose that $V$ is centered and $|V|\le a=1/10$.
+We claim that $\PP(V>u)+f(u)\ge(3/8)\EE|V|$ for
+$|u|\le11/20$. For $u\ge0$, use
+$\EE V_+\le u+a\PP(V>u)$ and $f(u)\ge3u/4$.
+For $u=-r$, $0<r\le a$, put $t=\PP(V>-r)$. Centering gives
+$0\le at-r(1-t)$, hence $r\le2at$, and therefore
+\[
+ t+f(-r)\ge t-\tfrac54r\ge\tfrac34t
+ \ge\tfrac34\EE V_+=\tfrac38\EE|V|.
+\]
+For $a<r\le11/20$, the probability is one and
+$1+f(-r)\ge5/16\ge(3/8)\EE|V|$. These estimates include atoms at
+the threshold with the strict-event convention displayed above.
+
+For general $W$, clip at $a_0=1/20$, writing
+$T=\max(-a_0,\min(W,a_0))$, $m=\EE T$, $V=T-m$, and $M_4=\EE W^4$.
+Then
+\[
+ |m|\le a_0^{-3}M_4,\qquad
+ \PP(T\ne W)\le a_0^{-4}M_4,\qquad
+ \EE|V|\ge\EE|W|-2a_0^{-3}M_4.
+\]
+Take $\kappa$ small enough that $|m|\le1/20$. Thus $|V|\le1/10$,
+$|u-m|\le11/20$, and
+\[
+ \PP(W>u)\ge\PP(V>u-m)-\PP(T\ne W),\qquad
+ |f(u)-f(u-m)|\le\tfrac54|m|.
+\]
+Applying the bounded-variable estimate at $u-m$ proves
+\eqref{eq:loss-upper}. Apply it to $-W$ and $g(x)=-f(-x)$ at $-u$
+to obtain \eqref{eq:loss-lower}.
+\end{proof}
+
+\begin{lemma}\label{lem:small-cluster-variance}
+There exist a compact interval $I\subset(0,1/2)$ containing $\pe$ in its
+interior, constants $\epsilon_0,\lambda_0>0$, and $N_0<\infty$ with
+the following property. Let $B\sim\mathrm{Bernoulli}(p)$, $p\in I$,
+and suppose
+\[
+ Y=B+U,\qquad \EE(U\mid B)=0,\qquad |U|\le\epsilon_0.
+\]
+If $n\ge N_0$ and $n\EE U^2\le\lambda_0$, then
+\[
+ R_n(Y)\le R_n(B)<\ce.
+\]
+The first inequality is strict when $\EE U^2>0$.
+\end{lemma}
+
+\begin{proof}
+Start with a fixed compact interval $I_*$ around $\pe$ inside
+$(0,1/2)$. All estimates below initially hold for $p\in I_*$;
+at the end we choose the interval $I\subset I_*$. Write
+\[
+ q=1-p,\quad v=pq,\quad \tau=p^2+q^2,\quad
+ s_b=\EE(U^2\mid B=b),\quad s=qs_0+ps_1,\quad\lambda=ns.
+\]
+All sample pairs $(B_i,U_i)$ are independent copies of $(B,U)$.
+Conditional centering gives $\EE Y=p$ and $\Var Y=v+s$.
+Choose $\epsilon_0<\inf_{p\in I_*}\min(p,q)$. The signs within the two
+clusters are then fixed relative to the mean, and cubic expansion gives
+\begin{equation}\label{eq:cluster-third-moment}
+ \rho:=\EE|Y-p|^3
+ =v\tau+q\{3ps_0-\EE(U^3\mid B=0)\}
+       +p\{3qs_1+\EE(U^3\mid B=1)\}.
+\end{equation}
+In particular, $|\rho-v\tau|\le Cs$ uniformly over the conditional laws.
+
+Let $K=\sum_{i=1}^nB_i$, $b_k=\PP(K=k)$, and let $F_B$ be its CDF.
+Conditional on $K=k$, the sum of the $Y_i$ has the law of $k+W_k$,
+where $W_k$ can be represented as the sum of $n-k$ independent copies of
+the conditional law $U\mid B=0$ and $k$ independent copies of
+$U\mid B=1$. Indeed, conditioning first on the whole label vector
+gives this convolution for every vector with $k$ ones. This assertion
+concerns the law of the sum; it requires no independence of $B$ and $U$.
+Put $t_k=\EE W_k^2$. Uniformly for $0\le k\le n$,
+\begin{equation}\label{eq:cluster-fourth-moment}
+ t_k=(n-k)s_0+ks_1\le C\lambda,\qquad
+ \EE W_k^4\le3t_k^2+\epsilon_0^2t_k
+ \le C\lambda(\lambda+\epsilon_0^2)=:M_4^*.
+\end{equation}
+The fourth-moment inequality follows by expanding the fourth power of
+a sum of independent centered variables.
+For $z_k=(k-np)/\sqrt{nv}$ in any fixed interval $[-M,M]$,
+\[
+ |t_k-\lambda|=|k-np|\,|s_1-s_0|
+ \le C_M\lambda/\sqrt n.
+\]
+Thus, for $\lambda>0$ and sufficiently large $n$, interpolation gives
+\begin{equation}\label{eq:cluster-absolute-loss}
+ \EE|W_k|\ge\frac{t_k^{3/2}}{(\EE W_k^4)^{1/2}}
+ \ge\frac{t_k}{\sqrt{3t_k+\epsilon_0^2}}
+ \ge\frac{c_M\lambda}{\sqrt{C\lambda+\epsilon_0^2}}.
+\end{equation}
+
+We next compare distribution functions at an arbitrary real threshold.
+Choose $x=k+u$, $k\in\mathbb Z$, $|u|\le1/2$, and denote by $F$ the
+CDF of $\sum_iY_i$. For $0\le k\le n$,
+\begin{align}
+ F(k+u)&=F_B(k-1)+b_k\PP(W_k\le u)+e^+_{k,u},
+ \label{eq:cluster-right-block}\\
+ F((k+u)-)&=F_B(k-1)+b_k\PP(W_k<u)+e^-_{k,u}.
+ \label{eq:cluster-left-block}
+\end{align}
+A block $j\ne k$ can change its unperturbed inclusion status only if
+$|W_j|\ge|j-k|-1/2$. Lemma~\ref{lem:binomial-estimates} and
+\eqref{eq:cluster-fourth-moment} therefore imply
+\begin{equation}\label{eq:cluster-leakage}
+ |e^\pm_{k,u}|\le
+ \sum_{j\ne k}\frac{b_j\EE W_j^4}{(|j-k|-1/2)^4}
+ \le\frac{CM_4^*}{\sqrt n}.
+\end{equation}
+The sum of reciprocal fourth powers is bounded independently of $k,n$.
+These inequalities include atoms and either choice at a half-integer.
+For $k<0$ or $k>n$, the same estimate holds without a main block, with
+baseline zero or one, respectively.
+
+Consider first $|z_k|\le M$, and put
+\[
+ G_k(u)=\Phi\left(\frac{k-np+u}{\sqrt{n(v+s)}}\right),\qquad
+ f_k(u)=\frac{G_k(u)-G_k(0)}{b_k}.
+\]
+The central local limit estimate in Lemma~\ref{lem:binomial-estimates},
+together with $s\le\lambda_0/n$, gives $G'_k(u)/b_k=1+o(1)$ uniformly
+for $|z_k|\le M$ and $|u|\le3/5$. For all sufficiently large $n$,
+$3/4\le f'_k\le5/4$. We use this estimate only to bound the derivative,
+so it produces no additive approximation error. Take
+$\lambda_0,\epsilon_0$ small enough that $M_4^*\le\kappa$.
+Lemma~\ref{lem:one-sided-loss}, applied in
+\eqref{eq:cluster-right-block}--\eqref{eq:cluster-left-block}, gives
+\begin{align*}
+ F(k+u)-G_k(u)
+ &\le F_B(k)-G_k(0)-cb_k\EE|W_k|
+       +Cb_k\EE W_k^4+CM_4^*/\sqrt n,\\
+ G_k(u)-F((k+u)-)
+ &\le G_k(0)-F_B(k-1)-cb_k\EE|W_k|
+       +Cb_k\EE W_k^4+CM_4^*/\sqrt n.
+\end{align*}
+Multiply by $\sqrt n(v+s)^{3/2}/\rho$. Since $\sqrt n b_k$ is bounded
+above and below on the central interval, each resulting branch is at
+most
+\begin{equation}\label{eq:cluster-central-comparison}
+ \widetilde R^\pm_{n,k}
+ -\frac{c_M\lambda}{\sqrt{C\lambda+\epsilon_0^2}}
+ +C_M\lambda(\lambda+\epsilon_0^2),
+\end{equation}
+where $\widetilde R^\pm_{n,k}$ is the corresponding binomial branch
+with Gaussian variance $v+s$ and prefactor $(v+s)^{3/2}/\rho$.
+
+For every $k$ the change of this branch is bounded by
+\begin{equation}\label{eq:cluster-normalization-error}
+ \widetilde R^\pm_{n,k}
+ \le R^\pm_{n,k}(B_p)+C\sqrt n\,s
+ =R^\pm_{n,k}(B_p)+C\lambda/\sqrt n.
+\end{equation}
+To see this, \eqref{eq:cluster-third-moment} implies that the prefactor
+changes by $O(s)$, and binomial discrepancies are uniformly
+$O(n^{-1/2})$. In addition,
+$\sup_z|\Phi(z/\sqrt{1+s/v})-\Phi(z)|\le Cs$.
+After normalization these give errors $O(s)$ and $O(\sqrt n s)$,
+respectively. The ratios of the two positive errors in
+\eqref{eq:cluster-central-comparison}--\eqref{eq:cluster-normalization-error}
+to the negative loss are bounded by
+\[
+ C_M(\lambda+\epsilon_0^2)^{3/2},\qquad
+ C_M\sqrt{C\lambda+\epsilon_0^2}/\sqrt n.
+\]
+First reduce $\lambda_0,\epsilon_0$ and then increase $N_0$.
+For all $0<\lambda\le\lambda_0$, both errors are absorbed, leaving
+every central signed discrepancy, after normalization, at most
+\begin{equation}\label{eq:cluster-strict-central}
+ R_n(B_p)-\frac{c_M\lambda}{\sqrt{C\lambda+\epsilon_0^2}}.
+\end{equation}
+In particular this holds for arbitrarily small positive $\lambda$.
+
+It remains to exclude far thresholds uniformly. Retain the original
+compact parameter interval $I_*$, before any further shrinking, and put
+\[
+\begin{aligned}
+ a_n&=\frac{\sqrt n(v+s)^{3/2}}{\rho},\\
+ D^+_{k,u}&=a_n[F(k+u)-G_k(u)],\\
+ D^-_{k,u}&=a_n[G_k(u)-F((k+u)-)].
+\end{aligned}
+\]
+For $0\le k\le n$, equations
+\eqref{eq:cluster-right-block}--\eqref{eq:cluster-leakage} imply
+\[
+ F_B(k-1)-\frac{CM_4^*}{\sqrt n}
+ \le F((k+u)-)\le F(k+u)
+ \le F_B(k)+\frac{CM_4^*}{\sqrt n}.
+\]
+Moreover, the Gaussian derivative bound and
+\eqref{eq:cluster-third-moment} give, uniformly for $|u|\le1/2$,
+\[
+ a_n|G_k(u)-G_k(0)|
+ \le\frac{\phi(0)(v+s)}{2\rho}
+ \le\frac{\phi(0)}{2\tau}+Cs.
+\]
+Combining these inequalities with
+\eqref{eq:cluster-normalization-error} and the uniform binomial
+expansion \eqref{eq:binomial-envelopes}, we obtain
+\begin{equation}\label{eq:cluster-far-comparison}
+ \max\{D^+_{k,u},D^-_{k,u}\}
+ \le \max\{A_p^+(z_k),A_p^-(z_k)\}
+       +\frac{\phi(0)}{2\tau}
+       +C\lambda(\lambda+\epsilon_0^2)
+       +C\lambda/\sqrt n+\omega_n,
+\end{equation}
+where $\omega_n\to0$ depends only on $I_*$ and is uniform over the
+noise laws, $p\in I_*$, $k$, and $u$. Here the term $Cs$ has been
+absorbed into $C\lambda/\sqrt n$.
+Since $\tau\ge1/2$, the second term is at most $\phi(0)<\ce$.
+Fix $\gamma=(\ce-\phi(0))/8>0$. First choose $M$ so large that
+\[
+ \sup_{p\in I_*}\sup_{|z|>M}
+ \max\{|A_p^+(z)|,|A_p^-(z)|\}\le\gamma.
+\]
+Then reduce $\lambda_0,\epsilon_0$ so that the fourth-moment
+contribution in \eqref{eq:cluster-far-comparison} is at most $\gamma$,
+while also satisfying the central-window requirements above.
+Finally increase $N_0$ so that the last two terms are at most
+$\gamma$. Thus all $|z_k|>M$, with $0\le k\le n$, have both signed
+normalized discrepancies at most $\phi(0)+3\gamma\le\ce-2\gamma$.
+If $k<0$ or $k>n$, the leakage estimate holds with baseline zero or
+one, respectively. Because $p\in I_*$, the corresponding standardized
+Gaussian threshold has absolute value at least $c\sqrt n$, uniformly
+for $|u|\le1/2$. Each signed normalized discrepancy is therefore at
+most
+\[
+ CM_4^*+C\sqrt n\,e^{-cn},
+\]
+and, after the same reductions and an increase of $N_0$, is also at
+most $\ce-2\gamma$.
+
+At an integer nearest $np$, the positive binomial branch equals
+\[
+ g(p)+o(1),\qquad
+ g(p)=\frac{\phi(0)(3+1-2p)}{6\tau},\qquad g(\pe)=\ce.
+\]
+Shrink $I$ around $\pe$ and increase $N_0$ so that
+$R_n(B_p)\ge\ce-\gamma$ uniformly. Every far signed discrepancy is therefore at most $R_n(B_p)-\gamma$.
+Together with \eqref{eq:cluster-strict-central}, this gives, for
+$0<\lambda\le\lambda_0$,
+\begin{equation}\label{eq:cluster-uniform-gap}
+ R_n(Y)\le R_n(B_p)-
+ \min\left\{
+       \frac{c_M\lambda}{\sqrt{C\lambda+\epsilon_0^2}},\,
+       \gamma
+     \right\}.
+\end{equation}
+Here $M$ and the positive constants are fixed, independently of $p\in I$,
+$n\ge N_0$, and the conditional noise laws. Thus taking the supremum
+over all thresholds preserves a strictly positive gap whenever
+$\lambda>0$, with no lower bound on the size of $\lambda$.
+The use of left limits for the lower branch also bounds the ordinary
+lower CDF discrepancy. The choices may be made in the following order: fix $I_*$ and
+$\gamma$, choose $M$, reduce $\lambda_0,\epsilon_0$ to satisfy both
+central and far-threshold estimates, shrink $I$ around $\pe$, and
+finally increase $N_0$ to satisfy all the preceding requirements.
+If $\lambda=0$, then $U=0$ almost surely. The strict Bernoulli
+inequality $R_n(B_p)<\ce$ is
+\cite[Theorem~1, p.~1]{Schulz2016}.
+\end{proof}
+
+\begin{lemma}[Uniform local mass]\label{lem:two-cluster-local-mass}
+Fix a compact interval $I\subset(0,1)$, $\lambda_*>0$, $R\ge0$,
+and real numbers $a<b$. There exist $\epsilon_*>0$, $c_*>0$, and
+$N_*<\infty$ with the following property. Let
+\[
+ B\sim\mathrm{Bernoulli}(p),\qquad p\in I,\qquad
+ \EE(U\mid B)=0,\qquad |U|\le\epsilon_*,\qquad Y=B+U.
+\]
+For every $n\ge N_*$ satisfying $L:=n\EE U^2\ge\lambda_*$,
+and independent copies $Y_1,\ldots,Y_n$ of $Y$, one has
+\[
+ \inf_{|x-np|\le R\sqrt n}
+ \PP\left\{\sum_{i=1}^nY_i\in(x+a,x+b)\right\}
+ \ge\frac{c_*}{\sqrt n}.
+\]
+\end{lemma}
+
+\begin{proof}
+Put $\alpha=\inf_{p\in I}\min(p,1-p)>0$ and initially restrict
+$\epsilon_*\le1$. Write
+\[
+ s_b=\EE(U^2\mid B=b),\qquad s=(1-p)s_0+ps_1=L/n.
+\]
+Then $s_0+s_1\le s/\alpha$. Conditional on
+$K=\sum_iB_i=k$, the sum of the $Y_i$ has the law of $k+W_k$,
+with the same independent conditional-summand representation as in
+Lemma~\ref{lem:small-cluster-variance}. Consequently
+\[
+ t_k:=\EE W_k^2=(n-k)s_0+ks_1
+     =L+(k-np)(s_1-s_0).
+\]
+For a given $x$ in the stated range, take all integers in
+\[
+ \mathcal K_x=\{k\in\mathbb Z:|k-x|\le r\},\qquad
+ r=\max(1,\sqrt L).
+\]
+Since $L\le n\epsilon_*^2$, one has $r\le1+\sqrt n$ and
+$|k-np|\le(R+2)\sqrt n$ for all $k\in\mathcal K_x$.
+Thus, uniformly over the admissible laws, $x$, and these integers,
+\[
+ \left|\frac{t_k}{L}-1\right|
+ \le\frac{R+2}{\alpha\sqrt n}.
+\]
+Increasing $N_*$, all selected integers lie in $[0,n]$ and satisfy
+$L/2\le t_k\le3L/2$. The central local limit estimate in
+Lemma~\ref{lem:binomial-estimates} also gives
+\[
+ \PP(K=k)\ge c_R/\sqrt n\qquad(k\in\mathcal K_x)
+\]
+with $c_R>0$ depending only on $I,R$.
+
+The sum of the third absolute moments of the independent conditional
+noise summands is at most $\epsilon_*t_k$. The Berry--Esseen
+inequality for independent, not necessarily identically distributed,
+centered summands therefore gives
+\[
+ \sup_z\left|\PP(W_k/\sqrt{t_k}\le z)-\Phi(z)\right|
+ \le C_{\mathrm{BE}}\epsilon_*/\sqrt{t_k};
+\]
+see \cite[pp.~124--125]{Shevtsova2013}. The same bound holds for left limits because
+$\Phi$ is continuous. Both standardized endpoints of
+$(x+a-k,x+b-k)$ have absolute value at most
+\[
+ A=\sqrt2\left[
+       \max(1,\lambda_*^{-1/2})
+       +\max(|a|,|b|)\lambda_*^{-1/2}\right].
+\]
+Their normal interval probability is therefore at least
+\[
+ \frac{c_1}{\sqrt L},\qquad
+ c_1=(b-a)\sqrt{2/3}\,\phi(A)>0.
+\]
+Subtracting the two CDF errors, with a left limit at the upper
+endpoint, yields
+\[
+ \PP\{W_k\in(x+a-k,x+b-k)\}
+ \ge\frac{c_1-2\sqrt2 C_{\mathrm{BE}}\epsilon_*}{\sqrt L}.
+\]
+Now choose
+$\epsilon_*\le\min\{1,c_1/(4\sqrt2 C_{\mathrm{BE}})\}$.
+The last lower bound is then $c_1/(2\sqrt L)$.
+Finally, the closed interval $[x-r,x+r]$ contains at least
+$2r-1\ge r\ge\sqrt L$ integers. Summing over $\mathcal K_x$ gives
+\[
+ \PP\left\{\sum_iY_i\in(x+a,x+b)\right\}
+ \ge \#\mathcal K_x\frac{c_R}{\sqrt n}
+             \frac{c_1}{2\sqrt L}
+ \ge\frac{c_Rc_1}{2\sqrt n},
+\]
+which proves the assertion. All constants depend only on
+$I,\lambda_*,R,a,b$.
+\end{proof}
+
+\begin{lemma}\label{lem:accumulated-cluster-variance}
+Let $p_j\to p\in(0,1)$, $n_j\to\infty$, and
+\[
+ Y_j=B_j+U_j,\qquad B_j\sim\mathrm{Bernoulli}(p_j),\qquad
+ \EE(U_j\mid B_j)=0,\qquad |U_j|\le\epsilon_j\to0.
+\]
+Write $s_j=\EE U_j^2$, $v=p(1-p)$ and $d=1-2p$.
+If $\liminf_j n_js_j>0$, then for some $\delta>0$,
+\begin{equation}\label{eq:macroscopic-gap}
+ \limsup_j\sqrt{n_j}\,\Delta_{n_j}(Y_j)
+ \le\frac{\phi(0)(3+|d|)}{6\sqrt v}-\delta.
+\end{equation}
+Consequently, if $p\in\{\pe,1-\pe\}$ and
+$R_{n_j}(Y_j)\to\ce$, then $n_js_j\to0$.
+\end{lemma}
+
+\begin{proof}
+Choose $\lambda_*>0$ so that $n_js_j\ge\lambda_*$ eventually,
+and fix a compact interval $I\subset(0,1)$ containing all sufficiently
+late $p_j$. For any fixed $R\ge0$ and $a<b$, apply
+Lemma~\ref{lem:two-cluster-local-mass}. Its requirements hold eventually
+because $\epsilon_j\to0$ and $n_j\to\infty$. Hence there is $c_*>0$
+such that
+\begin{equation}\label{eq:cluster-local-mass}
+ \inf_{|x-n_jp_j|\le R\sqrt{n_j}}
+ \PP\left\{\sum_{i=1}^{n_j}Y_{j,i}\in(x+a,x+b)\right\}
+ \ge c_*/\sqrt{n_j}
+\end{equation}
+eventually. In particular, this estimate is uniform whether $n_js_j$
+remains bounded or tends to infinity.
+
+Write $S_j=\sum_{i=1}^{n_j}Y_{j,i}$, and let $J_j$ be the CDF of
+$S_j+H$ for an independent $H\sim\mathrm{Unif}[-1/2,1/2]$.
+Set
+\[
+ \sigma_j^2=p_j(1-p_j)+s_j,\qquad
+ z=\frac{x-n_jp_j}{\sigma_j\sqrt{n_j}},\qquad
+ \gamma_j=\frac{\EE(Y_j-p_j)^3}{\sigma_j^3}.
+\]
+Lemma~\ref{lem:jitter} yields, uniformly in real $x$,
+\begin{equation}\label{eq:cluster-jitter-expansion}
+ J_j(x)=\Phi(z)+\frac{\gamma_j}{6\sqrt{n_j}}
+                   (1-z^2)\phi(z)+o(n_j^{-1/2}).
+\end{equation}
+For precision about scaling, the standardized limiting Bernoulli law
+has span $1/\sqrt v$. The lemma initially supplies raw jitter on
+$[-\sigma_j/(2\sqrt v),\sigma_j/(2\sqrt v)]$. Couple this uniform
+variable and $H$ to differ by at most
+$|\sigma_j/\sqrt v-1|/2=o(1)$. Squeezing the two CDFs between these
+raw shifts changes the expansion by $o(n_j^{-1/2})$, since its normal
+term has raw derivative $O(n_j^{-1/2})$ and its correction has raw
+derivative $O(n_j^{-1})$. This proves
+\eqref{eq:cluster-jitter-expansion} with exactly the stated jitter.
+
+For any real $x$, direct integration of the uniform CDF gives
+\begin{align*}
+ J_j(x+1/2)-\PP(S_j\le x)
+ &=\EE[(x+1-S_j)\ind_{\{x<S_j<x+1\}}],\\
+ \PP(S_j\le x)-J_j(x-1/2)
+ &=\EE[(S_j-x+1)\ind_{\{x-1<S_j<x\}}]+\PP(S_j=x).
+\end{align*}
+Each difference is at least one half the mass of, respectively,
+$(x+1/4,x+1/2)$ and $(x-1/2,x-1/4)$.
+For a fixed standardized radius $R$, choose $j_0$ so that
+$\Sigma:=\sup_{j\ge j_0}\sigma_j<\infty$, which is possible because
+$\sigma_j\to\sqrt v$. Then $|z|\le R$ implies
+$|x-n_jp_j|\le R\Sigma\sqrt{n_j}$.
+Apply \eqref{eq:cluster-local-mass} with raw radius $R\Sigma$ and
+with $(a,b)=(1/4,1/2)$ and $(-1/2,-1/4)$.
+Taking $c_R$ to be half the smaller of the resulting positive constants,
+both improvements are at least $c_R/\sqrt{n_j}$ uniformly for
+$|z|\le R$. Expanding \eqref{eq:cluster-jitter-expansion} at $x\pm1/2$ consequently
+gives on this region
+\begin{align*}
+ \sqrt{n_j}\,[\PP(S_j\le x)-\Phi(z)]
+ &\le\left[\frac1{2\sigma_j}
+          +\frac{\gamma_j}{6}(1-z^2)\right]\phi(z)-c_R+o(1),\\
+ \sqrt{n_j}\,[\Phi(z)-\PP(S_j\le x)]
+ &\le\left[\frac1{2\sigma_j}
+          -\frac{\gamma_j}{6}(1-z^2)\right]\phi(z)-c_R+o(1).
+\end{align*}
+Here $\sigma_j\to\sqrt v$ and $\gamma_j\to d/\sqrt v$.
+The limiting upper envelopes are bounded by
+$L_*:=\phi(0)(3+|d|)/(6\sqrt v)$, since
+$\sup_z|1-z^2|\phi(z)=\phi(0)$. Outside $|z|\le R$, the ordinary
+jitter envelopes, without the improvement, give the uniform bound
+\[
+ \sqrt{n_j}\,|\PP(S_j\le x)-\Phi(z)|
+ \le\left[\frac1{2\sigma_j}
+       +\frac{|\gamma_j|}{6}|1-z^2|\right]\phi(z)+o(1).
+\]
+Choose a fixed $R$ sufficiently large that its limiting right side is
+less than $L_*/2$ there. The global upper limit is at most
+$L_*-\min(c_R,L_*/2)$, proving \eqref{eq:macroscopic-gap}.
+
+The absolute standardized third moments converge to
+$\beta(B_p)=(p^2+(1-p)^2)/\sqrt v$. At either Esseen parameter,
+$L_*/\beta(B_p)=\ce$. If $n_js_j$ did not tend to zero, a subsequence
+would have a fixed positive lower bound, and
+\eqref{eq:macroscopic-gap} would contradict
+$R_{n_j}(Y_j)\to\ce$ on that subsequence.
+\end{proof}
+
+\begin{proof}[Proof of Proposition~\ref{prop:clusters}]
+Suppose that no pair $(\eta,N)$ has the asserted property at $\pe$.
+For every sufficiently large integer $j$, choose a law $Q_j$ and
+$n_j\ge j$ with $R_{n_j}(Q_j)>\ce$ such that
+\[
+ \supp Q_j\subset[-1/j,1/j]\cup[1-1/j,1+1/j],\qquad
+ |Q_j([1-1/j,1+1/j])-\pe|<1/j.
+\]
+For $X_j\sim Q_j$, let $B_j$ indicate membership in the upper interval,
+put $p_j=\PP(B_j=1)$, and let $m_{bj}=\EE(X_j\mid B_j=b)$.
+The two conditional probabilities are positive eventually, and
+$d_j=m_{1j}-m_{0j}$ lies between $1-2/j$ and $1+2/j$.
+The positive affine transformation
+\[
+ Y_j=\frac{X_j-m_{0j}}{d_j}=B_j+U_j
+\]
+satisfies $p_j\to\pe$, $\EE(U_j\mid B_j)=0$, and
+$|U_j|\le(2/j)/(1-2/j)\to0$. Affine invariance gives
+$R_{n_j}(Y_j)>\ce$.
+The ordinary envelopes in Corollary~\ref{cor:jitter-envelopes}, applied
+to the standardized laws, give $\limsup_jR_{n_j}(Y_j)\le\ce$.
+Thus these ratios converge to $\ce$, and
+Lemma~\ref{lem:accumulated-cluster-variance} implies
+$n_j\EE U_j^2\to0$. Eventually all the fixed hypotheses of
+Lemma~\ref{lem:small-cluster-variance} hold, contradicting
+$R_{n_j}(Y_j)>\ce$. This proves existence of fixed $\eta,N$.
+Reflection $X\mapsto1-X$ proves the assertion at $1-\pe$.
+\end{proof}
+
+% ===== extremizers =====
+\section{Extremizers and uniform support bounds}
+\label{sec:extremizers}
+
+We use the extremal constants \(C_n\) from \eqref{eq:cn}, the moment
+cutoff \(B_*\) from \eqref{eq:moment-cutoff}, and the convergence in
+\eqref{eq:cn-limit}. Write \(C_0=0.4690\), so that \(C_n\le C_0\) for
+all \(n\).
+
+Extremal problems for the distribution function of an iid sum under
+moment and range constraints were studied by Hoeffding and
+Shrikhande~\cite{HoeffdingShrikhande1955}.
+For finite-support and few-point reduction principles in related
+moment problems, see also \cite[Section~3]{MattnerShevtsova2019}.
+Below we differentiate the normalized signed discrepancy at a fixed
+active threshold to obtain contact identities for maximizing laws.
+
+\begin{lemma}[Attainment above the Esseen constant]
+\label{lem:attainment}
+If \(C_n>\ce\), there are \(P\in\Pthree\) and \(t\in\R\) such that
+\begin{equation}
+\label{eq:active-branch}
+\frac{\sqrt n}{\beta(P)}
+\left\{F_{n,P}(t)-\Phi(t/\sqrt n)\right\}
+=R_n(P)=C_n,
+\qquad
+1\le\beta(P)<B_*.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Choose pairs \((P_k,t_k)\) whose signed ratios tend to \(C_n\), with all
+these ratios greater than \(\ce\). By \eqref{eq:structural},
+\(\beta(P_k)<B_*\). This bound gives tightness and uniform integrability
+of the squares, since
+\[
+\int_{|x|>A}x^2\,P_k(dx)\le \frac{B_*}{A}.
+\]
+After passage to a subsequence, \(P_k\) converges weakly to a probability
+law \(P\), and \(\beta(P_k)\to b\le B_*\). Uniform integrability preserves
+the first two moments. Lower semicontinuity gives
+\(\beta(P)\le b\), so \(P\in\Pthree\).
+
+The positive discrepancy at \(t_k\) is at least \(\ce/\sqrt n\). If
+\(t_k\ge0\), it is at most \(1-\Phi(t_k/\sqrt n)\); if \(t_k<0\), it is
+at most \(n/t_k^2\) by Chebyshev's inequality for the centered sum.
+Consequently the thresholds are bounded for this fixed \(n\), and we
+may suppose that \(t_k\to t\in\R\).
+
+Weak convergence of the convolution laws and the closed-set
+portmanteau inequality imply
+\[
+F_{n,P}(t)\ge\limsup_{k\to\infty}F_{n,P_k}(t_k).
+\]
+For completeness, one may first replace the moving thresholds by
+\(t+\varepsilon\), apply portmanteau to \(( -\infty,t+\varepsilon]\),
+and then let \(\varepsilon\downarrow0\). Continuity of \(\Phi\) now gives
+\[
+F_{n,P}(t)-\Phi(t/\sqrt n)\ge\frac{C_n b}{\sqrt n}.
+\]
+By the definition of $C_n$,
+\[
+ C_n\ge
+ \frac{\sqrt n\{F_{n,P}(t)-\Phi(t/\sqrt n)\}}{\beta(P)}
+ \ge C_n\frac b{\beta(P)}\ge C_n.
+\]
+Since $C_n>0$, equality holds throughout; in particular,
+$\beta(P)=b$. Thus the limiting pair attains $C_n$, and its full
+Kolmogorov ratio also equals $C_n$. Finally, \(\beta(P)=B_*\) would contradict
+\eqref{eq:structural} and \(C_n>\ce\).
+\end{proof}
+
+The following selection principle will replace any need for
+monotonicity of the extremal constants.
+
+\begin{lemma}[Selection by harmonic increments]
+\label{lem:selection}
+Suppose that \(a_n\to0\) and that \(a_n>0\) for arbitrarily large
+integers \(n\). There are integers \(n_j\uparrow\infty\) such that
+\begin{equation}
+\label{eq:harmonic-selection}
+a_{n_j}>0,
+\qquad
+n_j(a_{n_j-1}-a_{n_j})_+\longrightarrow0.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+We claim that, for every \(\varepsilon>0\) and every starting index,
+there is a later positive term for which
+\(n(a_{n-1}-a_n)_+<\varepsilon\). Otherwise, for some
+\(\varepsilon>0\) and \(N_1\), every positive \(a_n\) with \(n\ge N_1\)
+would satisfy
+\[
+a_{n-1}-a_n\ge\frac{\varepsilon}{n}.
+\]
+A positive run could not begin at or after \(N_1\). Since there are
+arbitrarily late positive terms, the positive run already present at
+\(N_1\) would therefore continue indefinitely. Summing the last
+inequality along that run contradicts positivity, because the harmonic
+series diverges. The claim follows. Apply it successively with
+\(\varepsilon=1/j\) and increasing starting indices.
+\end{proof}
+
+We next derive the variational condition without restricting the
+contamination to preserve the mean or variance.
+
+\begin{lemma}[Contamination influence and support contact]
+\label{lem:influence}
+Let \(n\ge2\), and let \((P,t)\) attain the positive extremal value
+\(R=C_n>0\). Put
+\[
+z=\frac{t}{\sqrt n},\qquad
+\beta=\beta(P),\qquad M=\int x|x|\,P(dx),\qquad G=F_{n-1,P}.
+\]
+For \(y\in\R\), contaminate the raw law by
+\(P_e=(1-e)P+e\delta_y\), and evaluate its normalized signed discrepancy
+at the same raw threshold \(t\). Its right derivative \(I(y)\) at
+\(e=0\) exists and satisfies
+\begin{align}
+\beta I(y)={}&n^{3/2}\{G(t-y)-F_{n,P}(t)\}
++ny\phi(z)+\frac{\sqrt n}{2}z\phi(z)(y^2-1)\notag\\
+&+\frac32R\beta(y^2-1)
+-R\{|y|^3-\beta-3yM\}.\label{eq:influence}
+\end{align}
+Moreover,
+\begin{equation}
+\label{eq:contact}
+I(y)\le0\quad(y\in\R),
+\qquad I(x)=0\quad(x\in\supp P).
+\end{equation}
+In particular, every \(x\in\supp P\) satisfies the exact contact equation
+\begin{align}
+n\{G(t-x)-F_{n,P}(t)\}={}&-\sqrt n\,\phi(z)x
+-\frac{z\phi(z)}2(x^2-1)\notag\\
+&+\frac{R}{\sqrt n}
+\left\{|x|^3-\beta-3Mx-\frac32\beta(x^2-1)\right\}.
+\label{eq:contact-equation}
+\end{align}
+\end{lemma}
+
+\begin{proof}
+Let \(m_e,v_e,\rho_e\) be the mean, variance, and third central absolute
+moment of \(P_e\). For all sufficiently small \(e\ge0\), its variance is
+positive and its normalized signed discrepancy is
+\[
+r(e)=\frac{\sqrt n\,v_e^{3/2}}{\rho_e}
+\left\{F_{n,P_e}(t)-
+\Phi\left(\frac{t-nm_e}{\sqrt{nv_e}}\right)\right\}.
+\]
+Standardizing \(P_e\) shows that \(r(e)\le C_n=r(0)\). At \(e=0\),
+direct differentiation gives
+\[
+m'_0=y,\qquad v'_0=y^2-1,\qquad
+\rho'_0=|y|^3-\beta-3yM.
+\]
+For the last identity, use
+\[
+\rho_e=(1-e)\int|x-ey|^3\,P(dx)+e|(1-e)y|^3.
+\]
+For each fixed \(y\), differentiation under the integral is justified
+by a bound of the form \(C_y(1+x^2)\).
+
+The convolution CDF is a polynomial in the mixing weight, so
+\[
+\left.\frac{d}{de}F_{n,P_e}(t)\right|_{e=0}
+=n\{G(t-y)-F_{n,P}(t)\}.
+\]
+There is no differentiation of a CDF with respect to its threshold.
+The derivative of the normal argument is
+\[
+\left.\frac{d}{de}\frac{t-nm_e}{\sqrt{nv_e}}\right|_{e=0}
+=-\sqrt n\,y-\frac z2(y^2-1).
+\]
+These identities and \(r(0)=R\) give \eqref{eq:influence}, while maximality
+gives \(I(y)\le0\).
+
+For this fixed \(n,P,t\), the right side of \eqref{eq:influence} is
+bounded in absolute value by a constant times \(1+|y|^3\). Its integral
+under \(P\) vanishes: the convolution term integrates to zero, as do
+the other terms by the first two moment identities and the definition
+of \(\beta\). Therefore \(I=0\) \(P\)-almost surely.
+
+A CDF is upper semicontinuous, so \(y\mapsto G(t-y)\), and hence \(I\),
+is upper semicontinuous. Since \(I\le0\), the set \(\{I=0\}=\{I\ge0\}\)
+is closed. Being a closed set of full \(P\)-measure, it contains
+\(\supp P\). This proves \eqref{eq:contact}; rearrangement of
+\eqref{eq:influence} gives \eqref{eq:contact-equation}.
+\end{proof}
+
+\begin{lemma}[Uniform Gaussian cancellation]
+\label{lem:gaussian-expansion}
+For \(n\ge2\) and \(y,z\in\R\), define
+\begin{align}
+H_n(z,y):={}&n^{3/2}
+\left\{\Phi\left(\frac{z-y/\sqrt n}{\sqrt{1-1/n}}\right)-\Phi(z)\right\}
++ny\phi(z)\notag\\
+&+\frac{\sqrt n}{2}z\phi(z)(y^2-1).\label{eq:gaussian-H}
+\end{align}
+There is an absolute constant \(A\) such that
+\begin{equation}
+\label{eq:gaussian-global}
+|H_n(z,y)|\le\frac{\phi(0)}6|y|^3+A(1+|y|)
+\qquad(n\ge2,\ y,z\in\R).
+\end{equation}
+For every \(L<\infty\), there is a constant \(A_L<\infty\) such that
+\begin{equation}
+\label{eq:gaussian-remainder}
+\left|H_n(z,y)-\phi''(z)\left(\frac y2-\frac{y^3}{6}\right)\right|
+\le\frac{A_L}{\sqrt n}
+\qquad(n\ge2,\ |y|\le L,\ z\in\R).
+\end{equation}
+Consequently, if \(n_j\to\infty\) and \(z_j\to0\), then
+\begin{equation}
+\label{eq:gaussian-compact}
+H_{n_j}(z_j,y)\longrightarrow\frac{\phi(0)}6(y^3-3y)
+\quad\text{uniformly for }|y|\le L.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Put \(u=z-y/\sqrt n\). Since
+\(\Phi'''(z)=\phi''(z)=(z^2-1)\phi(z)\) and
+\(\|\phi''\|_\infty=\phi(0)\), Taylor's theorem gives
+\begin{equation}
+\label{eq:translation-bound}
+\left|n^{3/2}\{\Phi(u)-\Phi(z)\}
++ny\phi(z)+\frac{\sqrt n}{2}zy^2\phi(z)\right|
+\le\frac{\phi(0)}6|y|^3.
+\end{equation}
+To account for the scale change, set
+\(f(\lambda)=\Phi(u/\sqrt{1-\lambda})\). With
+\(r=u/\sqrt{1-\lambda}\), differentiation gives
+\[
+f'(\lambda)=\frac{r\phi(r)}{2(1-\lambda)},\qquad
+f''(\lambda)=\frac{r(3-r^2)\phi(r)}{4(1-\lambda)^2}.
+\]
+The second derivative is bounded by an absolute constant for every
+\(u\in\R\) and \(0\le\lambda\le1/2\). Hence
+\[
+\Phi\left(\frac{u}{\sqrt{1-1/n}}\right)-\Phi(u)
+=\frac{u\phi(u)}{2n}+O(n^{-2}),
+\]
+uniformly in \(u\). Combining this with \eqref{eq:translation-bound},
+the remaining contribution to \(H_n\) is
+\[
+\frac{\sqrt n}{2}\{u\phi(u)-z\phi(z)\}+O(n^{-1/2}).
+\]
+The derivative of \(z\phi(z)\) is bounded on \(\R\), so this contribution
+is bounded in absolute value by \(A(1+|y|)\). This proves
+\eqref{eq:gaussian-global} without a restriction on either argument.
+
+For \(|y|\le L\), one further term in the translation expansion gives,
+uniformly in \(z\),
+\[
+n^{3/2}\{\Phi(u)-\Phi(z)\}
++ny\phi(z)+\frac{\sqrt n}{2}zy^2\phi(z)
+=-\frac{\phi''(z)y^3}{6}+O_L(n^{-1/2}).
+\]
+Similarly, the bounded second derivative of \(z\phi(z)\) gives
+\[
+\frac{\sqrt n}{2}\{u\phi(u)-z\phi(z)\}
+=-\frac y2(z\phi(z))'+O_L(n^{-1/2}).
+\]
+Since \((z\phi(z))'=-\phi''(z)\), their sum proves
+\eqref{eq:gaussian-remainder}. Finally \(\phi''(0)=-\phi(0)\), which yields
+\eqref{eq:gaussian-compact}.
+\end{proof}
+
+\begin{proposition}[A uniformly bounded sequence of extremizers]
+\label{prop:bounded-extremizers}
+Suppose that \(C_n>\ce\) for arbitrarily large integers \(n\). Then
+there are integers \(n_j\uparrow\infty\), laws \(P_j\in\Pthree\),
+thresholds \(t_j\in\R\), and a finite constant \(L\) such that, for
+every \(j\),
+\begin{gather}
+\label{eq:selected-extremizers}
+\frac{\sqrt{n_j}}{\beta_j}
+\left\{F_{n_j,P_j}(t_j)-\Phi(t_j/\sqrt{n_j})\right\}
+=R_{n_j}(P_j)=C_{n_j}>\ce,
+\qquad 1\le\beta_j:=\beta(P_j)<B_*,\\
+\label{eq:selected-increments}
+n_j(C_{n_j-1}-C_{n_j})_+\longrightarrow0,\\
+\label{eq:bounded-extremizer-support}
+\supp P_j\subset[-L,L].
+\end{gather}
+The constant \(L\) may be chosen absolute.
+\end{proposition}
+
+\begin{proof}
+Apply Lemma~\ref{lem:selection} to \(a_n=C_n-\ce\), using
+\eqref{eq:cn-limit}. At the selected indices, choose maximizing
+pairs by Lemma~\ref{lem:attainment}. This gives
+\eqref{eq:selected-extremizers} and \eqref{eq:selected-increments}.
+We may suppose throughout that \(n_j\ge2\).
+
+For a selected pair, suppress the subscript \(j\), retain the notation
+of Lemma~\ref{lem:influence}, and put
+\[
+w=\frac{z-y/\sqrt n}{\sqrt{1-1/n}}.
+\]
+The definition of \(C_{n-1}\), applied to the same standardized law
+\(P\), gives
+\[
+G(t-y)-\Phi(w)\le\frac{C_{n-1}\beta}{\sqrt{n-1}}.
+\]
+At the active branch,
+\(F_{n,P}(t)-\Phi(z)=R\beta/\sqrt n\). Substituting these two facts into
+\eqref{eq:influence} yields
+\begin{align*}
+\beta I(y)\le{}&H_n(z,y)
++\beta\left\{\frac{n^{3/2}}{\sqrt{n-1}}C_{n-1}-nR\right\}\\
+&+\frac32R\beta(y^2-1)-R\{|y|^3-\beta-3yM\}.
+\end{align*}
+For \(n\ge2\),
+\[
+0\le n\left(\sqrt{\frac n{n-1}}-1\right)\le1.
+\]
+Thus the expression in braces in the first line is at most
+\(n(C_{n-1}-R)_++C_0\). Also
+\(|M|\le\int x^2\,P(dx)=1\), \(\beta<B_*\), and \(R\le C_0\).
+The global Gaussian bound therefore gives an absolute constant
+\(A_1\), independent of \(n,P,t,y\) for these selected pairs, such that
+\begin{equation}
+\label{eq:influence-bound}
+\beta I(y)\le
+-\left(R-\frac{\phi(0)}6\right)|y|^3
++A_1(1+y^2)+\beta n(C_{n-1}-R)_+
+\qquad(y\in\R).
+\end{equation}
+
+Let \(\gamma=\ce-\phi(0)/6>0\). Along the selected sequence,
+\eqref{eq:selected-increments} and \eqref{eq:influence-bound} imply
+\[
+\beta_jI_j(y)\le-\gamma|y|^3+A_1(1+y^2)+o(1),
+\]
+where the remainder is independent of \(y\). Choose an absolute \(L\)
+so large that
+\(\gamma r^3>A_1(1+r^2)+1\) whenever \(r>L\).
+For every sufficiently large \(j\), it follows that \(I_j(y)<0\) for
+\(|y|>L\). The support contact condition \eqref{eq:contact} then forces
+\(\supp P_j\subset[-L,L]\). Discarding finitely many initial terms and
+reindexing proves the proposition.
+\end{proof}
+
+% ===== completion =====
+\section{Separation of support points and proof of the main theorem}\label{sec:completion}
+
+In this section we consider a sequence of positive-discrepancy maximizing pairs \((P_j,t_j)\) at sample sizes \(n_j\to\infty\), as in Proposition~\ref{prop:bounded-extremizers}. In particular,
+\begin{equation}\label{eq:selected-sequence}
+\begin{gathered}
+ R_{n_j}(P_j)=C_{n_j}>\ce,\qquad
+ n_j(C_{n_j-1}-C_{n_j})_+\longrightarrow0,\\
+ \supp(P_j)\subset[-L,L]
+ \quad\text{for one fixed }L<\infty.
+\end{gathered}
+\end{equation}
+We write \(\beta_j=\beta(P_j)\), \(z_j=t_j/\sqrt{n_j}\) and
+\(M_j=\int x|x|\,P_j(dx)\).
+
+\begin{lemma}\label{lem:limit-extremizer}
+After passing to a subsequence in \eqref{eq:selected-sequence},
+\[
+ P_j\longrightarrow\Pe\quad\text{in }W_3,
+ \qquad z_j\longrightarrow0.
+\]
+\end{lemma}
+
+\begin{proof}
+The common compact support gives a weakly convergent subsequence with limit \(P\in\Pthree\), and the convergence is in \(W_3\). Write \(\beta=\beta(P)\), \(\kappa=\kappa(P)\) and \(h=h(P)\). Corollary~\ref{cor:jitter-envelopes} gives, uniformly for \(z\in\R\),
+\begin{equation}\label{eq:limit-upper-envelope}
+ \sqrt{n_j}\bigl[F_{n_j,P_j}(\sqrt{n_j}z)-\Phi(z)\bigr]
+ \le \phi(z)\left[\frac h2+\frac\kappa6(1-z^2)\right]+o(1).
+\end{equation}
+At \(z=z_j\), the left side equals \(C_{n_j}\beta_j\to\ce\beta\). Since
+\[
+ \phi(z)\le\phi_0,\qquad
+ |1-z^2|\phi(z)\le\phi_0,
+\]
+equation~\eqref{eq:limit-upper-envelope} and \eqref{eq:esseen-moment} imply
+\[
+ \ce\beta\le\frac{\phi_0}{6}(3h+|\kappa|)\le\ce\beta.
+\]
+The equality characterization in \eqref{eq:esseen-moment} shows that \(P\) is either \(\Pe\) or its reflection.
+
+Put $A=h_{\mathrm E}/2$ and $B=\ke/6$. Then $A>3B>0$,
+because $h_{\mathrm E}>\ke>0$. The two possible positive
+upper envelopes are
+\[
+ E_+(z)=\phi(z)(A+B-Bz^2),\qquad
+ E_-(z)=\phi(z)(A-B+Bz^2),
+\]
+for $\Pe$ and its reflection, respectively. Direct differentiation gives
+\[
+ E_-'(z)=z\phi(z)(3B-A-Bz^2).
+\]
+Thus $E_-$ is even and strictly decreasing on $(0,\infty)$, so
+\[
+ \sup_z E_-(z)=\phi_0(A-B)
+ <\phi_0(A+B)=\ce\be.
+\]
+The reflected law is therefore incompatible with
+\eqref{eq:limit-upper-envelope}, and $P=\Pe$.
+
+The function $E_+$ has its unique global maximum at zero.
+Indeed, for $z\ne0$ either its polynomial factor is nonpositive,
+or both that factor and $\phi(z)$ are strictly smaller than their
+positive values at zero. Moreover, $E_+(z)\to0$ as $|z|\to\infty$.
+Consequently, for every $\delta>0$,
+\[
+ \sup_{|z|\ge\delta}E_+(z)<E_+(0)=\ce\be.
+\]
+Equation~\eqref{eq:limit-upper-envelope}, evaluated at $z_j$,
+therefore forces $z_j\to0$.
+\end{proof}
+
+\begin{lemma}\label{lem:support-interval}
+Under \eqref{eq:selected-sequence} and the subsequence of Lemma~\ref{lem:limit-extremizer}, every convergent sequence \(y_j\in\supp(P_j)\), with limit \(y\), satisfies
+\begin{equation}\label{eq:limiting-support-interval}
+ y\in\left[-\frac{\sqrt{10}}2\aE,
+                \frac{\sqrt{10}}2\bE\right].
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Let \(I_j\) be the contamination derivative from Lemma~\ref{lem:influence}. Since \(y_j\) is a support point, \(I_j(y_j)=0\). Put \(G_j=F_{n_j-1,P_j}\) and
+\[
+ w_j=\frac{z_j-y_j/\sqrt{n_j}}{\sqrt{1-1/n_j}}.
+\]
+The definition of \(C_{n_j-1}\) gives
+\[
+ G_j(t_j-y_j)-\Phi(w_j)
+ \le \frac{C_{n_j-1}\beta_j}{\sqrt{n_j-1}}.
+\]
+Insert this bound and the exact identity
+\(F_{n_j,P_j}(t_j)-\Phi(z_j)=C_{n_j}\beta_j/\sqrt{n_j}\)
+into \eqref{eq:influence}. The compact expansion in Lemma~\ref{lem:gaussian-expansion} gives
+\begin{equation}\label{eq:sharp-gaussian-limit}
+\begin{split}
+ &n_j^{3/2}[\Phi(w_j)-\Phi(z_j)]
+   +n_jy_j\phi(z_j)
+   +\frac{\sqrt{n_j}}2z_j\phi(z_j)(y_j^2-1)\\
+ &\hspace{30mm}\longrightarrow
+    \frac{\phi_0}{6}(y^3-3y).
+\end{split}
+\end{equation}
+Also,
+\begin{equation}\label{eq:recursive-constant-expansion}
+\begin{split}
+ &\beta_j\left[
+       \frac{n_j^{3/2}C_{n_j-1}}{\sqrt{n_j-1}}-n_jC_{n_j}\right]\\
+ &\qquad=
+ \beta_jn_j(C_{n_j-1}-C_{n_j})
+ +\frac12\beta_jC_{n_j-1}+o(1).
+\end{split}
+\end{equation}
+The constant \(\beta_jC_{n_j-1}/2\) cancels, in the limit, the constant \(-\beta_jC_{n_j}/2\) contributed by the last two terms of \eqref{eq:influence}. The remaining recursive term in \eqref{eq:recursive-constant-expansion} has nonpositive upper limit by \eqref{eq:selected-sequence}. Therefore \(I_j(y_j)=0\) implies
+\begin{equation}\label{eq:limiting-contact-inequality}
+ 0\le\frac{\phi_0}{6}(y^3-3y)-\ce|y|^3
+       +\frac32\ce\be y^2+3\ce M_{\mathrm E}y,
+ \qquad M_{\mathrm E}=\qe-\pe.
+\end{equation}
+
+Write \(c_*=3+\sqrt{10}=6\ce/\phi_0\). By \eqref{eq:esseen-identities}, \(c_*M_{\mathrm E}=1\). Thus the linear terms in \eqref{eq:limiting-contact-inequality} cancel, and that inequality becomes
+\begin{equation}\label{eq:contact-polynomial}
+ c_*|y|^3-y^3-\frac32c_*\be y^2\le0.
+\end{equation}
+For \(y\ne0\), its left side is
+\[
+ y^2\left[(c_*-\sgn(y))|y|-\frac32c_*\be\right].
+\]
+Using \(c_*\be=\sqrt{10}/\se\), the two nonzero roots are
+\[
+ -\frac{3c_*\be}{2(c_*+1)}=-\frac{\sqrt{10}}2\aE,
+ \qquad
+ \frac{3c_*\be}{2(c_*-1)}=\frac{\sqrt{10}}2\bE.
+\]
+This proves \eqref{eq:limiting-support-interval}.
+\end{proof}
+
+The interval in \eqref{eq:limiting-support-interval} is larger than the convex hull of the two Esseen atoms. The next lemma gives the additional information needed to identify all possible support limits.
+
+\begin{lemma}[Separation of support limits]\label{lem:support-separation}
+Along the subsequence of Lemma~\ref{lem:limit-extremizer}, suppose \(x_j,y_j\in\supp(P_j)\), \(x_j\to x\) and \(y_j\to y\). Then either \(x=y\) or
+\[
+ |x-y|\ge h_{\mathrm E}=1/\se.
+\]
+\end{lemma}
+
+\begin{proof}
+Write $m_j=n_j-1$, $G_j=F_{m_j,P_j}$ and $h=h_{\mathrm E}$.
+For every $v\in\supp(P_j)$, the contact equation
+\eqref{eq:contact-equation} and the common bound $|v|\le L$ give
+\[
+ G_j(t_j-v)=F_{n_j,P_j}(t_j)
+ -\frac{\phi(z_j)v}{\sqrt{n_j}}+O(n_j^{-1}).
+\]
+Likewise, Taylor expansion of the normal distribution function gives
+\[
+ \Phi\left(\frac{t_j-v}{\sqrt{m_j}}\right)
+ =\Phi(z_j)-\frac{\phi(z_j)v}{\sqrt{n_j}}+O(n_j^{-1}).
+\]
+Both remainders are uniform over $v\in\supp(P_j)$: the first
+uses the uniform bounds on $\beta_j,M_j,C_{n_j}$ and
+$z_j\phi(z_j)$, and the second uses bounded derivatives of the
+normal distribution function together with $z_j\to0$.
+Applying these expansions with $v=x_j$ yields the following limit.
+\begin{equation}\label{eq:contact-saturation}
+ \sqrt{m_j}\left[
+ G_j(t_j-x_j)-
+ \Phi\left(\frac{t_j-x_j}{\sqrt{m_j}}\right)\right]
+ \longrightarrow\ce\be.
+\end{equation}
+
+Let \(J_j\) be the distribution function of the sum of \(m_j\) variables with law \(P_j\), plus an independent uniform variable on \([-h/2,h/2]\). Lemma~\ref{lem:jitter} applies to the same row laws with sample sizes \(m_j\). For \(u_j=t_j-x_j\), we have \(u_j/\sqrt{m_j}\to0\), and hence
+\[
+ \sqrt{m_j}\left[J_j(u_j+h/2)-\Phi(u_j/\sqrt{m_j})\right]
+ \longrightarrow
+ \phi_0\left(\frac h2+\frac\ke6\right)=\ce\be.
+\]
+Together with \eqref{eq:contact-saturation}, this yields
+\begin{equation}\label{eq:jitter-saturation}
+ \sqrt{m_j}[J_j(u_j+h/2)-G_j(u_j)]\longrightarrow0.
+\end{equation}
+The bracket is nonnegative and has the exact representation
+\begin{equation}\label{eq:jitter-contact-integral}
+ J_j(u_j+h/2)-G_j(u_j)
+ =\frac1h\int_0^h[G_j(u_j+s)-G_j(u_j)]\,ds.
+\end{equation}
+For any \(d_j\to d\in(0,h)\), monotonicity gives, for all sufficiently large \(j\),
+\[
+ J_j(u_j+h/2)-G_j(u_j)
+ \ge\frac{h-d_j}{h}
+       [G_j(u_j+d_j)-G_j(u_j)].
+\]
+Thus
+\begin{equation}\label{eq:flat-contact-interval}
+ \sqrt{m_j}[G_j(u_j+d_j)-G_j(u_j)]\longrightarrow0.
+\end{equation}
+
+Suppose now that \(0<y-x<h\), and put \(d_j=y_j-x_j\) and \(u_j=t_j-y_j\). Applying \eqref{eq:flat-contact-interval} at the support point \(y_j\) gives
+\[
+ \sqrt{m_j}[G_j(t_j-x_j)-G_j(t_j-y_j)]\longrightarrow0.
+\]
+Subtracting \eqref{eq:contact-equation} at \(x_j\) and \(y_j\), however, gives
+\[
+ n_j[G_j(t_j-x_j)-G_j(t_j-y_j)]
+ =-\sqrt{n_j}\phi(z_j)(x_j-y_j)+O(1).
+\]
+The same increment multiplied by \(\sqrt{m_j}\) therefore tends to \(\phi_0(y-x)>0\), a contradiction. Interchanging \(x_j\) and \(y_j\) treats the opposite ordering.
+\end{proof}
+
+\begin{proof}[Proof of the existence assertion in Theorem~\ref{thm:main}]
+Suppose that no universal threshold exists. By Proposition~\ref{prop:bounded-extremizers}, there is a sequence satisfying \eqref{eq:selected-sequence}. Pass to the subsequence of Lemma~\ref{lem:limit-extremizer}.
+
+Apply the fixed affine transformation \(v=\pe+\se x\). The two atoms of \(\Pe\) become \(0\) and \(1\), and the span \(h_{\mathrm E}\) becomes \(1\). By Lemma~\ref{lem:support-interval}, every limit of transformed support points belongs to
+\begin{equation}\label{eq:raw-support-interval}
+ \left[\pe-\frac{\sqrt{10}}2\pe,
+       \pe+\frac{\sqrt{10}}2\qe\right]
+ =\left[-\pe\qe,\frac92-\sqrt{10}\right]
+ \subset(-1,2).
+\end{equation}
+Weak convergence supplies support sequences approaching each of \(0\) and \(1\). Every other point in the interval \eqref{eq:raw-support-interval} has distance strictly between zero and one from at least one of these principal points, contradicting Lemma~\ref{lem:support-separation}. Hence only the two principal points can occur as support limits.
+
+The common bounded support now implies the uniform confinement
+\begin{equation}\label{eq:uniform-confinement}
+ \sup_{x\in\supp(P_j)}\dist(x,\{-\aE,\bE\})\longrightarrow0.
+\end{equation}
+Indeed, if this failed, a sequence of support points a fixed positive distance from both atoms would have a convergent subsequence, producing an excluded support limit.
+
+Let \(Q_j\) be the image of \(P_j\) under \(x\mapsto\pe+\se x\). For the fixed neighborhood in Proposition~\ref{prop:clusters}, equation~\eqref{eq:uniform-confinement} places the entire support of \(Q_j\) in the required two intervals for all sufficiently large \(j\). Their upper-cluster probabilities converge to \(\pe\) by weak convergence. Since \(n_j\to\infty\), Proposition~\ref{prop:clusters} and affine invariance give
+\[
+ R_{n_j}(P_j)=R_{n_j}(Q_j)\le\ce,
+\]
+contrary to \eqref{eq:selected-sequence}. Thus \(C_n>\ce\) for at most finitely many integers \(n\). An integer larger than all such indices has the required property. The explicit value in \eqref{eq:explicit-threshold} is proved in Appendix~\ref{app:effective}.
+\end{proof}
+
+\newpage
+
+% ===== explicit threshold =====
+\appendix
+\section{An explicit universal threshold}\label{app:effective}
+
+We give numerical versions of the estimates needed above.  The constants
+are chosen for convenience, without optimization.  Put $c_*=3+\sqrt{10}$.
+Throughout this appendix,
+\[
+ \mathcal A=10^{14},\qquad
+ \eta_*=e^{-2\mathcal A},\qquad
+ N_*=\lceil e^{\mathcal A}\rceil,\qquad
+ N_{\mathrm{conf}}=\lceil e^{1000\mathcal A}\rceil.
+\]
+We prove that the threshold in Theorem~\ref{thm:main} may be taken to be
+$2N_{\mathrm{conf}}$.  The proof uses Lemmas~\ref{lem:attainment}
+and~\ref{lem:influence}, but does not use the existence assertion proved in
+Section~\ref{sec:completion}.  Write $W_1(P,Q)$ for the infimum of
+$\EE|X-Y|$ over couplings with marginal laws $P,Q$, and put
+\[
+ d_n=n(C_{n-1}-C_n)_+,\qquad n\ge2.
+\]
+
+\subsection{Finite-sample selection and bounded support}
+
+The coefficient $2.5786$ before its enlargement in
+\eqref{eq:asymptotic}, together with \eqref{eq:moment-cutoff}, gives
+\begin{equation}\label{eq:effective-cn}
+ C_n\le0.4690,\qquad C_n\le\ce+\frac{4.75}{\sqrt n}.
+\end{equation}
+Indeed, a violating law has $\beta<B_*<1.84$, and
+$2.5786B_*<4.75$.  Nonviolating laws already satisfy the second bound.
+
+\begin{lemma}\label{lem:effective-selection}
+If $N\ge4$ and $C_N>\ce$, there is an integer
+$n\in[\lceil N/2\rceil,N]$ such that $C_n>\ce$ and
+\[
+ d_n<0.086,\qquad d_n\le\frac{10}{\sqrt{N-2}}.
+\]
+Every positive-discrepancy maximizing law at this index is supported
+in $[-6,6]$.
+\end{lemma}
+
+\begin{proof}
+Set $m=\lceil N/2\rceil$, $a_j=C_j-\ce$, and
+\[
+ D=\frac{\min\{0.4690-\ce,\ 4.75/\sqrt{m-1}\}}
+         {\sum_{j=m}^N1/j}.
+\]
+If no positive $a_j$, $m\le j\le N$, has $d_j\le D$, then every
+such positive term satisfies $a_{j-1}>a_j+D/j>0$.  Starting at $N$
+and summing backwards contradicts \eqref{eq:effective-cn} at $m-1$.
+Thus an index with $d_n\le D$ exists.  Since
+\[
+ \sum_{j=m}^N\frac1j\ge\log2,\qquad
+ m-1\ge\frac{N-2}{2},\qquad
+ \frac{0.4690-\ce}{\log2}<0.086,\qquad
+ \frac{4.75\sqrt2}{\log2}<10,
+\]
+the stated bounds follow.
+
+For the support assertion, the function $H_k$ in
+\eqref{eq:gaussian-H} satisfies the explicit bound
+\begin{equation}\label{eq:effective-H-global}
+ |H_k(z,y)|\le\frac{\phi_0}{6}|y|^3+\frac{|y|}{5}+\frac12
+ \qquad(k\ge2).
+\end{equation}
+To verify it, use the proof of Lemma~\ref{lem:gaussian-expansion}.
+The translation remainder is at most $\phi_0|y|^3/6$.
+For its scale function, the bounds
+$\sup_r|r|\phi(r)<1/4$ and $\sup_r|r|^3\phi(r)<1/2$ give
+$|f''(\lambda)|<5/4$ on $0\le\lambda\le1/2$.  Its contribution is
+therefore at most $5/(8\sqrt k)<1/2$.  Finally,
+$\|(x\phi(x))'\|_\infty=\phi_0<2/5$ bounds the remaining term
+by $|y|/5$.
+
+Let $(P,t)$ attain the positive maximum $R=C_k>\ce$,
+and write $\beta=\beta(P)$ and $M(P)=\EE[X|X|]$.  Inserting
+the $C_{k-1}$ bound into \eqref{eq:influence} gives
+\[
+ \beta I(y)\le H_k(z,y)+\beta(d_k+0.4690)
+ +\frac32R\beta(y^2-1)
+ -R\{|y|^3-\beta-3yM(P)\}.
+\]
+Here $0\le k(\sqrt{k/(k-1)}-1)\le1$.
+Using $R>2/5$, $R<1/2$, $\beta<2$, and $|M(P)|\le1$,
+we obtain, with $r=|y|$,
+\[
+ \beta I(y)\le-\frac{r^3}{3}+\frac{3r^2}{2}
+                    +\frac{17r}{10}+\frac32+2d_k.
+\]
+When $d_k\le1$, the right side is negative at $r=6$, where it
+is at most $-43/10$, and is decreasing for $r\ge6$.
+The support contact condition \eqref{eq:contact} proves the claim.
+\end{proof}
+
+\subsection{Explicit smoothing and a near-lattice estimate}
+
+In Lemma~\ref{lem:signed-smoothing}, one may take
+\begin{equation}\label{eq:effective-smoothing-constants}
+ C_1=\frac14,\qquad C_2=24.
+\end{equation}
+Indeed, its density is
+$K(x)=3(8\pi)^{-1}\sinc(x/4)^4$, and
+\[
+ K(x)\le\frac3{8\pi}\min\{1,256/x^4\},\qquad
+ \EE|Z|\le12/\pi<4.
+\]
+For $a=16$, symmetry gives
+$\varepsilon=\PP(Z>16)<1/8$ and
+$C_a=\EE(16-Z)_+<18$.  The constants displayed at the end of
+that lemma are consequently bounded by \eqref{eq:effective-smoothing-constants}.
+
+\begin{lemma}\label{lem:effective-low-frequency}
+Let $P\in\Pthree$ be supported in $[-6,6]$ with $\beta(P)<1.84$.
+Write $f(u)=\EE e^{iuX}$ and $\kappa=\EE X^3$.  For
+$k\ge2$ and $|t|\le\sqrt k/2$,
+\begin{equation}\label{eq:effective-fourier-error}
+\begin{split}
+ &\left|f(t/\sqrt k)^k-
+ e^{-t^2/2}\left(1+\frac{\kappa(it)^3}{6\sqrt k}\right)\right|\\
+ &\qquad\le
+ \frac{0.61t^4e^{-0.35t^2}+0.048t^6e^{-t^2/2}}{k}.
+\end{split}
+\end{equation}
+The integral of the left side divided by $|t|$, over this interval,
+is at most $6/k$.
+\end{lemma}
+
+\begin{proof}
+We have $\EE X^4\le6\beta<11.04$.  Taylor expansion and centering give
+\[
+ f(u)=1-\frac{u^2}{2}+\frac{\kappa(iu)^3}{6}+r(u),
+ \qquad |r(u)|\le0.46u^4,\qquad |f(u)-1|\le u^2/2.
+\]
+For $|u|\le1/2$, the principal logarithm therefore satisfies
+\[
+ \left|\log f(u)+\frac{u^2}{2}-\frac{\kappa(iu)^3}{6}\right|
+ \le(0.46+1/7)u^4<0.61u^4.
+\]
+An independent copy $X'$ satisfies
+$\EE(X-X')^4=2\EE X^4+6<28.08$, whence
+\[
+ |f(u)|^2\le1-u^2+1.17u^4\le1-0.7u^2,
+ \qquad |f(u)|\le e^{-0.35u^2}.
+\]
+Compare $k\log f(u)$ with
+$-ku^2/2+k\kappa(iu)^3/6$ by integrating the exponential along
+the joining segment.  Then use $|e^{iv}-1-iv|\le v^2/2$ for real
+$v$, and $\kappa^2/72<0.048$.  This proves
+\eqref{eq:effective-fourier-error}.  The integral constant is bounded by
+$0.61/(0.35)^2+16(0.048)<6$.
+\end{proof}
+
+The signed Edgeworth distribution function used below is
+\[
+ \mathcal G_{k,\kappa}(x)
+ =\Phi(x)+\frac{\kappa}{6\sqrt k}(1-x^2)\phi(x).
+\]
+For $|\kappa|<1.84$, its density has absolute value at most one:
+use $\phi_0<2/5$ and
+$\sup_x|(x^3-3x)\phi(x)|<5/4$.
+The corresponding Fourier transform, denoted by $b_k$, satisfies
+\begin{equation}\label{eq:effective-gaussian-tail}
+ \int_{|t|\ge\sqrt k/2}\frac{|b_k(t)|}{|t|}\,dt
+ \le5e^{-k/8}.
+\end{equation}
+Integration by parts bounds its two terms respectively by
+$8e^{-k/8}/k$ and
+$1.84(1/6+2/(3k))e^{-k/8}$, whose sum is less than the stated
+bound for $k\ge2$.
+
+\begin{lemma}\label{lem:effective-near-lattice}
+Suppose $P\in\Pthree$ is supported in $[-6,6]$ and $R_k(P)>\ce$
+for an integer $k\ge1024$.  There are $a\in\R$ and
+$h\in[\pi/500,4\pi]$ such that
+\begin{equation}\label{eq:effective-near-lattice}
+ \EE\dist(X,a+h\mathbb Z)^2\le2\pi^2\frac{\log k}{k}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The moment cutoff gives $\beta(P)<1.84$.  If
+$|f(u)|\le1-\log k/k$ throughout $1/2\le|u|\le1000$, then
+$|f(u)|^k\le1/k$ there.  Use cutoff $1000\sqrt k$ in
+Lemma~\ref{lem:signed-smoothing}, with
+\eqref{eq:effective-smoothing-constants},
+Lemma~\ref{lem:effective-low-frequency}, and
+\eqref{eq:effective-gaussian-tail}.  Since $\log2000<8$ and
+$(5/4)\sqrt k e^{-k/8}\le1/\sqrt k$ for $k\ge1024$, this gives
+\[
+ \sqrt k\,\|F_k-\mathcal G_{k,\kappa}\|_\infty
+ \le\frac{13}{2\sqrt k}+\frac3{125},
+\]
+where $F_k$ is the CDF of the standardized sum.
+It follows from $\beta\ge1$ and $|\kappa|\le\beta$ that
+\[
+ R_k(P)\le\frac1{15}+\frac{13}{2\sqrt k}+\frac3{125}
+ \le0.293791667<\ce,
+\]
+a contradiction.  Thus some $u\in[1/2,1000]$ has
+$|f(u)|>1-\log k/k$.
+Set $\theta=\arg f(u)$, $a=\theta/u$, and $h=2\pi/u$.  Then
+\[
+ \EE|e^{iuX}-e^{i\theta}|^2=2(1-|f(u)|)<2\log k/k.
+\]
+The inequality
+$\dist(v,2\pi\mathbb Z)\le(\pi/2)|e^{iv}-1|$ now gives
+\eqref{eq:effective-near-lattice}, since $u\ge1/2$.
+\end{proof}
+
+\subsection{A quantitative two-cluster smoothing expansion}
+
+In this and the next two subsections, let
+\[
+\begin{gathered}
+ I=[2/5,9/20],\qquad
+ B\sim\operatorname{Bernoulli}(p),\quad p\in I,\\
+ Y=B+U,\qquad \EE(U\mid B)=0,\qquad |U|\le\varepsilon,
+\end{gathered}
+\]
+and put
+\[
+ v=p(1-p),\quad s=\EE U^2,\quad \sigma^2=v+s,\quad
+ \gamma=\frac{\EE(Y-p)^3}{\sigma^3}.
+\]
+Let $J_n$ be the CDF of $\sum_{i=1}^nY_i+H$, where $H$ is
+independent and uniform on $[-1/2,1/2]$.
+
+\begin{lemma}\label{lem:effective-cluster-jitter}
+If $T\ge10$, $\varepsilon\le(100T)^{-1}$, and $n\ge10^6$, then,
+with $z=(x-np)/(\sigma\sqrt n)$,
+\begin{equation}\label{eq:effective-cluster-jitter}
+\begin{split}
+ &\sqrt n\sup_x\left|
+ J_n(x)-\Phi(z)-\frac{\gamma}{6\sqrt n}(1-z^2)\phi(z)
+ \right|\\
+ &\quad\le
+ \mathcal E(n,\varepsilon,T):=
+ \frac{4(1+\log T)}{\sqrt n}
+ +2\varepsilon^2T^2(1+\log T)+\frac{50}{T}.
+\end{split}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Write $f_Y(u)=\EE e^{iuY}$, $q_Y(u)=|f_Y(u)|^2$, and
+define $f_B,q_B$ similarly.
+For independent copies, put $D_B=B-B'$ and $D_U=U-U'$.
+Conditional centering gives $\EE(D_U\mid B,B')=0$ and
+$\EE D_U^2=2s$.  Taylor expansion in $D_U$ yields
+\begin{align}
+ |q_Y-q_B|&\le su^2,\notag\\
+ |q_Y'-q_B'|&\le s\{2|u|+(1+2\varepsilon)u^2\},\notag\\
+ |q_Y''-q_B''|&\le s\{2+4(1+2\varepsilon)|u|
+                       +(1+2\varepsilon)^2u^2\}
+ \le10s(1+u^2).\label{eq:effective-cluster-derivatives}
+\end{align}
+For example, these follow by differentiating $-\xi\sin(u\xi)$ and
+$-\xi^2\cos(u\xi)$ twice in $\xi$, using $|\xi|\le1+2\varepsilon$.
+No independence between $B$ and $U$ is needed.
+
+We have $q_B(u)=1-4v\sin^2(u/2)$ and $q_B''(u)=-2v\cos u$,
+with $v\ge6/25$.  On each interval
+$|u-2\pi j|\le1/4$ intersecting $[-T,T]$, use
+$|u|\le T+1/2$ in \eqref{eq:effective-cluster-derivatives}.
+The second-derivative error is at most $0.0011125$, so $q_Y''\le-2/5$;
+the endpoint first-derivative errors are less than $0.001$, whereas
+the Bernoulli derivatives have absolute value greater than $0.11$.
+There is consequently a unique internal maximum $u_j$, and
+\[
+ |u_j-2\pi j|\le8sT^2,\qquad
+ |f_Y(u)|^n\le e^{-n(u-u_j)^2/10}.
+\]
+The multiplier $H_0(u)=\sinc(u/2)$ vanishes at $2\pi j$ for
+$j\ne0$ and has Lipschitz constant at most $1/4$.
+For $j\ge1$, $|u|\ge5j$ on the corresponding interval, so its
+Fourier integral is at most
+\[
+ \frac1{20j}\int_{\R}(|w|+8sT^2)e^{-nw^2/10}\,dw
+ \le\frac1{2jn}+\frac{12sT^2}{5j\sqrt n}.
+\]
+After summing over positive and negative resonances, their total
+contribution is at most
+\begin{equation}\label{eq:effective-cluster-resonances}
+ \left(\frac1n+\frac{5sT^2}{\sqrt n}\right)(1+\log T).
+\end{equation}
+Outside these intervals, for $1/2\le|u|\le T$,
+$q_Y(u)\le1-1/100$ and $|f_Y(u)|^n\le e^{-n/200}$.
+The corresponding integral is bounded by $2\log(2T)e^{-n/200}$.
+
+For the low frequencies, $\varepsilon\le10^{-3}$ gives
+\[
+ \frac6{25}\le\sigma^2\le\frac14+10^{-6},\qquad
+ |(Y-p)/\sigma|<2,\qquad
+ \beta(Y)\le\frac{(1/4)(0.52)+4\cdot10^{-6}}{(6/25)^{3/2}}<1.11.
+\]
+Lemma~\ref{lem:effective-low-frequency} thus applies after standardization.
+The raw range $|u|\le1/2$ corresponds to
+$|t|\le\sigma\sqrt n/2<\sqrt n/2$.
+The additional multiplier error is bounded by
+\[
+ \frac1{24\sigma^2n}\int_{\R}|t|e^{-0.35t^2}\,dt
+ \le\frac{125}{252n}<\frac1{2n},
+\]
+so the low-frequency integral is at most $7/n$.
+The Gaussian tail beyond $|t|=\sigma\sqrt n/2$ is at most
+$20e^{-3n/100}$, by the calculation in
+\eqref{eq:effective-gaussian-tail} and $\sigma^2\ge6/25$.
+
+Apply signed smoothing with cutoff $\sigma T\sqrt n$ and density
+bound one.  Since $\sigma>0.48$, the scaled error is at most
+\[
+ \frac7{4\sqrt n}
+ +\left(\frac1{4\sqrt n}+\frac54sT^2\right)(1+\log T)
+ +\frac{\sqrt n}{2}\log(2T)e^{-n/200}
+ +5\sqrt n e^{-3n/100}+\frac{50}{T}.
+\]
+For $n\ge10^6$, the two exponential terms are together at most
+$(1+\log T)/\sqrt n$.  Using $s\le\varepsilon^2$ proves the lemma.
+\end{proof}
+
+\subsection{Binomial estimates and small accumulated variance}
+
+We use the iid nonuniform bound announced in
+\cite[pp.~124--125]{Shevtsova2013}; its normalization and the
+constant $17.36$ are recorded in equation~(1) and Table~1 of the
+arXiv version of \cite{Shevtsova2020}.
+Let $Y_1,\ldots,Y_n$ be independent with common law $Q$, and put
+$m_Q=\EE Y_1$, $v_Q=\Var Y_1>0$ and
+$\rho_Q=\EE|Y_1-m_Q|^3<\infty$.
+For $Z_i=(Y_i-m_Q)/\sqrt{nv_Q}$, the total variance is one and
+the third-order Lyapunov fraction is
+\[
+ L_{3,n}=\sum_{i=1}^n\EE|Z_i|^3
+        =\frac{\rho_Q}{v_Q^{3/2}\sqrt n}
+        =\frac{\beta(Q)}{\sqrt n}.
+\]
+Thus, with $z=(x-nm_Q)/\sqrt{nv_Q}$, the bound becomes
+\begin{equation}\label{eq:effective-nonuniform}
+ \frac{\sqrt n}{\beta(Q)}
+ \left|Q^{*n}((-\infty,x])-\Phi(z)\right|
+ \le\frac{17.36}{1+|z|^3}.
+\end{equation}
+The source uses strict distribution functions.  Taking thresholds
+decreasing to $x$ gives the right-continuous version above, since
+both $\Phi(z)$ and $(1+|z|^3)^{-1}$ are continuous; the same
+estimate therefore holds for left limits as well.
+For independent, not necessarily identically distributed variables,
+we use the ordinary Berry--Esseen inequality with constant one,
+which is an enlargement of $0.5583$ in \cite{Shevtsova2013}.
+
+\begin{lemma}\label{lem:effective-binomial}
+Use the notation of Lemma~\ref{lem:binomial-estimates}, with $p\in I$.
+For $n\ge10^{100}$,
+\begin{align}
+ \sup_k b_{n,k}(p)&\le2/\sqrt n,\label{eq:effective-binomial-mass}\\
+ 0.99\le\frac{\sqrt{nv}\,b_{n,k}(p)}{\phi(z_k)}
+ &\le1.01,\qquad
+ b_{n,k}(p)\ge10^{-6}/\sqrt n
+ \quad (|z_k|\le5),\label{eq:effective-binomial-central}\\
+ b_{n,k}(p)&\ge e^{-100}/\sqrt n
+ \quad (|z_k|\le11),\label{eq:effective-binomial-wide}\\
+ |R^\pm_{n,k}(B_p)-A_p^\pm(z_k)|
+ &\le2\cdot10^{-10}.\label{eq:effective-binomial-branches}
+\end{align}
+Moreover, $R_n(B_p)>0.39$.
+\end{lemma}
+
+\begin{proof}
+The Fourier bound in the proof of Lemma~\ref{lem:binomial-estimates}
+gives
+$b_{n,k}(p)\le\sqrt\pi/(2\sqrt{2nv})<2/\sqrt n$.
+Apply Lemma~\ref{lem:effective-cluster-jitter} with $U=0$ and
+$T=10^{12}$; its scaled error is less than $10^{-10}$.
+Since
+\[
+ F_{n,p}(k)=J_n(k+1/2),\qquad
+ F_{n,p}(k-1)=J_n(k-1/2),
+\]
+Taylor expansion at $z_k$ gives each scaled jump-branch error
+at most $10^{-10}+1/(4\sqrt n)<2\cdot10^{-10}$.
+For the Taylor constant, use
+$\|\phi'\|_\infty<1/4$,
+$\|((1-z^2)\phi(z))'\|_\infty<5/4$,
+$v\ge6/25$, and $|\gamma|=|1-2p|/\sqrt v\le0.2/\sqrt{6/25}$.
+The resulting coefficient of $1/\sqrt n$ is less than $1/4$.
+It follows that
+\[
+ \left|\sqrt n\,b_{n,k}(p)-\frac{\phi(z_k)}{\sqrt v}\right|
+ \le4\cdot10^{-10}.
+\]
+On $|z_k|\le5$, use $\phi(z_k)\ge\phi(5)>10^{-6}$ and
+$1/\sqrt v\ge2$ to obtain \eqref{eq:effective-binomial-central}.
+The branch normalization factor $\sqrt v/(p^2+(1-p)^2)$ is at most
+one, giving \eqref{eq:effective-binomial-branches}.
+
+For \eqref{eq:effective-binomial-wide}, instead choose $T=e^{200}$.
+The scaled smoothing error is less than $10^{-47}$, whereas
+$\phi(11)>e^{-62}$; taking the same difference of two CDF values
+proves the stated lower bound.
+At an integer nearest $np$, \eqref{eq:effective-binomial-branches}
+gives
+\[
+ R_n(B_p)\ge
+ \frac{\phi_0(2-p)}{3(p^2+(1-p)^2)}-3\cdot10^{-10}.
+\]
+The fraction is at least
+$0.3989(1.55)/(3(0.52))>0.396$, proving the final assertion.
+\end{proof}
+
+In Lemma~\ref{lem:one-sided-loss}, the constants may be taken as
+\begin{equation}\label{eq:effective-one-sided}
+ c_0=\frac38,\qquad C=176000,\qquad \kappa=\frac1{160000}.
+\end{equation}
+Indeed, the bounded-variable argument there already gives $c_0=3/8$.
+Clipping at $1/20$ incurs mean error at most $8000\EE W^4$,
+clipping probability at most $160000\EE W^4$, and loss
+$2(8000)\EE W^4$ in the first absolute moment.  The stated $\kappa$
+ensures the mean shift is at most $1/20$, and the total coefficient is
+$(3/8)(16000)+(5/4)(8000)+160000=176000$.
+Both strict-event inequalities of that lemma are therefore valid
+with these constants.
+
+\begin{lemma}\label{lem:effective-small-variance}
+If $p\in I$, $\EE(U\mid B)=0$, $|U|\le\varepsilon\le10^{-12}$,
+$n\ge10^{100}$, and $\lambda=n\EE U^2\le10^{-12}$, then
+$R_n(B+U)\le R_n(B)<\ce$.  For $\lambda>0$, more precisely,
+\begin{equation}\label{eq:effective-small-gap}
+ R_n(B+U)\le R_n(B)-
+ \min\left\{\frac{5\cdot10^{-9}\lambda}
+                  {\sqrt{5\lambda+\varepsilon^2}},\ \frac1{10}\right\}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Put $s_b=\EE(U^2\mid B=b)$, $s=(1-p)s_0+ps_1$, and
+$K=\sum_iB_i$.  Given $K=k$, the noise sum has the law of a sum
+$W_k$ of $n-k$ independent copies of $U\mid B=0$ and $k$ independent
+copies of $U\mid B=1$, as in the proof of
+Lemma~\ref{lem:small-cluster-variance}.  For $0\le k\le n$,
+\[
+ t_k:=\EE W_k^2=(n-k)s_0+ks_1\le\frac52\lambda,\qquad
+ \EE W_k^4\le3t_k^2+\varepsilon^2t_k
+ \le20\lambda(\lambda+\varepsilon^2)=:D_4.
+\]
+For $|z_k|\le5$,
+$|t_k-\lambda|\le25\lambda/(4\sqrt n)$, so
+$t_k\in[\lambda/2,3\lambda/2]$.  Interpolation yields
+\begin{equation}\label{eq:effective-absolute-noise}
+ \EE|W_k|\ge\frac{t_k}{\sqrt{3t_k+\varepsilon^2}}
+ \ge\frac{\lambda}{2\sqrt{5\lambda+\varepsilon^2}}.
+\end{equation}
+
+Write a real threshold as $k+u$, $k\in\mathbb Z$, $|u|\le1/2$.
+The two block identities
+\eqref{eq:cluster-right-block}--\eqref{eq:cluster-left-block}
+hold with
+\begin{equation}\label{eq:effective-leakage}
+ |e^\pm_{k,u}|
+ \le\frac{80D_4}{\sqrt n},
+\end{equation}
+because \eqref{eq:effective-binomial-mass} applies and
+$\sum_{j\ne k}(|j-k|-1/2)^{-4}<40$.
+Let $\rho=\EE|Y-p|^3$, $\tau=p^2+(1-p)^2$, and
+\[
+ A=\frac{(v+s)^{3/2}}{\rho},\qquad A_B=\frac{\sqrt v}{\tau}.
+\]
+The signs in the two clusters relative to $p$ are fixed.  Conditional
+cubic expansion gives $|\rho-v\tau|\le4s$ and hence
+\begin{equation}\label{eq:effective-prefactor}
+ \frac12<A<2,\qquad |A-A_B|\le50s.
+\end{equation}
+For $G_k$ and $f_k$ in the proof of
+Lemma~\ref{lem:small-cluster-variance}, the relative mass bound
+\eqref{eq:effective-binomial-central} gives
+$3/4\le f_k'\le5/4$ on $|u|\le3/5$, whenever $|z_k|\le5$.
+Indeed, the new Gaussian argument differs from $z_k$ by at most
+$3/\sqrt n$, its density ratio has logarithm of absolute value
+at most $20/\sqrt n$, and $\sqrt{v/(v+s)}\ge1-3s$.
+The derivative ratio is thus in $[0.98,1.02]$.
+
+Since $D_4<3\cdot10^{-23}$, apply
+\eqref{eq:effective-one-sided} to both block identities.
+After multiplication by $A\sqrt n$, each central signed discrepancy
+is at most the corresponding binomial branch with variance $v+s$
+and prefactor $A$, minus
+$10^{-8}\lambda/\sqrt{5\lambda+\varepsilon^2}$, plus
+$2\cdot10^7\lambda(\lambda+\varepsilon^2)$.
+For the loss, the available coefficient is
+$(3/8)(1/2)10^{-6}(1/2)=9.375\cdot10^{-8}>10^{-8}$.
+For the error, \eqref{eq:effective-leakage} and
+\eqref{eq:effective-prefactor} give the coefficient
+$(176000\cdot4+160)20=14{,}083{,}200<2\cdot10^7$.
+
+To restore the binomial variance and prefactor, use
+\eqref{eq:effective-prefactor}, the strict Bernoulli bound
+of \cite[Theorem~1, p.~1]{Schulz2016}, and
+\[
+ \sup_x\left|\Phi\left(\frac{x}{\sqrt{n(v+s)}}\right)
+             -\Phi\left(\frac{x}{\sqrt{nv}}\right)\right|\le s.
+\]
+This adds at most $100\lambda/\sqrt n$.
+All positive errors are absorbed by half the loss, because
+\[
+ 2\cdot10^7(10^{-12}+10^{-24})+100\cdot10^{-50}
+ <\frac{5\cdot10^{-9}}{\sqrt{5\cdot10^{-12}+10^{-24}}}.
+\]
+The two sides are respectively less than $2.1\cdot10^{-5}$ and
+greater than $1/600$.  This comparison follows after dividing by
+$\lambda>0$, and is valid however small that number is.
+
+If $|z_k|>5$, the correctly standardized threshold for $Y$ has
+absolute value greater than $4.9$.  Equation~\eqref{eq:effective-nonuniform}
+then bounds both signed discrepancies by
+$17.36/(1+4.9^3)<0.15$, whereas
+Lemma~\ref{lem:effective-binomial} gives $R_n(B)>0.39$.
+This includes $k<0$ and $k>n$, and leaves a gap greater than $1/10$.
+The central and far estimates prove \eqref{eq:effective-small-gap}.
+If $\lambda=0$, then $U=0$ almost surely and Schulz's theorem applies
+directly.
+\end{proof}
+
+\subsection{An explicit local two-cluster theorem}
+
+\begin{lemma}\label{lem:effective-local-mass}
+Suppose $p\in I$, $\EE(U\mid B)=0$, $|U|\le e^{-\mathcal A}$,
+$n\ge10^{100}$, and $\lambda=n\EE U^2\ge10^{-12}$.
+For $(a,b)=(1/4,1/2)$ and $(a,b)=(-1/2,-1/4)$,
+\begin{equation}\label{eq:effective-local-mass}
+ \inf_{|x-np|\le3\sqrt n}
+ \PP\left\{\sum_{i=1}^nY_i\in(x+a,x+b)\right\}
+ \ge\frac{e^{-4\cdot10^{12}}}{\sqrt n}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Take all integers $k$ with $|k-x|\le r=\max(1,\sqrt\lambda)$.
+Since $\lambda\le ne^{-2\mathcal A}$,
+\[
+ |k-np|\le5\sqrt n,\qquad
+ |t_k/\lambda-1|\le25/(2\sqrt n).
+\]
+All these integers are in $[0,n]$, with
+$t_k\in[\lambda/2,3\lambda/2]$ and $|z_k|<11$.
+Their binomial masses are at least $e^{-100}/\sqrt n$ by
+\eqref{eq:effective-binomial-wide}.
+The independent conditional noise summands have total third
+absolute moment at most $e^{-\mathcal A}t_k$.  Their Berry--Esseen
+error is consequently at most $e^{-\mathcal A}/\sqrt{t_k}$.
+Both standardized endpoints of the required conditional interval
+have absolute value at most
+$A_0=3\cdot10^6/\sqrt2$.
+Its Gaussian mass is at least $c_1/\sqrt\lambda$, where
+\[
+ c_1=\frac14\sqrt{\frac23}\phi(A_0)
+ =\frac{e^{-(9/4)10^{12}}}{4\sqrt{3\pi}}
+ >e^{-3\cdot10^{12}}.
+\]
+As $e^{-\mathcal A}\le c_1/(4\sqrt2)$, subtracting the two CDF
+errors leaves at least $c_1/(2\sqrt\lambda)$.
+There are at least $\sqrt\lambda$ selected integers, so summation
+gives $e^{-100}c_1/(2\sqrt n)\ge e^{-4\cdot10^{12}}/\sqrt n$.
+The upper endpoint of the open interval uses a CDF left limit,
+to which the same Berry--Esseen estimate applies.
+\end{proof}
+
+\begin{proposition}\label{prop:effective-clusters}
+If $p\in I$, $\EE(U\mid B)=0$, and $|U|\le e^{-\mathcal A}$, then
+$R_n(B+U)<\ce$ for every integer $n\ge N_*$.
+Consequently, the parameters in Proposition~\ref{prop:clusters}
+may be taken to be $\eta=\eta_*$ and $N=N_*$.
+\end{proposition}
+
+\begin{proof}
+Lemma~\ref{lem:effective-small-variance} treats
+$\lambda=n\EE U^2\le10^{-12}$.  In the remaining case put
+\[
+ D=e^{-5\cdot10^{12}},\qquad T=e^{10^{13}}.
+\]
+Lemma~\ref{lem:effective-cluster-jitter} applies and gives an error
+$E_n=\mathcal E(n,e^{-\mathcal A},T)\le D/4$.
+Its three terms are bounded by
+\[
+ 4(1+10^{13})e^{-5\cdot10^{13}},\qquad
+ 2(1+10^{13})e^{-18\cdot10^{13}},\qquad
+ 50e^{-10^{13}}.
+\]
+Also $2/\sqrt n+100s\le D/4$.
+
+Let $F_n$ be the CDF of $\sum_iY_i$.
+The exact uniform-jitter identities used in the proof of
+Lemma~\ref{lem:accumulated-cluster-variance}, together with
+\eqref{eq:effective-local-mass}, give
+\[
+ J_n(x+1/2)-F_n(x)\ge D/\sqrt n,\qquad
+ F_n(x)-J_n(x-1/2)\ge D/\sqrt n
+\]
+whenever $|z|\le5$.
+Indeed, then $|x-np|\le5\sigma\sqrt n<3\sqrt n$, and each
+difference is at least half the appropriate quarter-interval mass.
+Expanding \eqref{eq:effective-cluster-jitter} at $x\pm1/2$,
+with scaled Taylor remainder at most $2/\sqrt n$, yields
+\begin{equation}\label{eq:effective-central-envelope}
+ \sqrt n\,|F_n(x)-\Phi(z)|
+ \le\phi_0\left(\frac1{2\sigma}+\frac{|\gamma|}{6}\right)
+       -D+E_n+\frac2{\sqrt n}.
+\end{equation}
+
+Write $\tau=p^2+(1-p)^2$,
+$\beta_B=\tau/\sqrt v$ and $\gamma_B=(1-2p)/\sqrt v$.
+Conditional cubic expansion and $v\ge6/25$ give
+$|\beta(Y)-\beta_B|\le100s$ and $|\gamma-\gamma_B|\le100s$.
+Since $\sigma\ge\sqrt v$,
+\[
+ \phi_0\left(\frac1{2\sigma}+\frac{|\gamma|}{6}\right)
+ \le L_B+7s,\qquad
+ L_B=\frac{\phi_0(3+1-2p)}{6\sqrt v}\le\ce\beta_B.
+\]
+For the last inequality, put $c_*=3+\sqrt{10}$ and use the exact identity
+$c_*\tau-2(2-p)=2c_*(p-\pe)^2$.
+The right side of \eqref{eq:effective-central-envelope} is therefore
+at most
+\[
+ \ce\beta(Y)-D+E_n+\frac2{\sqrt n}+100s
+ \le\ce\beta(Y)-D/2.
+\]
+As $\beta(Y)<2$, the normalized error on $|z|\le5$ is at most
+$\ce-D/4$.  On $|z|>5$, \eqref{eq:effective-nonuniform} bounds it
+by $17.36/126<0.14<\ce-D/4$.  This proves the first assertion.
+
+For the second, let a law $Q$ satisfy the hypotheses of
+Proposition~\ref{prop:clusters} with $\eta=\eta_*$ at parameter $\pe$.
+Let $B$ mark its upper cluster, put $m_b=\EE(X\mid B=b)$, and
+$d=m_1-m_0$.  Then
+\[
+ (X-m_0)/d=B+U,\qquad
+ \EE(U\mid B)=0,\qquad
+ |U|\le\frac{2\eta_*}{1-2\eta_*}\le4\eta_*\le e^{-\mathcal A}.
+\]
+The cluster probability lies in $I$, and affine invariance proves
+the assertion.  Reflection treats the parameter $1-\pe$.
+\end{proof}
+
+\subsection{Stability of the lattice moment inequality}
+
+\begin{lemma}\label{lem:effective-lattice-stability}
+Let $Q\in\Pthree$ be supported in $[-15,15]$, with $\beta(Q)\le2$,
+and suppose its support is contained in a translate of $h\mathbb Z$,
+$h>0$.  Put $c_*=3+\sqrt{10}$.  If
+\[
+ 0\le D:=c_*\beta(Q)-|\kappa(Q)|-3h\le\delta\le10^{-6},
+\]
+then, for some $\epsilon\in\{-1,1\}$,
+\begin{equation}\label{eq:effective-lattice-stability}
+ W_1(Q,\epsilon\Pe)\le1000\sqrt\delta,\qquad
+ |h-h_{\mathrm E}|\le1000\sqrt\delta.
+\end{equation}
+The span $h$ need not be maximal.
+\end{lemma}
+
+\begin{proof}
+Reflect the law if necessary so that $\kappa(Q)\ge0$, and write
+$c=c_*=3+\sqrt{10}$.  Let
+\[
+\begin{gathered}
+ m=\EE X_+=\EE X_->0,\qquad \pi=\nu_-\otimes\nu_+,\\
+ \nu_-(da)=\frac{aQ(-da)}m,\qquad
+ \nu_+(db)=\frac{bQ(db)}m.
+\end{gathered}
+\]
+Here $\nu_-$ and $\nu_+$ are probability measures on the positive
+half-line.  The
+moment identities
+\[
+ m\int(a+b)\,d\pi=1,\qquad
+ m\int(a^2+b^2)\,d\pi=\beta(Q),\qquad
+ m\int(b^2-a^2)\,d\pi=\kappa(Q)
+\]
+and $(c-2)(c-4)=9$ yield
+\begin{equation}\label{eq:effective-lattice-deficit}
+\begin{split}
+ D=m\int\bigl[
+ &(\sqrt{c-2}\,a-\sqrt{c-4}\,b)^2\\
+ &+3(a+b)(a+b-h)\bigr]\,d\pi(a,b).
+\end{split}
+\end{equation}
+Every $a+b$ in this integral is a positive integer multiple of
+$h$, so both terms are nonnegative.  Moreover,
+\[
+ \frac{c-1-\delta}{3}\le h\le\frac{2c}{3},
+ \qquad\text{and hence}\qquad 1.7<h<5.
+\]
+If zero belonged to the lattice, every such pair would satisfy
+$a+b\ge2h$, and the second term in
+\eqref{eq:effective-lattice-deficit} would give $D\ge3h>5$,
+contrary to $D\le10^{-6}$.
+
+Let $-a,b$ be the two lattice points immediately bracketing zero,
+so that $a,b>0$ and $a+b=h$.  Every negative lattice point has
+absolute value $a+kh$, and every positive lattice point has value
+$b+lh$, with $k,l\ge0$ integers.  If either $-a$ or $b$ had zero
+mass, every pair in the integral would have $k+l\ge1$ and thus
+sum at least $2h$, giving the same contradiction.  Both points
+therefore have positive mass.  In particular, their difference is
+$h$, so the given span is in fact maximal under the present
+hypotheses, although this was not assumed.
+
+Let $A_{\mathrm{out}}$ consist of all the other lattice points and
+write
+\[
+ r=Q(A_{\mathrm{out}}),\qquad
+ s_1=\EE[|X|\ind_{A_{\mathrm{out}}}],\qquad
+ s_2=\EE[X^2\ind_{A_{\mathrm{out}}}].
+\]
+A pair involving an outside point has sum at least $2h$.  Since
+\[
+ (a'+b')\ind_{\{a'+b'\ge2h\}}
+ \ge a'\ind_{\{-a'\in A_{\mathrm{out}}\}}
+     +b'\ind_{\{b'\in A_{\mathrm{out}}\}},
+\]
+integration against the size-biased product measure gives
+\begin{equation}\label{eq:effective-extra-lattice-mass}
+ s_2\le\frac{D}{3h}\le\delta.
+\end{equation}
+Every outside point has absolute value at least $h>1$, so
+$r\le s_1\le s_2\le\delta$ as well.
+
+Let $W$ have the conditional law of $X$ on $\{-a,b\}$, and put
+$\mu=\EE W$ and $v_0=\Var W$.  The exact formulas
+\[
+ \mu=-\frac{\EE[X\ind_{A_{\mathrm{out}}}]}{1-r},
+ \qquad \EE W^2=\frac{1-s_2}{1-r}
+\]
+imply
+\[
+ |\mu|\le2\delta,\qquad |v_0-1|\le5\delta.
+\]
+The function
+$F_h(x)=c|x|^3-x^3-3hx^2$ is nonnegative whenever $|x|\ge h$,
+because $c-1>3$.  As $\EE F_h(X)=D$, it follows that
+$\EE F_h(W)\le D/(1-r)\le2\delta$.
+We have $|W|<5$ and $|\mu|\le2\delta$; hence the mean value
+theorem bounds the change in each of the two cubic moments on
+centering by $200\delta$.  The change in the quadratic
+contribution is $3h\mu^2\le60\delta^2\le\delta$.
+Consequently,
+\[
+ c\EE|W-\mu|^3-\EE(W-\mu)^3-3hv_0\le2000\delta.
+\]
+
+Let $p=\PP\{W=b\}\in(0,1)$.  Since
+$v_0=h^2p(1-p)$, division by $v_0^{3/2}$ yields
+\[
+ \frac{c\{p^2+(1-p)^2\}-(1-2p)-3}{\sqrt{p(1-p)}}
+ =\frac{2c(p-\pe)^2}{\sqrt{p(1-p)}}\le3000\delta.
+\]
+Using $\sqrt{p(1-p)}\le1/2$, we obtain
+\[
+ |p-\pe|\le\sqrt{750/c}\,\sqrt\delta\le12\sqrt\delta.
+\]
+As $\delta\le10^{-6}$, this places $p$ in
+$I=[2/5,9/20]$.
+
+For completeness, all Wasserstein costs can be realized by
+explicit couplings.  Leave $X$ unchanged on $\{-a,b\}$ and,
+on $A_{\mathrm{out}}$, replace it by an independent sample with
+law $\mathcal L(W)$.  The resulting variable has law
+$\mathcal L(W)$, and each replacement moves a point by less than
+$15+5=20$.  Thus
+\[
+ W_1(Q,\mathcal L(W))\le20r\le20\delta.
+\]
+Put $Y=(W-\mu)/\sqrt{v_0}$.  The deterministic coupling and
+$\EE|Y|\le1$ give
+\[
+ \begin{split}
+ W_1(\mathcal L(W),\mathcal L(Y))
+ &\le |\mu|+|\sqrt{v_0}-1|\EE|Y|\\
+ &\le2\delta+\frac{5\delta}{1+\sqrt{1-5\delta}}
+ \le10\delta.
+ \end{split}
+\]
+The standardized Bernoulli atoms are
+$l(p)=-\sqrt{p/(1-p)}$ and
+$u(p)=\sqrt{(1-p)/p}$.  On $I$, both derivatives have absolute
+value less than five, and the distance between any two relevant
+atoms is less than $5/2$.  Couple Bernoulli variables with
+parameters $p$ and $\pe$ using one uniform random variable.
+Where their indicators agree, the displacement is at most
+$5|p-\pe|$; the indicators disagree with probability
+$|p-\pe|$, and the displacement there is less than $5/2$.
+It follows that
+\[
+ W_1(\mathcal L(Y),\Pe)\le8|p-\pe|.
+\]
+The triangle inequality now proves
+\[
+ W_1(Q,\Pe)\le30\delta+96\sqrt\delta
+ \le1000\sqrt\delta.
+\]
+
+Finally, put $s(p)=[p(1-p)]^{-1/2}$.  On $I$ we have $s(p)<3$
+and $|s'(p)|<1$.  Since $h=\sqrt{v_0}s(p)$ and
+$h_{\mathrm E}=s(\pe)$,
+\[
+ |h-h_{\mathrm E}|
+ \le3|\sqrt{v_0}-1|+|p-\pe|
+ \le15\delta+12\sqrt\delta
+ \le1000\sqrt\delta.
+\]
+Undoing the initial reflection proves both assertions.
+\end{proof}
+
+\subsection{Finite lattice approximation and uniform resonance control}
+
+For this and the next subsection fix
+\begin{equation}\label{eq:effective-global-parameters}
+ T=e^{20\mathcal A},\qquad \tau=e^{-100\mathcal A},\qquad
+ g=10^{-20}\tau^2,\qquad \xi=10^{10}\tau T^2.
+\end{equation}
+
+\begin{lemma}\label{lem:effective-global-jitter}
+Suppose $P\in\Pthree$ is supported in $[-6,6]$,
+$n\ge N_{\mathrm{conf}}$, and $R_n(P)>\ce$.
+There is a finite lattice law $Q$, of mean $\mu_Q$, variance $v_Q$,
+central third absolute moment $\rho_Q$, central third moment $\kappa_Q$,
+and maximal span $h$, such that
+\begin{gather}
+ \pi/500\le h\le5,\qquad W_1(P,Q)\le10^5\tau,\notag\\
+ |\mu_Q|\le10^5\tau,\qquad |v_Q-1|\le10^9\tau,\label{eq:effective-rounded-moments}\\
+ |\rho_Q-\beta(P)|+|\kappa_Q-\kappa(P)|\le2\cdot10^9\tau.\notag
+\end{gather}
+Its standardization is supported in $[-15,15]$ and has third
+absolute moment less than two.
+For an independent $H_h$ uniform on $[-h/2,h/2]$ and every integer
+$\ell\in[n/2,n]$,
+\begin{equation}\label{eq:effective-global-jitter}
+\begin{split}
+ \sqrt\ell\sup_x\Bigg|
+ &\PP\left\{\sum_{i=1}^{\ell}X_i+H_h\le x\right\}
+ -\Phi(x/\sqrt\ell)\\
+ &-\frac{\kappa(P)}{6\sqrt\ell}
+       (1-x^2/\ell)\phi(x/\sqrt\ell)
+ \Bigg|\le e^{-19\mathcal A}.
+\end{split}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Round $X$ to a nearest point $Z$ of the lattice
+$a_0+h_0\mathbb Z$ supplied by Lemma~\ref{lem:effective-near-lattice}.
+Then
+\[
+ |Z|<13,\qquad
+ e_n:=\EE|X-Z|\le5\sqrt{\frac{\log n}{n}}.
+\]
+The occupied lattice points have total span at most $12+h_0$,
+so their number and their range of integer indices are less than 2000.
+Retain the points with probability at least $\tau$, let $E$ be the
+retention event, put $r=\PP(E^c)\le2000\tau$, and let $Q$ be the
+law of $Z$ conditional on $E$.  Since $e_n\le\tau$,
+\[
+ W_1(P,Q)\le e_n+26r\le10^5\tau.
+\]
+Writing $w=10^5\tau$, the moment bounds follow explicitly from
+\[
+ |\mu_Q|\le w,\qquad |v_Q-1|\le26w+w^2\le27w.
+\]
+Centering $Q$ increases the coupling distance by at most $w$.
+The coupled centered variables lie in $[-14,14]$, on which both
+cubic moment functions have Lipschitz constant $588$.
+Each central third-moment error is thus at most $1176w<10^9\tau$.
+This also verifies the claims about the standardization of $Q$.
+The span $h$ is a positive integer multiple of $h_0$.
+Equation~\eqref{eq:esseen-moment}, applied to the standardization
+of $Q$, gives $3hv_Q\le c_*\rho_Q-|\kappa_Q|$, and hence $h\le5$.
+
+Write the retained points as $z_0+hd_i$, with $d_0=0$,
+$0\le d_i\le2000$, and $\gcd\{d_i:d_i>0\}=1$.
+There are integers $c_i$ such that
+\begin{equation}\label{eq:effective-bezout}
+ \sum_i c_i d_i=1,\qquad \sum_i|c_i|\le4000.
+\end{equation}
+To see this, choose a positive $d_j=d_*$. If $d_*=1$,
+take $c_j=1$ and $c_i=0$ for $i\ne j$.
+Otherwise, since $\gcd\{d_i:d_i>0\}=1$, the Cayley graph of
+$\mathbb Z/d_*\mathbb Z$ generated by the residues $\pm d_i$
+is connected. A simple path from zero to one has at most
+$d_*-1$ edges. Its signed integer sum $S$ therefore satisfies
+\[
+ S\equiv1\pmod{d_*},\qquad |S|\le2000(d_*-1).
+\]
+Write $S-1=md_*$, where $m\in\mathbb Z$. Then
+\[
+ |m|\le\frac{2000(d_*-1)+1}{d_*}\le2000.
+\]
+Subtracting $md_j$ from the signed sum gives integer coefficients
+$c_i$ with
+\[
+ \sum_i c_i d_i=1,\qquad
+ \sum_i|c_i|\le(d_*-1)+|m|\le3999<4000.
+\]
+This proves \eqref{eq:effective-bezout}.
+
+Let $\omega=2\pi/h$.  Each retained conditional probability is at
+least $\tau$.  The circular triangle inequality and
+\eqref{eq:effective-bezout} give
+\[
+ \dist(uh,2\pi\mathbb Z)
+ \le4000\max_i\dist(uhd_i,2\pi\mathbb Z).
+\]
+In the identity
+$1-|f_Q(u)|^2=\sum_{i,j}q_iq_j[1-\cos(u(z_i-z_j))]$,
+retain the symmetric pair $(i,0),(0,i)$ with maximal circular
+distance.  Using $1-\cos t\ge2\dist(t,2\pi\mathbb Z)^2/\pi^2$
+gives
+\begin{equation}\label{eq:effective-spectral-gap}
+ 1-|f_Q(u)|^2\ge10^{-12}\tau^2\dist(u,\omega\mathbb Z)^2,
+ \qquad u\in\R.
+\end{equation}
+The coefficient is
+$4(\pi/500)^2/(\pi^2\,4000^2)=10^{-12}$.
+
+If $\dist(u,\omega\mathbb Z)\ge10^{-3}$, then
+$|f_Q(u)|\le1-50g$.  The conditional mixture representation gives
+the useful inequality
+\begin{equation}\label{eq:effective-mixture-gap}
+ |f_P(u)|\le(1-r)|f_Q(u)|+r+|u|e_n.
+\end{equation}
+Indeed, the difference on the retention event is at most
+$|u|\EE(|X-Z|\ind_E)$, while the complementary term has absolute
+value at most $r$.
+The parameter choices ensure $Te_n\le g$ and $r<1/100$:
+for $n\ge N_{\mathrm{conf}}$,
+\[
+ Te_n\le5\sqrt{1000\mathcal A}\,e^{-480\mathcal A}
+       <10^{-20}e^{-200\mathcal A}=g.
+\]
+Consequently $|f_P(u)|\le1-g$ at every nonresonant frequency
+$|u|\le T$.  In particular, the deletion probability has not been
+used as a separate additive spectral error.
+
+Write $q_P=|f_P|^2$ and $q_Q=|f_Q|^2$.
+The coupling above and independent copies give, for $|u|\le T+1$,
+\begin{equation}\label{eq:effective-global-derivatives}
+ |q_P'(u)-q_Q'(u)|\le\xi,\qquad
+ |q_P''(u)-q_Q''(u)|\le\xi.
+\end{equation}
+For the difference variable $x\in[-26,26]$, the functions
+$-x\sin(ux)$ and $-x^2\cos(ux)$ have Lipschitz constants
+$1+26|u|$ and $52+676|u|$, respectively.
+The two difference variables have coupling distance at most
+$2\cdot10^5\tau$, which proves \eqref{eq:effective-global-derivatives}.
+
+Consider only the intervals
+$I_j=[j\omega-10^{-3},j\omega+10^{-3}]$ intersecting $[-T,T]$;
+each lies entirely in $[-T-1,T+1]$.
+At $u_j^0=j\omega$,
+\[
+ q_Q'(u_j^0)=0,\qquad q_Q''(u_j^0)=-2v_Q,\qquad
+ \|q_Q'''\|_\infty\le26(2v_Q)<60.
+\]
+Thus $q_P''\le-1$ on $I_j$, and its endpoint derivatives have
+opposite signs.  There is a unique interior maximum $u_j$, with
+\[
+ |u_j-u_j^0|\le\xi,\qquad
+ |f_P(u)|^\ell\le e^{-\ell(u-u_j)^2/4}\quad(u\in I_j).
+\]
+The multiplier $\sinc(hu/2)$ vanishes at every nonzero $u_j^0$ and
+has Lipschitz constant at most $3/2$.  For positive $j$ we have
+$|u|\ge j$ on $I_j$.  Since
+\[
+ \int_{\R}|w|e^{-\ell w^2/4}\,dw=\frac4\ell,\qquad
+ \int_{\R}e^{-\ell w^2/4}\,dw=\frac{2\sqrt\pi}{\sqrt\ell},
+\]
+the total integral over nonzero resonances is at most
+\[
+ 12(1+\log T)\left(\frac1\ell+\frac{\xi}{\sqrt\ell}\right).
+\]
+The factor $1+\log T$ bounds the harmonic sum over the relevant
+indices, including intervals only partially intersecting the cutoff.
+
+The low-frequency integral is at most $11/\ell$:
+Lemma~\ref{lem:effective-low-frequency} contributes $6/\ell$, and
+the extra jitter multiplier contributes at most
+$h^2/(24(0.35)\ell)<3/\ell$.
+The nonresonant integral is at most $2\log(2T)e^{-\ell g}$,
+and \eqref{eq:effective-gaussian-tail} gives the tail
+$5e^{-\ell/8}$.  Signed smoothing therefore bounds the left side
+of \eqref{eq:effective-global-jitter} by
+\begin{align*}
+ \frac{11}{4\sqrt\ell}
+ &+\frac{3(1+\log T)}{\sqrt\ell}
+   +3\xi(1+\log T)\\
+ &+\frac12\sqrt\ell\log(2T)e^{-\ell g}
+   +\frac54\sqrt\ell e^{-\ell/8}+\frac{24}{T}.
+\end{align*}
+For $\ell\in[n/2,n]$ and $n\ge N_{\mathrm{conf}}$,
+$\ell g\ge\sqrt n$, since
+$\ell g/\sqrt n\ge\frac12\,10^{-20}e^{300\mathcal A}>1$.
+The two exponential terms can consequently be absorbed to give
+the bound
+\[
+ \frac{10(1+\log T)}{\sqrt\ell}
+ +3\xi(1+\log T)+\frac{24}{T}.
+\]
+Its terms are at most
+$10\sqrt2(1+20\mathcal A)e^{-500\mathcal A}$,
+$3\cdot10^{10}(1+20\mathcal A)e^{-60\mathcal A}$, and
+$24e^{-20\mathcal A}$, respectively.  Their sum is less than
+$e^{-19\mathcal A}$, proving the lemma.
+\end{proof}
+
+\subsection{Effective identification of a maximizing law}
+
+\begin{lemma}\label{lem:effective-identification}
+Let $(P,t)$ attain the positive maximum $R=C_n>\ce$, where
+$n\ge N_{\mathrm{conf}}$ and $\supp P\subset[-6,6]$.
+Put $z=t/\sqrt n$, $h_{\mathrm E}=1/\se$, and $\delta_0=e^{-6\mathcal A}$.
+Then the span $h$ in Lemma~\ref{lem:effective-global-jitter} satisfies
+\begin{equation}\label{eq:effective-identification}
+ W_1(P,\Pe)\le e^{-7\mathcal A},\qquad
+ |h-h_{\mathrm E}|\le e^{-7\mathcal A},
+\end{equation}
+and
+\begin{equation}\label{eq:effective-moment-identification}
+ \begin{split}
+ |\beta(P)-\be|&\le\delta_0,\qquad
+ |\kappa(P)-\ke|\le\delta_0,\\
+ |M(P)-M(\Pe)|&\le\delta_0,\qquad z^2\le e^{-5\mathcal A}.
+ \end{split}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Let $Q,h$ be supplied by Lemma~\ref{lem:effective-global-jitter}.
+The upper jitter envelope, followed by Taylor expansion at $z$, gives
+\begin{equation}\label{eq:effective-maximizer-envelope}
+ \ce\beta(P)<
+ \phi(z)\left\{\frac h2+\frac{\kappa(P)}6(1-z^2)\right\}
+ +e^{-18\mathcal A}.
+\end{equation}
+The scaled Taylor remainder is at most $10/\sqrt n$ and is
+absorbed into the displayed error.  Since
+$\phi(z)\le\phi_0$ and $|(1-z^2)\phi(z)|\le\phi_0$,
+\[
+ c_*\beta(P)-|\kappa(P)|-3h\le16e^{-18\mathcal A}.
+\]
+The lattice moment inequality and \eqref{eq:effective-rounded-moments}
+therefore yield
+\[
+ 0\le c_*\rho_Q-|\kappa_Q|-3hv_Q
+ \le16e^{-18\mathcal A}+10^{12}\tau.
+\]
+Upon standardization, this deficit is at most
+$\delta=e^{-16\mathcal A}$.  Lemma~\ref{lem:effective-lattice-stability}
+applies to the standardized $Q$.  Transferring its conclusions back to
+$P$, using \eqref{eq:effective-rounded-moments}, gives some
+$\epsilon\in\{-1,1\}$ for which
+\[
+ \max\{W_1(P,\epsilon\Pe),\,|h-h_{\mathrm E}|\}
+ \le4000e^{-8\mathcal A}+10^{10}\tau<e^{-7\mathcal A}.
+\]
+Here $\epsilon\Pe$ denotes the law of $\epsilon X$ for $X\sim\Pe$.
+On the common support interval $[-6,6]$, the functions
+$|x|^3,x^3,x|x|$ have Lipschitz constants at most $108$.
+Consequently,
+\[
+ |\beta(P)-\be|\le\delta_0,\qquad
+ |\kappa(P)-\epsilon\ke|\le\delta_0,\qquad
+ |M(P)-\epsilon M(\Pe)|\le\delta_0.
+\]
+
+The sign is positive.  Indeed, the envelope corresponding to the
+negative sign is
+\[
+ E_-(z)=\phi(z)\left\{\frac{h_{\mathrm E}}{2}-\frac{\ke}{6}
+                            +\frac{\ke z^2}{6}\right\}.
+\]
+Since $h_{\mathrm E}>\ke>0$, its maximum occurs at zero.  By
+\eqref{eq:esseen-identities}, it is smaller than $\ce\be$ by
+$\phi_0\ke/3>0.039$.  The perturbations in
+\eqref{eq:effective-maximizer-envelope} are bounded uniformly in $z$
+by $2\delta_0+e^{-18\mathcal A}$, which excludes $\epsilon=-1$.
+
+The nonuniform estimate \eqref{eq:effective-nonuniform}, together
+with $R>\ce>0.4$, gives $|z|<4$.  For the positive envelope
+\[
+ E_+(z)=\phi(z)\left\{\frac{h_{\mathrm E}}{2}+\frac{\ke}{6}
+                            -\frac{\ke z^2}{6}\right\},
+\]
+we have
+\[
+ E_+(0)-E_+(z)\ge\frac{z^2}{100}\qquad(|z|\le4).
+\]
+This follows from $1-e^{-z^2/2}\ge z^2/20$ on that interval,
+$h_{\mathrm E}/2\ge1$, and $\phi_0>0.39$.
+Equation~\eqref{eq:effective-maximizer-envelope} and the moment
+bounds now give $z^2\le300\delta_0\le e^{-5\mathcal A}$.
+\end{proof}
+
+\subsection{An explicit bound on the entire support}
+
+\begin{proposition}\label{prop:effective-confinement}
+Suppose that $(P,t)$ attains the positive maximum $R=C_n>\ce$,
+where
+\[
+ n\ge N_{\mathrm{conf}},\qquad
+ \supp P\subset[-6,6],\qquad d_n\le20/\sqrt n.
+\]
+Let $\widetilde P$ be the law of $\pe+\se X$, $X\sim P$, and
+let $\zeta=\eta_*/2$.  Then
+\begin{equation}\label{eq:effective-full-support}
+ \supp\widetilde P\subset[-\zeta,\zeta]\cup[1-\zeta,1+\zeta],
+ \qquad
+ |\widetilde P([1-\zeta,1+\zeta])-\pe|<\eta_*.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Write $\beta=\beta(P)$, $\kappa=\kappa(P)$, $M=M(P)$,
+$z=t/\sqrt n$, and $\delta_0=e^{-6\mathcal A}$.
+We first obtain a coarser support bound.  For $|y|\le6$,
+the Gaussian cancellation in Lemma~\ref{lem:gaussian-expansion}
+has the explicit remainder
+\begin{equation}\label{eq:effective-H-local}
+ \left|H_n(z,y)-\frac{\phi_0}{6}(y^3-3y)\right|
+ \le100\left(z^2+\frac1{\sqrt n}\right).
+\end{equation}
+For completeness, the fourth-order translation remainder contributes
+at most $67.5/\sqrt n$, the scale remainder at most
+$0.625/\sqrt n$, and the remaining first-order expansion at most
+$11.25/\sqrt n$.  These estimates use
+$\|\phi'''\|_\infty<5/4$.  Finally,
+\[
+ \|\phi''''\|_\infty
+ \le\phi_0(16e^{-2}+12e^{-1}+3)<4,\qquad \phi'''(0)=0,
+\]
+so replacing $\phi''(z)$ by $\phi''(0)$ contributes at most $78z^2$.
+This proves \eqref{eq:effective-H-local}.
+
+In the influence bound, the recursive constant and $-R\beta/2$
+together are at most $3d_n+2/n$.  Here we use
+\[
+ 0\le n\left(\sqrt{\frac n{n-1}}-1\right)-\frac12\le\frac2n.
+\]
+Apply \eqref{eq:effective-H-local},
+\eqref{eq:effective-moment-identification}, and
+$0<R-\ce\le4.75/\sqrt n$ to \eqref{eq:influence}.
+The errors in this step have the following bounds, uniformly for
+$|y|\le6$:
+\[
+\begin{array}{ll}
+\text{Error source}&\text{Upper bound}\\[2pt]
+\hline
+\text{Gaussian cancellation remainder}
+ &100(z^2+n^{-1/2})\\
+\text{Recursive constant, including }-R\beta/2
+ &3d_n+2/n\\
+\text{Replacement of }R\text{ by }\ce
+ &1625n^{-1/2}\\
+\text{Replacement of }\beta,M\text{ by }\be,M_{\mathrm E}
+ &36\delta_0
+\end{array}
+\]
+For the third row, use $\beta<2$, $|M|\le1$, and
+$4.75(216+108+18)=1624.5$; the fourth follows from
+$\ce(54+18)<36$.
+Since $d_n\le20n^{-1/2}$, their sum is at most
+$2000n^{-1/2}+1000(\delta_0+z^2)$.  Moreover,
+\[
+ \begin{split}
+ 2000n^{-1/2}+1000(\delta_0+z^2)
+ &\le2000e^{-500\mathcal A}
+       +1000e^{-6\mathcal A}+1000e^{-5\mathcal A}\\
+ &=e^{-4\mathcal A}
+   \left(2000e^{-496\mathcal A}
+        +1000e^{-2\mathcal A}+1000e^{-\mathcal A}\right)
+ <e^{-4\mathcal A}.
+ \end{split}
+\]
+At every $y\in\supp P$, the contact condition therefore gives
+\begin{equation}\label{eq:effective-contact-polynomial}
+ 0\le L(y)+\frac{2000}{\sqrt n}
+                  +1000(\delta_0+z^2)
+ \le L(y)+e^{-4\mathcal A},
+\end{equation}
+where, with $M_{\mathrm E}=M(\Pe)$,
+\begin{align*}
+ L(y)
+ &=\frac{\phi_0}{6}(y^3-3y)-\ce|y|^3
+       +\frac32\ce\be y^2+3\ce M_{\mathrm E}y\\
+ &=-\frac{\phi_0}{6}y^2
+    \left\{(c_*-\sgn y)|y|-\frac32c_*\be\right\}.
+\end{align*}
+The second identity uses $c_*M_{\mathrm E}=1$.
+The nonzero roots are $-\sqrt{10}\aE/2$ and $\sqrt{10}\bE/2$.
+If $r=\pe+\se y\notin[-1/2,3/2]$, then $L(y)<-0.1$.
+Indeed, $\pe\in[0.418,0.420]$ and $\se\in[0.49,0.5]$ give
+$|y|\ge1.836$ on the left and $|y|\ge2.16$ on the right,
+whereas the corresponding root magnitudes are less than $1.363$
+and $1.89$.  Substitution into the factored expression proves
+the stated bound.  Thus \eqref{eq:effective-contact-polynomial}
+forces
+\begin{equation}\label{eq:effective-coarse-support}
+ \pe+\se\supp P\subset[-1/2,3/2].
+\end{equation}
+
+We next quantify the flatness at each contact point.  Put $m=n-1$
+and $G=F_{m,P}$, and let $J$ be the CDF of the sum of $m$
+independent $P$ variables plus an independent
+$\operatorname{Unif}[-h_{\mathrm E}/2,h_{\mathrm E}/2]$ variable.
+Replacing $h$ by $h_{\mathrm E}$ in Lemma~\ref{lem:effective-global-jitter}
+gives a scaled approximation error at most
+$e^{-19\mathcal A}+\tfrac12e^{-7\mathcal A}\le2\delta_0$.
+To see this, couple the two uniform variables so that their
+distance is at most $|h-h_{\mathrm E}|/2$, and sandwich the new CDF
+between translates of the old one.  The approximating CDF has
+derivative at most $1/\sqrt m$ in the original coordinates,
+and \eqref{eq:effective-identification} gives the claim.
+
+Set
+\[
+ \mathcal P(y)=|y|^3-\beta-3My-\frac32\beta(y^2-1).
+\]
+The contact equation \eqref{eq:contact-equation} and the
+definition of $H_n$ give the exact identity
+\begin{equation}\label{eq:effective-contact-exact}
+ \begin{split}
+ &\sqrt m\left\{G(t-y)-\Phi\left(\frac{t-y}{\sqrt m}\right)\right\}\\
+ &\qquad=\sqrt{\frac mn}
+       \left\{R\beta+\frac{R\mathcal P(y)-H_n(z,y)}n\right\}.
+ \end{split}
+\end{equation}
+For $|y|\le6$, we have $|\mathcal P(y)|\le341$ and
+$|H_n(z,y)|<17$; the latter follows from
+\eqref{eq:effective-H-local} and
+\eqref{eq:effective-moment-identification}.
+Since $R<1/2$ and $R\beta<1$, it follows that
+\begin{equation}\label{eq:effective-contact-saturation}
+ \sqrt m\left\{G(t-y)-\Phi\left(\frac{t-y}{\sqrt m}\right)\right\}
+ \ge\ce\beta-\frac{200}{n}.
+\end{equation}
+On the other hand, the upper envelope for $J$ and the moment
+bounds in \eqref{eq:effective-moment-identification} give the
+following explicit error budget:
+\[
+\begin{array}{ll}
+\text{Error source}&\text{Scaled upper bound}\\[2pt]
+\hline
+\text{Uniform smoothing with span }h&e^{-19\mathcal A}\\
+\text{Replacement of }h\text{ by }h_{\mathrm E}
+ &\tfrac12e^{-7\mathcal A}\\
+\text{Moment error in the upper envelope}&\tfrac12\delta_0\\
+\text{Taylor remainder at the half-span shift}&2n^{-1/2}\\
+\text{Contact saturation deficit}&200/n
+\end{array}
+\]
+Indeed, the coupling and derivative bound used above give the
+second row.  The scaled upper envelope is at most
+$\phi_0(h_{\mathrm E}/2+|\kappa|/6)$, whose excess over
+$\ce\beta$ is at most $(\ce+\phi_0/6)\delta_0<\delta_0/2$.
+For the fourth row, put $a=h_{\mathrm E}/2<3/2$ and
+$\psi(w)=(1-w^2)\phi(w)$.
+Taylor expansion at $w=(t-y)/\sqrt m$, using
+$\|\phi'\|_\infty<1/4$,
+$\|\psi'\|_\infty<5/4$, and $|\kappa|<2$, gives a scaled
+remainder at most
+$(a^2/8+5a/12)/\sqrt m<1/\sqrt m\le2/\sqrt n$.
+Consequently,
+\[
+ \begin{split}
+ &\sqrt m\{J(t-y+h_{\mathrm E}/2)-G(t-y)\}\\
+ &\quad\le e^{-19\mathcal A}
+       +\tfrac12e^{-7\mathcal A}+\tfrac12\delta_0
+       +2n^{-1/2}+200/n\\
+ &\quad\le4\delta_0+1000n^{-1/2}\\
+ &\quad\le e^{-5\mathcal A}
+       \left(4e^{-\mathcal A}+1000e^{-495\mathcal A}\right)
+       <e^{-5\mathcal A}.
+ \end{split}
+\]
+The lower bound follows directly from the support of the uniform
+variable.  We have therefore proved
+\begin{equation}\label{eq:effective-contact-flatness}
+ 0\le\sqrt m\{J(t-y+h_{\mathrm E}/2)-G(t-y)\}
+ \le4\delta_0+\frac{1000}{\sqrt n}\le e^{-5\mathcal A}.
+\end{equation}
+
+Let $x<y$ be support points and put $d=y-x\in(0,h_{\mathrm E})$.
+The uniform integral formula gives
+\[
+ J(t-y+h_{\mathrm E}/2)=\frac1{h_{\mathrm E}}\int_0^{h_{\mathrm E}}G(t-y+u)\,du.
+\]
+Monotonicity and \eqref{eq:effective-contact-flatness} yield
+\begin{equation}\label{eq:effective-increment-upper}
+ \sqrt m\{G(t-x)-G(t-y)\}
+ \le\frac{h_{\mathrm E}}{h_{\mathrm E}-d}e^{-5\mathcal A}.
+\end{equation}
+Subtracting the exact contact equations at $x$ and $y$ gives
+\begin{align*}
+ \sqrt m\{G(t-x)-G(t-y)\}
+ &=\sqrt{\frac mn}\phi(z)d
+   +\frac{\sqrt m}{2n}z\phi(z)(y^2-x^2)\\
+ &\quad+\frac{R\sqrt m}{n^{3/2}}
+                         \{\mathcal P(x)-\mathcal P(y)\}.
+\end{align*}
+The first coefficient is at least $1/3$.
+The absolute sum of the other terms is at most
+$4.5/\sqrt n+341/n\le30/\sqrt n$, using
+$|x|,|y|\le6$ and $\sup_z|z\phi(z)|<1/4$.
+Consequently,
+\begin{equation}\label{eq:effective-increment-lower}
+ \sqrt m\{G(t-x)-G(t-y)\}\ge\frac d3-\frac{30}{\sqrt n}.
+\end{equation}
+No lower bound on the probability of either support point is used.
+
+Finally, the affine map $T(x)=\pe+\se x$ sends $\Pe$ to
+$B_{\pe}$.  The affine scaling identity for the Wasserstein distance
+and \eqref{eq:effective-identification} therefore give
+\[
+ W_1(\widetilde P,B_{\pe})
+ =\se W_1(P,\Pe)\le e^{-7\mathcal A}.
+\]
+
+There are support points of $\widetilde P$ within $\zeta/10$
+of both zero and one: otherwise the transport cost from the
+corresponding Bernoulli atom would be at least
+$0.4\zeta/10>e^{-7\mathcal A}$.
+
+Suppose there is a further support point $r$ with
+$\dist(r,\{0,1\})\ge\zeta$.
+By \eqref{eq:effective-coarse-support}, $r\in[-1/2,3/2]$.
+Choosing the nearer of the two support points just found gives
+two support points at distance in $[0.9\zeta,0.6]$ in these
+coordinates.  Their distance in the standardized coordinates
+therefore satisfies
+\[
+ 0.9\zeta h_{\mathrm E}\le d\le0.6h_{\mathrm E}.
+\]
+The upper bound \eqref{eq:effective-increment-upper} is at most
+$3e^{-5\mathcal A}$, whereas
+\eqref{eq:effective-increment-lower} is at least
+$0.6\zeta-30/\sqrt n>3e^{-5\mathcal A}$, a contradiction.
+This proves the support assertion in
+\eqref{eq:effective-full-support}.
+Collapsing each cluster to its neighboring integer costs at most
+$\zeta$ in $W_1$.  If its upper cluster probability is $p$,
+the triangle inequality gives
+$|p-\pe|\le\zeta+e^{-7\mathcal A}<\eta_*$, completing the proof.
+\end{proof}
+
+\begin{proof}[Proof of the explicit bound in Theorem~\ref{thm:main}]
+Suppose that $C_N>\ce$ for some $N\ge2N_{\mathrm{conf}}$.
+By Lemmas~\ref{lem:attainment} and~\ref{lem:effective-selection},
+there is an index $n\in[\lceil N/2\rceil,N]$ and a positive
+maximizing pair $(P,t)$ for which
+\[
+ n\ge N_{\mathrm{conf}},\qquad
+ \supp P\subset[-6,6],\qquad
+ d_n\le\frac{10}{\sqrt{N-2}}
+       \le\frac{10}{\sqrt{n-2}}\le\frac{20}{\sqrt n}.
+\]
+Proposition~\ref{prop:effective-confinement} places the affine
+image $\widetilde P$ in the two-cluster neighborhood of
+Proposition~\ref{prop:effective-clusters}.
+Since $n\ge N_{\mathrm{conf}}\ge N_*$, that proposition and
+affine invariance give $R_n(P)<\ce$, contrary to $R_n(P)=C_n>\ce$.
+Thus the threshold \eqref{eq:explicit-threshold} is valid.
+\end{proof}
+
+
+\newpage
+% ===== references =====
+\begin{thebibliography}{99}
+
+\bibitem{Bentkus1994}
+V. Bentkus,
+On the asymptotical behavior of the constant in the Berry--Esseen inequality,
+\textit{J. Theoret. Probab.} \textbf{7} (1994), no.~2, 211--224.
+\href{https://doi.org/10.1007/BF02214268}{doi:10.1007/BF02214268}.
+
+\bibitem{Berry1941}
+A.~C. Berry,
+The accuracy of the Gaussian approximation to the sum of independent variates,
+\textit{Trans. Amer. Math. Soc.} \textbf{49} (1941), 122--136.
+\href{https://doi.org/10.1090/S0002-9947-1941-0003498-3}{doi:10.1090/S0002-9947-1941-0003498-3}.
+
+\bibitem{Chistyakov2002a}
+G.~P. Chistyakov,
+A new asymptotic expansion and asymptotically best constants in Lyapunov's theorem.~I,
+\textit{Theory Probab. Appl.} \textbf{46} (2002), 226--242.
+\href{https://doi.org/10.1137/S0040585X97978932}{doi:10.1137/S0040585X97978932}.
+
+\bibitem{Chistyakov2002b}
+G.~P. Chistyakov,
+A new asymptotic expansion and asymptotically best constants in Lyapunov's theorem.~II,
+\textit{Theory Probab. Appl.} \textbf{46} (2002), 516--522.
+\href{https://doi.org/10.1137/S0040585X97979172}{doi:10.1137/S0040585X97979172}.
+
+\bibitem{Chistyakov2003}
+G.~P. Chistyakov,
+A new asymptotic expansion and asymptotically best constants in Lyapunov's theorem.~III,
+\textit{Theory Probab. Appl.} \textbf{47} (2003), 395--414.
+\href{https://doi.org/10.1137/S0040585X97979822}{doi:10.1137/S0040585X97979822}.
+
+\bibitem{DerumignyGirardGuyonvarch2024}
+A. Derumigny, L. Girard and Y. Guyonvarch,
+Explicit non-asymptotic bounds for the distance to the first-order Edgeworth expansion,
+\textit{Sankhy\=a A} \textbf{86} (2024), no.~1, 261--336.
+\href{https://doi.org/10.1007/s13171-023-00320-y}{doi:10.1007/s13171-023-00320-y}.
+
+\bibitem{Esseen1942}
+C.-G. Esseen,
+On the Liapounoff limit of error in the theory of probability,
+\textit{Ark. Mat. Astr. Fys.} \textbf{28A} (1942), no.~9, 1--19.
+
+\bibitem{Esseen1945}
+C.-G. Esseen,
+Fourier analysis of distribution functions. A mathematical study of the Laplace--Gaussian law,
+\textit{Acta Math.} \textbf{77} (1945), 1--125.
+\href{https://doi.org/10.1007/BF02392223}{doi:10.1007/BF02392223}.
+
+\bibitem{Esseen1956}
+C.-G. Esseen,
+A moment inequality with an application to the central limit theorem,
+\textit{Skand. Aktuarietidskr.} \textbf{39} (1956), 160--170.
+\href{https://doi.org/10.1080/03461238.1956.10414946}{doi:10.1080/03461238.1956.10414946}.
+
+\bibitem{HoeffdingShrikhande1955}
+W. Hoeffding and S.~S. Shrikhande,
+Bounds for the distribution function of a sum of independent, identically distributed random variables,
+\textit{Ann. Math. Statist.} \textbf{26} (1955), no.~3, 439--449.
+\href{https://doi.org/10.1214/aoms/1177728489}{doi:10.1214/aoms/1177728489}.
+
+\bibitem{MattnerShevtsova2019}
+L. Mattner and I. Shevtsova,
+An optimal Berry--Esseen type theorem for integrals of smooth functions,
+\textit{ALEA Lat. Am. J. Probab. Math. Stat.} \textbf{16} (2019), 487--530.
+\href{https://doi.org/10.30757/ALEA.v16-19}{doi:10.30757/ALEA.v16-19}.
+
+\bibitem{Prawitz1975}
+H. Prawitz,
+On the remainder in the central limit theorem. Part~I.
+Onedimensional independent variables with finite absolute moments of third order,
+\textit{Scand. Actuar. J.} \textbf{1975}, no.~3, 145--156.
+\href{https://doi.org/10.1080/03461238.1975.10405092}{doi:10.1080/03461238.1975.10405092}.
+
+\bibitem{Schulz2016}
+J. Schulz,
+\textit{The optimal Berry--Esseen constant in the binomial case},
+doctoral dissertation, Universit\"at Trier, 2016.
+\url{https://d-nb.info/1197702695/34}.
+
+\bibitem{Shevtsova2012}
+I. Shevtsova,
+Moment-type estimates with asymptotically optimal structure for the accuracy of the normal approximation,
+\textit{Ann. Math. Inform.} \textbf{39} (2012), 241--307.
+\url{https://ami.uni-eszterhazy.hu/uploads/papers/finalpdf/AMI_39_from241to307.pdf}.
+
+\bibitem{Shevtsova2013}
+I.~G. Shevtsova,
+On the absolute constants in the Berry--Esseen inequality and its structural and nonuniform improvements,
+\textit{Inform. Primen.} \textbf{7} (2013), no.~1, 124--125.
+\url{https://www.mathnet.ru/eng/ia252}.
+
+\bibitem{Zolotarev1966}
+V.~M. Zolotarev,
+An absolute estimate of the remainder term in the central limit theorem,
+\textit{Theory Probab. Appl.} \textbf{11} (1966), no.~1, 95--105.
+\href{https://doi.org/10.1137/1111005}{doi:10.1137/1111005}.
+
+\bibitem{ZolotukhinNagaevChebotarev2018}
+A. Zolotukhin, S. Nagaev and V. Chebotarev,
+On a bound of the absolute constant in the Berry--Esseen inequality for i.i.d. Bernoulli random variables,
+\textit{Mod. Stoch. Theory Appl.} \textbf{5} (2018), no.~3, 385--410.
+\href{https://doi.org/10.15559/18-VMSTA113}{doi:10.15559/18-VMSTA113}.
+
+\bibitem{Shevtsova2020}
+I.~G. Shevtsova,
+Lower bounds for the constants in non-uniform estimates of the rate of convergence in the CLT,
+\textit{J. Math. Sci.} \textbf{248} (2020), 92--98.
+\href{https://doi.org/10.1007/s10958-020-04858-2}{doi:10.1007/s10958-020-04858-2}.
+Author's preprint: \url{https://arxiv.org/abs/2001.01123v1}.
+
+\end{thebibliography}
+
+
+\end{document}

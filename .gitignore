@@ -1,0 +1,25 @@
+# Lean and Lake build products and downloaded dependencies
+.lake/
+*.olean
+*.ilean
+*.olean.private
+*.olean.server
+*.trace
+
+# Fresh verification outputs (the release snapshot is in verification/)
+validation/
+
+# Local editor, Python, and OS files
+__pycache__/
+*.py[cod]
+.venv/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Local credentials and archives
+.env
+.env.*
+*.zip
+*.tar.gz

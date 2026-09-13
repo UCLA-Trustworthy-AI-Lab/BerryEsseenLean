@@ -1,0 +1,52 @@
+name: Lean verification
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lean-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Install elan and the pinned Lean toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          installer_dir="$(mktemp -d)"
+          curl --fail --location --retry 3 \
+            https://github.com/leanprover/elan/releases/download/v4.2.4/elan-x86_64-unknown-linux-gnu.tar.gz \
+            --output "$installer_dir/elan.tar.gz"
+          echo "42b94d4244e8353142c456ec0e4ca6528fd898a6c604d4059f494e706e431f63  $installer_dir/elan.tar.gz" | sha256sum --check
+          tar -xzf "$installer_dir/elan.tar.gz" -C "$installer_dir"
+          "$installer_dir/elan-init" -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          "$HOME/.elan/bin/elan" toolchain install "$(cat lean-toolchain)"
+
+      - name: Fetch the pinned mathlib cache
+        run: lake exe cache get
+
+      - name: Compile all project sources and run every audit
+        run: python3 scripts/verify.py --jobs 2
+
+      - name: Retain verification logs
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: lean-verification-${{ github.run_id }}
+          path: validation/
+          if-no-files-found: ignore
+          retention-days: 14

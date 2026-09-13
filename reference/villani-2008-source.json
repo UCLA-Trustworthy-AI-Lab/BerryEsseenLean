@@ -1,0 +1,49 @@
+{
+  "author": "Cédric Villani",
+  "title": "Optimal transport, old and new",
+  "version": "Author manuscript dated June 13, 2008",
+  "source_url": "http://elenaher.dinauz.org/B07D.StFlour.pdf",
+  "pdf_pages": 998,
+  "sha256": "3ae2db61cbffadfeef0de738742f4f3ce81b21874dacb1ad2991a7000434675d",
+  "correspondence_checked": true,
+  "W": {
+    "statement": [
+      "Definition 6.8(i)",
+      "Theorem 6.9"
+    ],
+    "printed_pages": [
+      108
+    ],
+    "pdf_pages": [
+      114
+    ],
+    "proof_printed_pages": [
+      113,
+      114,
+      115
+    ],
+    "proof_pdf_pages": [
+      119,
+      120,
+      121
+    ]
+  },
+  "K": {
+    "statement": "Remark 6.5, equation (6.3)",
+    "printed_pages": [
+      107
+    ],
+    "pdf_pages": [
+      113
+    ],
+    "alternative_statement": "Particular Case 5.16, equation (5.11)",
+    "alternative_printed_pages": [
+      72
+    ],
+    "alternative_pdf_pages": [
+      78
+    ]
+  },
+  "source_updated_utc": "2026-09-13T01:12:08.099856+00:00",
+  "reference_status": "Adopted reference version for the W and K interfaces."
+}

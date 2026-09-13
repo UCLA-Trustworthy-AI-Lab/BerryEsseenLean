@@ -1,0 +1,12 @@
+STRICT_ALL_AXIOMS_JSON: {"axioms":["propext","Classical.choice","Quot.sound"],"project_declarations":5074,"unexpected_axioms":[]}
+BerryEsseen.strict_main_theorem : BerryEsseen.ClassicalBerryEsseenBounds →
+  BerryEsseen.PublishedEsseenFixedLawAsymptotic →
+    BerryEsseen.PublishedEsseenMoment →
+      BerryEsseen.PublishedBernoulliBound →
+        BerryEsseen.PublishedNonIIDBound → BerryEsseen.PublishedWassersteinThreeTopology → BerryEsseen.MainClaim
+BerryEsseen.strict_explicit_theorem : BerryEsseen.ClassicalBerryEsseenBounds →
+  BerryEsseen.PublishedEsseenMoment →
+    BerryEsseen.PublishedBernoulliBound →
+      BerryEsseen.PublishedNonIIDBound →
+        BerryEsseen.PublishedNonuniformBound → BerryEsseen.PublishedWassersteinDuality → BerryEsseen.ExplicitClaim
+BerryEsseen.strict_sharpness : BerryEsseen.PublishedEsseenFixedLawAsymptotic → BerryEsseen.ManuscriptSharpnessClaim

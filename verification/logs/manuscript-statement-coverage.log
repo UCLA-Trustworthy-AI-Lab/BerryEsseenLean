@@ -1,0 +1,517 @@
+BerryEsseen.strict_main_theorem (H : BerryEsseen.ClassicalBerryEsseenBounds)
+  (A : BerryEsseen.PublishedEsseenFixedLawAsymptotic) (E : BerryEsseen.PublishedEsseenMoment)
+  (B : BerryEsseen.PublishedBernoulliBound) (I : BerryEsseen.PublishedNonIIDBound)
+  (W : BerryEsseen.PublishedWassersteinThreeTopology) : BerryEsseen.MainClaim
+BerryEsseen.strict_explicit_theorem (H : BerryEsseen.ClassicalBerryEsseenBounds) (E : BerryEsseen.PublishedEsseenMoment)
+  (B : BerryEsseen.PublishedBernoulliBound) (I : BerryEsseen.PublishedNonIIDBound)
+  (U : BerryEsseen.PublishedNonuniformBound) (K : BerryEsseen.PublishedWassersteinDuality) : BerryEsseen.ExplicitClaim
+BerryEsseen.strict_sharpness (A : BerryEsseen.PublishedEsseenFixedLawAsymptotic) : BerryEsseen.ManuscriptSharpnessClaim
+BerryEsseen.manuscript_signed_smoothing_sup (μ : MeasureTheory.Measure ℝ) [MeasureTheory.IsProbabilityMeasure μ]
+  (s : MeasureTheory.SignedMeasure ℝ) (hs : ↑s Set.univ = 1) (hμ : MeasureTheory.Integrable (fun z => |z|) μ)
+  (hs1 : MeasureTheory.Integrable (fun z => |z|) s.totalVariation) (M : NNReal)
+  (hM : LipschitzWith M fun x => ↑s (Set.Iic x)) (L : ℝ) (hL : 0 < L) :
+  sSup (Set.range fun x => |μ.real (Set.Iic x) - ↑s (Set.Iic x)|) ≤
+    (1 / 4 * ∫ (t : ℝ) in Set.Icc (-L) L, ‖MeasureTheory.charFun μ t - BerryEsseen.signedFourier s t‖ / |t|) +
+      24 * ↑M / L
+BerryEsseen.maximal_span_wassersteinThree_jitter_expansion (W : BerryEsseen.PublishedWassersteinThreeTopology)
+  (S : BerryEsseen.PublishedSignedSmoothing) (P : ℕ → BerryEsseen.StandardizedLaw) (Q : BerryEsseen.StandardizedLaw)
+  (hW : Filter.Tendsto (fun j => BerryEsseen.wassersteinThree (P j).measure Q.measure) Filter.atTop (nhds 0))
+  (n : ℕ → ℕ) (hn : Filter.Tendsto n Filter.atTop Filter.atTop) (h : ℝ) (hh : 0 ≤ h)
+  (hspan : 0 < h → BerryEsseen.IsLatticeSpan Q.measure h)
+  (hmax : ∀ (d : ℝ), BerryEsseen.IsLatticeSpan Q.measure d → d ≤ h) :
+  TendstoUniformly (fun j x => √↑(n j) * BerryEsseen.jitterCDFError (P j) (n j) h x) (fun x => 0) Filter.atTop
+BerryEsseen.raw_wassersteinThree_variable_jitter_expansion_at_raw (W : BerryEsseen.PublishedWassersteinThreeTopology)
+  (S : BerryEsseen.PublishedSignedSmoothing) (μj : ℕ → MeasureTheory.ProbabilityMeasure ℝ)
+  (μ : MeasureTheory.ProbabilityMeasure ℝ) (hi : ∀ (j : ℕ), MeasureTheory.Integrable (fun x => |x| ^ 3) ↑(μj j))
+  (hiQ : MeasureTheory.Integrable (fun x => |x| ^ 3) ↑μ)
+  (hW : Filter.Tendsto (fun j => BerryEsseen.wassersteinThree ↑(μj j) ↑μ) Filter.atTop (nhds 0))
+  (hσQ : 0 < BerryEsseen.rawStdDev ↑μ) (n : ℕ → ℕ) (hn : Filter.Tendsto n Filter.atTop Filter.atTop) (d : ℝ)
+  (hd : 0 ≤ d ∧ (0 < d → BerryEsseen.IsLatticeSpan (↑μ) d) ∧ ∀ (e : ℝ), BerryEsseen.IsLatticeSpan (↑μ) e → e ≤ d)
+  (dj : ℕ → ℝ) (hdj : ∀ (j : ℕ), 0 ≤ dj j) (hdlim : Filter.Tendsto dj Filter.atTop (nhds d)) (ε : ℝ) :
+  ε > 0 →
+    ∀ᶠ (j : ℕ) in Filter.atTop,
+      ∀ (t : ℝ),
+        |√↑(n j) *
+              (↑(ProbabilityTheory.cdf ((BerryEsseen.iidSumLaw (↑(μj j)) (n j)).conv (BerryEsseen.spanJitter (dj j))))
+                  t -
+                BerryEsseen.edgeworthCDF (n j)
+                  ((∫ (y : ℝ), (y - BerryEsseen.rawMean ↑(μj j)) ^ 3 ∂↑(μj j)) / BerryEsseen.rawStdDev ↑(μj j) ^ 3)
+                  ((t - ↑(n j) * BerryEsseen.rawMean ↑(μj j)) / (BerryEsseen.rawStdDev ↑(μj j) * √↑(n j))))| <
+          ε
+BerryEsseen.wassersteinThree_jitter_envelopes (W : BerryEsseen.PublishedWassersteinThreeTopology)
+  (S : BerryEsseen.PublishedSignedSmoothing) (P : ℕ → BerryEsseen.StandardizedLaw) (Q : BerryEsseen.StandardizedLaw)
+  (hW : Filter.Tendsto (fun j => BerryEsseen.wassersteinThree (P j).measure Q.measure) Filter.atTop (nhds 0))
+  (n : ℕ → ℕ) (hn : Filter.Tendsto n Filter.atTop Filter.atTop) (hn1 : ∀ (j : ℕ), 1 ≤ n j) (h : ℝ) (hh : 0 ≤ h)
+  (hspan : 0 < h → BerryEsseen.IsLatticeSpan Q.measure h)
+  (hmax : ∀ (d : ℝ), BerryEsseen.IsLatticeSpan Q.measure d → d ≤ h) (ε : ℝ) :
+  0 < ε →
+    ∀ᶠ (j : ℕ) in Filter.atTop,
+      ∀ (x : ℝ),
+        BerryEsseen.edgeworthEnvelope (-h) (BerryEsseen.signedThirdMoment (P j)) x - ε ≤
+            √↑(n j) * (BerryEsseen.normalizedSumCDF (P j) (n j) x - BerryEsseen.normalCDF x) ∧
+          √↑(n j) * (BerryEsseen.normalizedSumCDF (P j) (n j) x - BerryEsseen.normalCDF x) ≤
+            BerryEsseen.edgeworthEnvelope h (BerryEsseen.signedThirdMoment (P j)) x + ε
+BerryEsseen.wassersteinThree_jitter_limsup (W : BerryEsseen.PublishedWassersteinThreeTopology)
+  (S : BerryEsseen.PublishedSignedSmoothing) (P : ℕ → BerryEsseen.StandardizedLaw) (Q : BerryEsseen.StandardizedLaw)
+  (hW : Filter.Tendsto (fun j => BerryEsseen.wassersteinThree (P j).measure Q.measure) Filter.atTop (nhds 0))
+  (n : ℕ → ℕ) (hn : Filter.Tendsto n Filter.atTop Filter.atTop) (hn1 : ∀ (j : ℕ), 1 ≤ n j) (h : ℝ) (hh : 0 ≤ h)
+  (hspan : 0 < h → BerryEsseen.IsLatticeSpan Q.measure h)
+  (hmax : ∀ (d : ℝ), BerryEsseen.IsLatticeSpan Q.measure d → d ≤ h) :
+  Filter.limsup (fun j => BerryEsseen.scaledSumCDFSup (P j) (n j)) Filter.atTop ≤
+    (|BerryEsseen.signedThirdMoment Q| + 3 * h) * BerryEsseen.phi0 / 6
+BerryEsseen.manuscript_binomial_estimates (W : BerryEsseen.PublishedWassersteinThreeTopology) (K : Set ℝ)
+  (hK : IsCompact K) (hKI : K ⊆ Set.Ioo 0 1) :
+  (∃ C > 0, ∀ p ∈ K, ∀ (n : ℕ), 1 ≤ n → ∀ (k : ℤ), BerryEsseen.binomialIntegerWeight p n k ≤ C / √↑n) ∧
+    (∀ ε > 0,
+        ∃ N,
+          ∀ n ≥ N,
+            ∀ p ∈ K,
+              ∀ (k : ℤ),
+                |√↑n * BerryEsseen.binomialIntegerWeight p n k -
+                      BerryEsseen.standardNormalDensity (BerryEsseen.binomialZ p n k) / √(p * (1 - p))| <
+                  ε) ∧
+      (∀ M ≥ 0,
+          ∀ ε > 0,
+            ∃ N,
+              ∀ n ≥ N,
+                ∀ p ∈ K,
+                  ∀ (k : ℤ),
+                    |BerryEsseen.binomialZ p n k| ≤ M →
+                      |√(↑n * p * (1 - p)) * BerryEsseen.binomialIntegerWeight p n k /
+                              BerryEsseen.standardNormalDensity (BerryEsseen.binomialZ p n k) -
+                            1| <
+                        ε) ∧
+        (∀ ε > 0,
+            ∃ N,
+              ∀ n ≥ N,
+                ∀ p ∈ K,
+                  ∀ (k : ℤ),
+                    |BerryEsseen.binomialUpperBranch p n k -
+                            BerryEsseen.binomialUpperEnvelope p (BerryEsseen.binomialZ p n k)| <
+                        ε ∧
+                      |BerryEsseen.binomialLowerBranch p n k -
+                            BerryEsseen.binomialLowerEnvelope p (BerryEsseen.binomialZ p n k)| <
+                        ε) ∧
+          (∀ ε > 0,
+              ∃ M ≥ 0,
+                ∀ p ∈ K,
+                  ∀ (z : ℝ),
+                    M ≤ |z| →
+                      |BerryEsseen.binomialUpperEnvelope p z| < ε ∧ |BerryEsseen.binomialLowerEnvelope p z| < ε) ∧
+            ∀ ε > 0,
+              ∃ N,
+                ∀ n ≥ N,
+                  ∀ p ∈ K,
+                    ∀ (k : ℤ),
+                      |↑k - ↑n * p| ≤ 1 / 2 →
+                        |BerryEsseen.binomialUpperBranch p n k - BerryEsseen.binomialCentralLimit p| < ε
+BerryEsseen.manuscript_two_interval_cluster_stability (W : BerryEsseen.PublishedWassersteinThreeTopology)
+  (S : BerryEsseen.PublishedSignedSmoothing) (B : BerryEsseen.PublishedBernoulliBound)
+  (I : BerryEsseen.PublishedNonIIDBound) :
+  ∃ η ∈ Set.Ioo 0 (1 / 4),
+    ∃ N,
+      ∀ (μ : MeasureTheory.Measure ℝ),
+        MeasureTheory.IsProbabilityMeasure μ →
+          μ.support ⊆ Set.Icc (-η) η ∪ Set.Icc (1 - η) (1 + η) →
+            |μ.real (Set.Icc (1 - η) (1 + η)) - BerryEsseen.pE| < η ∨
+                |μ.real (Set.Icc (1 - η) (1 + η)) - (1 - BerryEsseen.pE)| < η →
+              ∀ (n : ℕ), N ≤ n → BerryEsseen.rawNormalizedConstant μ n ≤ BerryEsseen.cE
+BerryEsseen.manuscript_one_sided_loss.{u_1} {Ω : Type u_1} [MeasurableSpace Ω] {μ : MeasureTheory.Measure Ω}
+  [MeasureTheory.IsProbabilityMeasure μ] {W : Ω → ℝ} (hWm : Measurable W)
+  (h4 : MeasureTheory.Integrable (fun x => W x ^ 4) μ) (hmean : ∫ (x : Ω), W x ∂μ = 0)
+  (hsmall : ∫ (x : Ω), W x ^ 4 ∂μ ≤ 1 / 160000) {f : ℝ → ℝ} (hf : ContinuousOn f (Set.Icc (-(3 / 5)) (3 / 5)))
+  (hfd : DifferentiableOn ℝ f (Set.Ioo (-(3 / 5)) (3 / 5))) (hf0 : f 0 = 0)
+  (hd : ∀ x ∈ Set.Ioo (-(3 / 5)) (3 / 5), 3 / 4 ≤ deriv f x ∧ deriv f x ≤ 5 / 4) {u : ℝ} (hu : |u| ≤ 1 / 2) :
+  3 / 8 * ∫ (x : Ω), |W x| ∂μ - 176000 * ∫ (x : Ω), W x ^ 4 ∂μ ≤ μ.real {x | u < W x} + f u ∧
+    3 / 8 * ∫ (x : Ω), |W x| ∂μ - 176000 * ∫ (x : Ω), W x ^ 4 ∂μ ≤ μ.real {x | W x < u} - f u
+BerryEsseen.manuscript_small_cluster_variance_original_parameters (W : BerryEsseen.PublishedWassersteinThreeTopology)
+  (S : BerryEsseen.PublishedSignedSmoothing) (B : BerryEsseen.PublishedBernoulliBound) :
+  ∃ a b ε lam N,
+    a < b ∧
+      IsCompact (Set.Icc a b) ∧
+        Set.Icc a b ⊆ Set.Ioo 0 (1 / 2) ∧
+          BerryEsseen.pE ∈ Set.Ioo a b ∧
+            0 < ε ∧
+              0 < lam ∧
+                ∀ (P Q : BerryEsseen.CenteredFourthLaw),
+                  ∀ p ∈ Set.Icc a b,
+                    (∀ᵐ (x : ℝ) ∂P.measure, |x| ≤ ε) →
+                      (∀ᵐ (x : ℝ) ∂Q.measure, |x| ≤ ε) →
+                        ∀ (n : ℕ),
+                          N ≤ n →
+                            BerryEsseen.accumulatedNoiseVariance P Q p n ≤ lam →
+                              BerryEsseen.rawNormalizedConstant (BerryEsseen.twoClusterMeasure P Q p) n ≤
+                                  BerryEsseen.rawNormalizedConstant (BerryEsseen.bernoulliMeasure p) n ∧
+                                BerryEsseen.rawNormalizedConstant (BerryEsseen.bernoulliMeasure p) n < BerryEsseen.cE ∧
+                                  (0 < BerryEsseen.averageNoiseVariance P Q p →
+                                    BerryEsseen.rawNormalizedConstant (BerryEsseen.twoClusterMeasure P Q p) n <
+                                      BerryEsseen.rawNormalizedConstant (BerryEsseen.bernoulliMeasure p) n)
+BerryEsseen.compact_centered_measure_local_mass (W : BerryEsseen.PublishedWassersteinThreeTopology)
+  (S : BerryEsseen.PublishedSignedSmoothing) (I : BerryEsseen.PublishedNonIIDBound) (K : Set ℝ) (hK : IsCompact K)
+  (hKI : K ⊆ Set.Ioo 0 1) (Lstar R a b : ℝ) (hLstar : 0 < Lstar) (hR : 0 ≤ R) (hab : a < b) :
+  ∃ ε > 0,
+    ∃ c > 0,
+      ∃ N,
+        1 ≤ N ∧
+          ∀ (μ ν : MeasureTheory.Measure ℝ),
+            MeasureTheory.IsProbabilityMeasure μ →
+              MeasureTheory.IsProbabilityMeasure ν →
+                ∫ (x : ℝ), x ∂μ = 0 →
+                  ∫ (x : ℝ), x ∂ν = 0 →
+                    (∀ᵐ (y : ℝ) ∂μ, |y| ≤ ε) →
+                      (∀ᵐ (y : ℝ) ∂ν, |y| ≤ ε) →
+                        ∀ p ∈ K,
+                          ∀ (n : ℕ),
+                            N ≤ n →
+                              Lstar ≤ ↑n * ((1 - p) * ∫ (x : ℝ), x ^ 2 ∂μ + p * ∫ (x : ℝ), x ^ 2 ∂ν) →
+                                ∀ (x : ℝ),
+                                  |x - ↑n * p| ≤ R * √↑n →
+                                    c / √↑n ≤
+                                      (BerryEsseen.iidSumLaw
+                                            (BerryEsseen.mixtureMeasure μ (MeasureTheory.Measure.map (fun y => 1 + y) ν)
+                                              p)
+                                            n).real
+                                        (Set.Ioo (x + a) (x + b))
+BerryEsseen.general_cluster_macroscopic_gap (W : BerryEsseen.PublishedWassersteinThreeTopology)
+  (S : BerryEsseen.PublishedSignedSmoothing) (I : BerryEsseen.PublishedNonIIDBound)
+  (P Q : ℕ → BerryEsseen.CenteredFourthLaw) (p ε : ℕ → ℝ) (p₀ : ℝ) (hp₀ : p₀ ∈ Set.Ioo 0 1)
+  (hplim : Filter.Tendsto p Filter.atTop (nhds p₀)) (hεlim : Filter.Tendsto ε Filter.atTop (nhds 0))
+  (hP : ∀ (j : ℕ), ∀ᵐ (x : ℝ) ∂(P j).measure, |x| ≤ ε j) (hQ : ∀ (j : ℕ), ∀ᵐ (x : ℝ) ∂(Q j).measure, |x| ≤ ε j)
+  (n : ℕ → ℕ) (hn : Filter.Tendsto n Filter.atTop Filter.atTop)
+  (hL : 0 < Filter.liminf (fun j => ↑(BerryEsseen.accumulatedNoiseVariance (P j) (Q j) (p j) (n j))) Filter.atTop) :
+  ∃ δ > 0,
+    Filter.limsup (fun j => BerryEsseen.rawTwoClusterScaledCDFSup (P j) (Q j) (p j) (n j)) Filter.atTop ≤
+      BerryEsseen.phi0 * (3 + |1 - 2 * p₀|) / (6 * √(p₀ * (1 - p₀))) - δ
+BerryEsseen.accumulated_cluster_variance_tendsto_zero (W : BerryEsseen.PublishedWassersteinThreeTopology)
+  (S : BerryEsseen.PublishedSignedSmoothing) (I : BerryEsseen.PublishedNonIIDBound)
+  (P Q : ℕ → BerryEsseen.CenteredFourthLaw) (p ε : ℕ → ℝ) (p₀ : ℝ) (he : p₀ ∈ {BerryEsseen.pE, 1 - BerryEsseen.pE})
+  (hplim : Filter.Tendsto p Filter.atTop (nhds p₀)) (hεlim : Filter.Tendsto ε Filter.atTop (nhds 0))
+  (hP : ∀ (j : ℕ), ∀ᵐ (x : ℝ) ∂(P j).measure, |x| ≤ ε j) (hQ : ∀ (j : ℕ), ∀ᵐ (x : ℝ) ∂(Q j).measure, |x| ≤ ε j)
+  (n : ℕ → ℕ) (hn : Filter.Tendsto n Filter.atTop Filter.atTop)
+  (hR :
+    Filter.Tendsto (fun j => BerryEsseen.rawNormalizedConstant (BerryEsseen.twoClusterMeasure (P j) (Q j) (p j)) (n j))
+      Filter.atTop (nhds BerryEsseen.cE)) :
+  Filter.Tendsto (fun j => BerryEsseen.accumulatedNoiseVariance (P j) (Q j) (p j) (n j)) Filter.atTop (nhds 0)
+BerryEsseen.manuscript_extremal_attainment_full (H : BerryEsseen.ClassicalBerryEsseenBounds) (n : ℕ)
+  (hC : BerryEsseen.cE < BerryEsseen.extremalConstant (n + 1)) :
+  ∃ Q t,
+    BerryEsseen.signedRatio Q n t = BerryEsseen.extremalConstant (n + 1) ∧
+      sSup (Set.range (BerryEsseen.normalizedDiscrepancy Q (n + 1))) = BerryEsseen.extremalConstant (n + 1) ∧
+        1 ≤ BerryEsseen.thirdMoment Q ∧ BerryEsseen.thirdMoment Q < BerryEsseen.momentCutoff
+BerryEsseen.manuscript_harmonic_selection (a : ℕ → ℝ) (_ha : Filter.Tendsto a Filter.atTop (nhds 0))
+  (hpos : ∀ (K : ℕ), ∃ n ≥ K, 0 < a n) :
+  ∃ u,
+    StrictMono u ∧
+      (∀ (j : ℕ), 1 ≤ u j ∧ 0 < a (u j)) ∧
+        Filter.Tendsto (fun j => BerryEsseen.scaledDrop a (u j)) Filter.atTop (nhds 0)
+BerryEsseen.contamination_influence (P : BerryEsseen.StandardizedLaw) (n : ℕ) (t y : ℝ) :
+  HasDerivWithinAt (BerryEsseen.contaminationObjective P n t y)
+    (BerryEsseen.influenceNumerator P n t (√(↑n + 1)) (t / √(↑n + 1))
+        (BerryEsseen.standardNormalDensity (t / √(↑n + 1))) (BerryEsseen.signedRatio P n t) y /
+      BerryEsseen.thirdMoment P)
+    (Set.Icc 0 1) 0
+BerryEsseen.influence_nonpos_at_extremizer (H : BerryEsseen.ClassicalBerryEsseenBounds)
+  (P : BerryEsseen.StandardizedLaw) (n : ℕ) (t : ℝ)
+  (hattain : BerryEsseen.signedRatio P n t = BerryEsseen.extremalConstant (n + 1))
+  (hpos : 0 ≤ BerryEsseen.signedRatio P n t) (y : ℝ) :
+  BerryEsseen.influenceNumerator P n t (√(↑n + 1)) (t / √(↑n + 1)) (BerryEsseen.standardNormalDensity (t / √(↑n + 1)))
+      (BerryEsseen.signedRatio P n t) y ≤
+    0
+BerryEsseen.influence_contact_at_extremizer (H : BerryEsseen.ClassicalBerryEsseenBounds)
+  (P : BerryEsseen.StandardizedLaw) (n : ℕ) (t : ℝ)
+  (hattain : BerryEsseen.signedRatio P n t = BerryEsseen.extremalConstant (n + 1))
+  (hpos : 0 ≤ BerryEsseen.signedRatio P n t) (y : ℝ) :
+  y ∈ P.measure.support →
+    BerryEsseen.influenceNumerator P n t (√(↑n + 1)) (t / √(↑n + 1)) (BerryEsseen.standardNormalDensity (t / √(↑n + 1)))
+        (BerryEsseen.signedRatio P n t) y =
+      0
+BerryEsseen.influence_contact_equation (H : BerryEsseen.ClassicalBerryEsseenBounds) (P : BerryEsseen.StandardizedLaw)
+  (n : ℕ) (t : ℝ) (hattain : BerryEsseen.signedRatio P n t = BerryEsseen.extremalConstant (n + 1))
+  (hpos : 0 ≤ BerryEsseen.signedRatio P n t) (x : ℝ) (hx : x ∈ P.measure.support) :
+  (↑n + 1) *
+      (↑(ProbabilityTheory.cdf (BerryEsseen.iidSumLaw P.measure n)) (t - x) -
+        ↑(ProbabilityTheory.cdf (BerryEsseen.iidSumLaw P.measure (n + 1))) t) =
+    -√(↑n + 1) * BerryEsseen.standardNormalDensity (t / √(↑n + 1)) * x -
+        t / √(↑n + 1) * BerryEsseen.standardNormalDensity (t / √(↑n + 1)) / 2 * (x ^ 2 - 1) +
+      BerryEsseen.signedRatio P n t / √(↑n + 1) *
+        (|x| ^ 3 - BerryEsseen.thirdMoment P - 3 * BerryEsseen.signedSecondMoment P * x -
+          3 / 2 * BerryEsseen.thirdMoment P * (x ^ 2 - 1))
+BerryEsseen.gaussianHn_uniform_remainder (n : ℕ) (hn : 2 ≤ n) (z y L : ℝ) (hy : |y| ≤ L) :
+  |BerryEsseen.gaussianHn n z y - (z ^ 2 - 1) * BerryEsseen.standardNormalDensity z * (y / 2 - y ^ 3 / 6)| ≤
+    BerryEsseen.gaussianRemainderConstant L / √↑n
+BerryEsseen.gaussianHn_global_bound (n : ℕ) (hn : 2 ≤ n) (z y : ℝ) :
+  |BerryEsseen.gaussianHn n z y| ≤ BerryEsseen.phi0 / 6 * |y| ^ 3 + 9 * BerryEsseen.phi0 * (1 + |y|)
+BerryEsseen.gaussianHn_uniform_limit (n : ℕ → ℕ) (z : ℕ → ℝ) (hn : Filter.Tendsto n Filter.atTop Filter.atTop)
+  (hz : Filter.Tendsto z Filter.atTop (nhds 0)) (L : ℝ) :
+  TendstoUniformlyOn (fun j y => BerryEsseen.gaussianHn (n j) (z j) y) (fun y => BerryEsseen.phi0 / 6 * (y ^ 3 - 3 * y))
+    Filter.atTop (Set.Icc (-L) L)
+BerryEsseen.manuscript_bounded_extremizing_sequence (H : BerryEsseen.ClassicalBerryEsseenBounds)
+  (A : BerryEsseen.PublishedEsseenFixedLawAsymptotic)
+  (hviol : ∀ (K : ℕ), ∃ n ≥ K, BerryEsseen.cE < BerryEsseen.extremalConstant n) :
+  ∃ n P t,
+    StrictMono n ∧
+      (∀ (j : ℕ),
+          2 ≤ n j ∧
+            BerryEsseen.signedRatio (P j) (n j - 1) (t j) = BerryEsseen.extremalConstant (n j) ∧
+              BerryEsseen.cE < BerryEsseen.extremalConstant (n j) ∧
+                1 ≤ BerryEsseen.thirdMoment (P j) ∧
+                  BerryEsseen.thirdMoment (P j) < BerryEsseen.momentCutoff ∧ (P j).measure.support ⊆ Set.Ioo (-10) 10) ∧
+        Filter.Tendsto (fun j => BerryEsseen.scaledDrop BerryEsseen.extremalConstant (n j)) Filter.atTop (nhds 0)
+BerryEsseen.selected_extremizer_wassersteinThree_subsequence (H : BerryEsseen.ClassicalBerryEsseenBounds)
+  (W : BerryEsseen.PublishedWassersteinThreeTopology) (S : BerryEsseen.PublishedSignedSmoothing)
+  (E : BerryEsseen.PublishedEsseenMoment) (P : ℕ → BerryEsseen.StandardizedLaw) (n : ℕ → ℕ) (t : ℕ → ℝ)
+  (hn : Filter.Tendsto n Filter.atTop Filter.atTop)
+  (hattain : ∀ (j : ℕ), BerryEsseen.signedRatio (P j) (n j) (t j) = BerryEsseen.extremalConstant (n j + 1))
+  (hv : ∀ (j : ℕ), BerryEsseen.cE < BerryEsseen.extremalConstant (n j + 1))
+  (hd : Filter.Tendsto (fun j => BerryEsseen.scaledDrop BerryEsseen.extremalConstant (n j + 1)) Filter.atTop (nhds 0)) :
+  ∃ u,
+    StrictMono u ∧
+      Filter.Tendsto (fun j => (P (u j)).toProbabilityMeasure) Filter.atTop
+          (nhds BerryEsseen.esseenLaw.toProbabilityMeasure) ∧
+        Filter.Tendsto (fun j => BerryEsseen.thirdMoment (P (u j))) Filter.atTop (nhds BerryEsseen.betaE) ∧
+          Filter.Tendsto (fun j => BerryEsseen.signedThirdMoment (P (u j))) Filter.atTop (nhds BerryEsseen.kappaE) ∧
+            Filter.Tendsto (fun j => t (u j) / √(↑(n (u j)) + 1)) Filter.atTop (nhds 0) ∧
+              Filter.Tendsto (fun j => BerryEsseen.wassersteinThree (P (u j)).measure BerryEsseen.esseenLaw.measure)
+                Filter.atTop (nhds 0)
+BerryEsseen.extremizer_support_limit_interval_general (H : BerryEsseen.ClassicalBerryEsseenBounds)
+  (P : ℕ → BerryEsseen.StandardizedLaw) (n : ℕ → ℕ) (t : ℕ → ℝ) (hn : Filter.Tendsto n Filter.atTop Filter.atTop)
+  (hattain : ∀ (j : ℕ), BerryEsseen.signedRatio (P j) (n j) (t j) = BerryEsseen.extremalConstant (n j + 1))
+  (hv : ∀ (j : ℕ), BerryEsseen.cE < BerryEsseen.extremalConstant (n j + 1))
+  (hd : Filter.Tendsto (fun j => BerryEsseen.scaledDrop BerryEsseen.extremalConstant (n j + 1)) Filter.atTop (nhds 0))
+  (hw :
+    Filter.Tendsto (fun j => (P j).toProbabilityMeasure) Filter.atTop (nhds BerryEsseen.esseenLaw.toProbabilityMeasure))
+  (hz : Filter.Tendsto (fun j => t j / √(↑(n j) + 1)) Filter.atTop (nhds 0)) (v : ℕ → ℝ) (y : ℝ)
+  (hvSupp : ∀ (j : ℕ), v j ∈ (P j).measure.support) (hy : Filter.Tendsto v Filter.atTop (nhds y)) :
+  y ∈ Set.Icc (-(√10 / 2 * BerryEsseen.aE)) (√10 / 2 * BerryEsseen.bE)
+BerryEsseen.extremizer_support_limit_separation_general (H : BerryEsseen.ClassicalBerryEsseenBounds)
+  (W : BerryEsseen.PublishedWassersteinThreeTopology) (S : BerryEsseen.PublishedSignedSmoothing)
+  (P : ℕ → BerryEsseen.StandardizedLaw) (n : ℕ → ℕ) (t : ℕ → ℝ) (hn : Filter.Tendsto n Filter.atTop Filter.atTop)
+  (hattain : ∀ (j : ℕ), BerryEsseen.signedRatio (P j) (n j) (t j) = BerryEsseen.extremalConstant (n j + 1))
+  (hv : ∀ (j : ℕ), BerryEsseen.cE < BerryEsseen.extremalConstant (n j + 1))
+  (hd : Filter.Tendsto (fun j => BerryEsseen.scaledDrop BerryEsseen.extremalConstant (n j + 1)) Filter.atTop (nhds 0))
+  (hw :
+    Filter.Tendsto (fun j => (P j).toProbabilityMeasure) Filter.atTop (nhds BerryEsseen.esseenLaw.toProbabilityMeasure))
+  (hz : Filter.Tendsto (fun j => t j / √(↑(n j) + 1)) Filter.atTop (nhds 0)) (x y : ℕ → ℝ) (a b : ℝ)
+  (hxsupp : ∀ (j : ℕ), x j ∈ (P j).measure.support) (hysupp : ∀ (j : ℕ), y j ∈ (P j).measure.support)
+  (hx : Filter.Tendsto x Filter.atTop (nhds a)) (hy : Filter.Tendsto y Filter.atTop (nhds b)) :
+  a = b ∨ BerryEsseen.hE ≤ |a - b|
+BerryEsseen.effective_selection (H : BerryEsseen.ClassicalBerryEsseenBounds) (N : ℕ) (hN : 4 ≤ N)
+  (hviol : BerryEsseen.cE < BerryEsseen.extremalConstant N) :
+  ∃ n,
+    ⌈↑N / 2⌉₊ ≤ n ∧
+      n ≤ N ∧
+        BerryEsseen.cE < BerryEsseen.extremalConstant n ∧
+          BerryEsseen.scaledDrop BerryEsseen.extremalConstant n < 86e-3 ∧
+            BerryEsseen.scaledDrop BerryEsseen.extremalConstant n ≤ 10 / √↑(N - 2) ∧
+              ∀ (P : BerryEsseen.StandardizedLaw) (t : ℝ),
+                BerryEsseen.signedRatio P (n - 1) t = BerryEsseen.extremalConstant n →
+                  P.measure.support ⊆ Set.Icc (-6) 6
+BerryEsseen.effectiveLowFrequencyIntegral_bound (P : BerryEsseen.StandardizedLaw)
+  (hβ : BerryEsseen.thirdMoment P ≤ 1.84) (hb : ∀ᵐ (x : ℝ) ∂P.measure, |x| ≤ 6) (n : ℕ) (hn : 2 ≤ n) :
+  ∫ (t : ℝ) in BerryEsseen.effectiveLowFrequencyRange n, BerryEsseen.fourierEdgeworthError P n t ≤ 6 / ↑n
+BerryEsseen.effective_charFun_edgeworth_low_frequency (P : BerryEsseen.StandardizedLaw)
+  (hβ : BerryEsseen.thirdMoment P ≤ 1.84) (hb : ∀ᵐ (x : ℝ) ∂P.measure, |x| ≤ 6) (n : ℕ) (hn : 2 ≤ n) (t : ℝ)
+  (ht : |t| ≤ √↑n / 2) :
+  ‖MeasureTheory.charFun P.measure (t / √↑n) ^ n - BerryEsseen.edgeworthChar n (BerryEsseen.signedThirdMoment P) t‖ ≤
+    (0.61 * |t| ^ 4 * Real.exp (-0.35 * t ^ 2) + 48e-3 * |t| ^ 6 * Real.exp (-t ^ 2 / 2)) / ↑n
+BerryEsseen.effective_near_lattice (H : BerryEsseen.ClassicalBerryEsseenBounds)
+  (S : BerryEsseen.PublishedSignedSmoothing) (P : BerryEsseen.StandardizedLaw) (n : ℕ) (hn : 1024 ≤ n)
+  (hsupp : P.measure.support ⊆ Set.Icc (-6) 6) (hviol : ¬BerryEsseen.BoundAt P n) :
+  ∃ a h,
+    Real.pi / 500 ≤ h ∧
+      h ≤ 4 * Real.pi ∧
+        MeasureTheory.Integrable (fun x => Metric.infDist x (BerryEsseen.affineLattice a h) ^ 2) P.measure ∧
+          ∫ (x : ℝ), Metric.infDist x (BerryEsseen.affineLattice a h) ^ 2 ∂P.measure ≤
+            2 * Real.pi ^ 2 * Real.log ↑n / ↑n
+BerryEsseen.effective_cluster_jitter (S : BerryEsseen.PublishedSignedSmoothing) (P Q : BerryEsseen.CenteredFourthLaw)
+  (p ε T : ℝ) (hp : p ∈ Set.Icc (2 / 5) (9 / 20)) (hp01 : p ∈ Set.Ioo 0 1) (hε : 0 ≤ ε) (hT : 10 ≤ T)
+  (hεT : ε ≤ (100 * T)⁻¹) (hP : ∀ᵐ (x : ℝ) ∂P.measure, |x| ≤ ε) (hQ : ∀ᵐ (x : ℝ) ∂Q.measure, |x| ≤ ε) (n : ℕ)
+  (hn : 1000000 ≤ n) :
+  √↑n *
+      sSup
+        (Set.range fun x =>
+          |↑(ProbabilityTheory.cdf
+                    ((BerryEsseen.iidSumLaw (BerryEsseen.twoClusterMeasure P Q p) n).conv
+                      (BerryEsseen.uniformJitter 1)))
+                x -
+              BerryEsseen.edgeworthCDF n
+                (BerryEsseen.signedThirdMoment (BerryEsseen.standardizedTwoClusterLaw P Q p hp01))
+                ((x - ↑n * p) / (√(BerryEsseen.clusterVariance P Q p) * √↑n))|) ≤
+    BerryEsseen.effectiveClusterError n ε T
+BerryEsseen.manuscript_effective_binomial_branches (p : ℝ) (hp : p ∈ Set.Icc (2 / 5) (9 / 20)) (n : ℕ)
+  (hn : 10 ^ 100 ≤ n) (k : ℤ) :
+  |BerryEsseen.binomialUpperBranch p n k - BerryEsseen.binomialUpperEnvelope p (BerryEsseen.binomialZ p n k)| ≤
+      2 / 10 ^ 10 ∧
+    |BerryEsseen.binomialLowerBranch p n k - BerryEsseen.binomialLowerEnvelope p (BerryEsseen.binomialZ p n k)| ≤
+      2 / 10 ^ 10
+BerryEsseen.manuscript_effective_binomial_mass_sup (p : ℝ) (hp : p ∈ Set.Icc (2 / 5) (9 / 20)) (n : ℕ) (hn : 1 ≤ n) :
+  sSup (Set.range (BerryEsseen.binomialIntegerWeight p n)) ≤ 2 / √↑n
+BerryEsseen.manuscript_effective_binomial_integer_central (p : ℝ) (hp : p ∈ Set.Icc (2 / 5) (9 / 20)) (n : ℕ)
+  (hn : 10 ^ 100 ≤ n) (k : ℤ) (hz : |BerryEsseen.binomialZ p n k| ≤ 5) :
+  0.99 ≤
+      √(↑n * p * (1 - p)) * BerryEsseen.binomialIntegerWeight p n k /
+        BerryEsseen.standardNormalDensity (BerryEsseen.binomialZ p n k) ∧
+    √(↑n * p * (1 - p)) * BerryEsseen.binomialIntegerWeight p n k /
+          BerryEsseen.standardNormalDensity (BerryEsseen.binomialZ p n k) ≤
+        1.01 ∧
+      1 / 10 ^ 6 / √↑n ≤ BerryEsseen.binomialIntegerWeight p n k
+BerryEsseen.manuscript_effective_binomial_integer_wide (p : ℝ) (hp : p ∈ Set.Icc (2 / 5) (9 / 20)) (n : ℕ)
+  (hn : 10 ^ 100 ≤ n) (k : ℤ) (hz : |BerryEsseen.binomialZ p n k| ≤ 11) :
+  Real.exp (-100) / √↑n ≤ BerryEsseen.binomialIntegerWeight p n k
+BerryEsseen.manuscript_effective_binomial_constant_lower (p : ℝ) (hp : p ∈ Set.Icc (2 / 5) (9 / 20)) (n : ℕ)
+  (hn : 10 ^ 100 ≤ n) :
+  BerryEsseen.binomialCentralLimit p - 3 / 10 ^ 10 ≤ BerryEsseen.binomialNormalizedConstant p n ∧
+    0.39 < BerryEsseen.binomialNormalizedConstant p n
+BerryEsseen.manuscript_effective_small_variance (B : BerryEsseen.PublishedBernoulliBound)
+  (U : BerryEsseen.PublishedNonuniformBound) (P Q : BerryEsseen.CenteredFourthLaw) (p ε : ℝ)
+  (hp : p ∈ Set.Icc (2 / 5) (9 / 20)) (hε : ε ∈ Set.Icc 0 (1 / 10 ^ 12)) (hP : ∀ᵐ (x : ℝ) ∂P.measure, |x| ≤ ε)
+  (hQ : ∀ᵐ (x : ℝ) ∂Q.measure, |x| ≤ ε) (n : ℕ) (hn : 10 ^ 100 ≤ n)
+  (hlam : BerryEsseen.accumulatedNoiseVariance P Q p n ≤ 1 / 10 ^ 12) :
+  sSup (Set.range (BerryEsseen.normalizedDiscrepancy (BerryEsseen.standardizedTwoClusterLaw P Q p ⋯) n)) ≤
+      BerryEsseen.binomialNormalizedConstant p n ∧
+    BerryEsseen.binomialNormalizedConstant p n < BerryEsseen.cE
+BerryEsseen.manuscript_effective_small_variance_positive (B : BerryEsseen.PublishedBernoulliBound)
+  (U : BerryEsseen.PublishedNonuniformBound) (P Q : BerryEsseen.CenteredFourthLaw) (p ε : ℝ)
+  (hp : p ∈ Set.Icc (2 / 5) (9 / 20)) (hε : ε ∈ Set.Icc 0 (1 / 10 ^ 12)) (hP : ∀ᵐ (x : ℝ) ∂P.measure, |x| ≤ ε)
+  (hQ : ∀ᵐ (x : ℝ) ∂Q.measure, |x| ≤ ε) (n : ℕ) (hn : 10 ^ 100 ≤ n)
+  (hlam : BerryEsseen.accumulatedNoiseVariance P Q p n ∈ Set.Ioc 0 (1 / 10 ^ 12)) :
+  sSup (Set.range (BerryEsseen.normalizedDiscrepancy (BerryEsseen.standardizedTwoClusterLaw P Q p ⋯) n)) ≤
+    BerryEsseen.binomialNormalizedConstant p n -
+      BerryEsseen.effectiveSmallVarianceGap (BerryEsseen.accumulatedNoiseVariance P Q p n) ε
+BerryEsseen.manuscript_effective_local_mass (I : BerryEsseen.PublishedNonIIDBound) (P Q : BerryEsseen.CenteredFourthLaw)
+  (p : ℝ) (hp : p ∈ Set.Icc (2 / 5) (9 / 20)) (hP : ∀ᵐ (x : ℝ) ∂P.measure, |x| ≤ Real.exp (-BerryEsseen.appendixA))
+  (hQ : ∀ᵐ (x : ℝ) ∂Q.measure, |x| ≤ Real.exp (-BerryEsseen.appendixA)) (n : ℕ) (hn : 10 ^ 100 ≤ n)
+  (hlam : 1 / 10 ^ 12 ≤ BerryEsseen.accumulatedNoiseVariance P Q p n) (a b : ℝ) (ha : |a| ≤ 1 / 2) (hb : |b| ≤ 1 / 2)
+  (hab : 1 / 4 ≤ b - a) :
+  Real.exp (-4000000000000) / √↑n ≤
+    sInf
+      (Set.range fun x =>
+        (BerryEsseen.iidSumLaw (BerryEsseen.twoClusterMeasure P Q p) n).real (Set.Ioo (↑x + a) (↑x + b)))
+BerryEsseen.manuscript_effective_cluster_stability (B : BerryEsseen.PublishedBernoulliBound)
+  (I : BerryEsseen.PublishedNonIIDBound) (U : BerryEsseen.PublishedNonuniformBound)
+  (P Q : BerryEsseen.CenteredFourthLaw) (p : ℝ) (hp : p ∈ Set.Icc (2 / 5) (9 / 20))
+  (hP : ∀ᵐ (x : ℝ) ∂P.measure, |x| ≤ Real.exp (-BerryEsseen.appendixA))
+  (hQ : ∀ᵐ (x : ℝ) ∂Q.measure, |x| ≤ Real.exp (-BerryEsseen.appendixA)) (n : ℕ) (hn : BerryEsseen.appendixNStar ≤ n) :
+  sSup (Set.range (BerryEsseen.normalizedDiscrepancy (BerryEsseen.standardizedTwoClusterLaw P Q p ⋯) n)) <
+    BerryEsseen.cE
+BerryEsseen.manuscript_effective_interval_stability_support (B : BerryEsseen.PublishedBernoulliBound)
+  (I : BerryEsseen.PublishedNonIIDBound) (U : BerryEsseen.PublishedNonuniformBound) (μ : MeasureTheory.Measure ℝ)
+  [MeasureTheory.IsProbabilityMeasure μ]
+  (hb :
+    μ.support ⊆
+      Set.Icc (-BerryEsseen.appendixEtaStar) BerryEsseen.appendixEtaStar ∪
+        Set.Icc (1 - BerryEsseen.appendixEtaStar) (1 + BerryEsseen.appendixEtaStar))
+  (hp :
+    |μ.real (Set.Icc (1 - BerryEsseen.appendixEtaStar) (1 + BerryEsseen.appendixEtaStar)) - BerryEsseen.pE| <
+        BerryEsseen.appendixEtaStar ∨
+      |μ.real (Set.Icc (1 - BerryEsseen.appendixEtaStar) (1 + BerryEsseen.appendixEtaStar)) - (1 - BerryEsseen.pE)| <
+        BerryEsseen.appendixEtaStar)
+  (n : ℕ) (hn : BerryEsseen.appendixNStar ≤ n) : BerryEsseen.rawNormalizedConstant μ n < BerryEsseen.cE
+BerryEsseen.effective_lattice_stability (K : BerryEsseen.PublishedWassersteinDuality) (P : BerryEsseen.StandardizedLaw)
+  (h δ : ℝ) (hsupp : P.measure.support ⊆ Set.Icc (-15) 15) (hlat : BerryEsseen.IsLatticeSpan P.measure h)
+  (hβ : BerryEsseen.thirdMoment P ≤ 2) (hD : BerryEsseen.latticeMomentDeficit P h ∈ Set.Icc 0 δ) (hδ : δ ≤ 1 / 10 ^ 6) :
+  ∃ ε ∈ {-1, 1},
+    BerryEsseen.wassersteinOne P.measure (MeasureTheory.Measure.map (fun x => ε * x) BerryEsseen.esseenLaw.measure) ≤
+        1000 * √δ ∧
+      |h - BerryEsseen.hE| ≤ 1000 * √δ
+BerryEsseen.effective_global_jitter (H : BerryEsseen.ClassicalBerryEsseenBounds)
+  (S : BerryEsseen.PublishedSignedSmoothing) (E : BerryEsseen.PublishedEsseenMoment)
+  (K : BerryEsseen.PublishedWassersteinDuality) (P : BerryEsseen.StandardizedLaw) (n : ℕ)
+  (hn : BerryEsseen.appendixNConf ≤ n) (hsupp : P.measure.support ⊆ Set.Icc (-6) 6) (hviol : ¬BerryEsseen.BoundAt P n) :
+  ∃ Q F h Z,
+    MeasureTheory.IsProbabilityMeasure Q ∧
+      F.card < 2000 ∧
+        Q.support ⊆ ↑F ∧
+          (∀ x ∈ F, |x| < 13) ∧
+            (∀ x ∈ F, BerryEsseen.appendixRetention ≤ Q.real {x}) ∧
+              h ∈ Set.Icc (Real.pi / 500) 5 ∧
+                BerryEsseen.IsLatticeSpan Q h ∧
+                  (∀ (d : ℝ), BerryEsseen.IsLatticeSpan Q d → d ≤ h) ∧
+                    BerryEsseen.wassersteinOne P.measure Q ≤ 10 ^ 5 * BerryEsseen.appendixRetention ∧
+                      |BerryEsseen.rawMean Q| ≤ 10 ^ 5 * BerryEsseen.appendixRetention ∧
+                        |BerryEsseen.rawStdDev Q ^ 2 - 1| ≤ 10 ^ 9 * BerryEsseen.appendixRetention ∧
+                          |BerryEsseen.rawThirdAbsoluteMoment Q - BerryEsseen.thirdMoment P| +
+                                |∫ (x : ℝ), (x - BerryEsseen.rawMean Q) ^ 3 ∂Q - BerryEsseen.signedThirdMoment P| ≤
+                              2 * 10 ^ 9 * BerryEsseen.appendixRetention ∧
+                            Z.measure =
+                                BerryEsseen.standardizedMeasure Q (BerryEsseen.rawMean Q) (BerryEsseen.rawStdDev Q) ∧
+                              Z.measure.support ⊆ Set.Icc (-15) 15 ∧
+                                BerryEsseen.thirdMoment Z < 2 ∧
+                                  BerryEsseen.IsMaximalSpan Z (h / BerryEsseen.rawStdDev Q) ∧
+                                    (∀ (u : ℝ),
+                                        |u| ≤ BerryEsseen.appendixGlobalCutoff →
+                                          1 / 1000 ≤ Metric.infDist u (BerryEsseen.affineLattice 0 (2 * Real.pi / h)) →
+                                            ‖MeasureTheory.charFun P.measure u‖ ≤ 1 - BerryEsseen.appendixGlobalGap) ∧
+                                      ∀ (ℓ : ℕ),
+                                        ↑n / 2 ≤ ↑ℓ →
+                                          √↑ℓ * BerryEsseen.globalJitterDiscrepancy P ℓ h ≤
+                                            Real.exp (-19 * BerryEsseen.appendixA)
+BerryEsseen.effective_identification_with_global_jitter (H : BerryEsseen.ClassicalBerryEsseenBounds)
+  (S : BerryEsseen.PublishedSignedSmoothing) (E : BerryEsseen.PublishedEsseenMoment)
+  (K : BerryEsseen.PublishedWassersteinDuality) (U : BerryEsseen.PublishedNonuniformBound)
+  (P : BerryEsseen.StandardizedLaw) (n : ℕ) (hn : BerryEsseen.appendixNConf ≤ n)
+  (hsupp : P.measure.support ⊆ Set.Icc (-6) 6) (z : ℝ)
+  (hpos :
+    BerryEsseen.cE * BerryEsseen.thirdMoment P < √↑n * (BerryEsseen.normalizedSumCDF P n z - BerryEsseen.normalCDF z)) :
+  ∃ Q F h Z,
+    MeasureTheory.IsProbabilityMeasure Q ∧
+      F.card < 2000 ∧
+        Q.support ⊆ ↑F ∧
+          (∀ x ∈ F, |x| < 13) ∧
+            (∀ x ∈ F, BerryEsseen.appendixRetention ≤ Q.real {x}) ∧
+              h ∈ Set.Icc (Real.pi / 500) 5 ∧
+                BerryEsseen.IsLatticeSpan Q h ∧
+                  (∀ (d : ℝ), BerryEsseen.IsLatticeSpan Q d → d ≤ h) ∧
+                    BerryEsseen.wassersteinOne P.measure Q ≤ 10 ^ 5 * BerryEsseen.appendixRetention ∧
+                      |BerryEsseen.rawMean Q| ≤ 10 ^ 5 * BerryEsseen.appendixRetention ∧
+                        |BerryEsseen.rawStdDev Q ^ 2 - 1| ≤ 10 ^ 9 * BerryEsseen.appendixRetention ∧
+                          |BerryEsseen.rawThirdAbsoluteMoment Q - BerryEsseen.thirdMoment P| +
+                                |∫ (x : ℝ), (x - BerryEsseen.rawMean Q) ^ 3 ∂Q - BerryEsseen.signedThirdMoment P| ≤
+                              2 * 10 ^ 9 * BerryEsseen.appendixRetention ∧
+                            Z.measure =
+                                BerryEsseen.standardizedMeasure Q (BerryEsseen.rawMean Q) (BerryEsseen.rawStdDev Q) ∧
+                              Z.measure.support ⊆ Set.Icc (-15) 15 ∧
+                                BerryEsseen.thirdMoment Z < 2 ∧
+                                  BerryEsseen.IsMaximalSpan Z (h / BerryEsseen.rawStdDev Q) ∧
+                                    (∀ (u : ℝ),
+                                        |u| ≤ BerryEsseen.appendixGlobalCutoff →
+                                          1 / 1000 ≤ Metric.infDist u (BerryEsseen.affineLattice 0 (2 * Real.pi / h)) →
+                                            ‖MeasureTheory.charFun P.measure u‖ ≤ 1 - BerryEsseen.appendixGlobalGap) ∧
+                                      (∀ (ℓ : ℕ),
+                                          ↑n / 2 ≤ ↑ℓ →
+                                            √↑ℓ * BerryEsseen.globalJitterDiscrepancy P ℓ h ≤
+                                              Real.exp (-19 * BerryEsseen.appendixA)) ∧
+                                        BerryEsseen.wassersteinOne P.measure BerryEsseen.esseenLaw.measure ≤
+                                            Real.exp (-7 * BerryEsseen.appendixA) ∧
+                                          |h - BerryEsseen.hE| ≤ Real.exp (-7 * BerryEsseen.appendixA) ∧
+                                            |BerryEsseen.thirdMoment P - BerryEsseen.betaE| ≤
+                                                Real.exp (-6 * BerryEsseen.appendixA) ∧
+                                              |BerryEsseen.signedThirdMoment P - BerryEsseen.kappaE| ≤
+                                                  Real.exp (-6 * BerryEsseen.appendixA) ∧
+                                                |BerryEsseen.signedSecondMoment P -
+                                                        BerryEsseen.signedSecondMoment BerryEsseen.esseenLaw| ≤
+                                                    Real.exp (-6 * BerryEsseen.appendixA) ∧
+                                                  z ^ 2 ≤ Real.exp (-5 * BerryEsseen.appendixA) ∧
+                                                    ∀ (ℓ : ℕ),
+                                                      ↑n / 2 ≤ ↑ℓ →
+                                                        ∀ (x : ℝ),
+                                                          √↑ℓ *
+                                                              |↑(ProbabilityTheory.cdf
+                                                                        ((BerryEsseen.iidSumLaw P.measure ℓ).conv
+                                                                          (BerryEsseen.uniformJitter h)))
+                                                                    x -
+                                                                  BerryEsseen.edgeworthCDF ℓ
+                                                                    (BerryEsseen.signedThirdMoment P) (x / √↑ℓ)| ≤
+                                                            Real.exp (-19 * BerryEsseen.appendixA)
+BerryEsseen.manuscript_effective_full_support (H : BerryEsseen.ClassicalBerryEsseenBounds)
+  (E : BerryEsseen.PublishedEsseenMoment) (K : BerryEsseen.PublishedWassersteinDuality)
+  (U : BerryEsseen.PublishedNonuniformBound) (P : BerryEsseen.StandardizedLaw) (n : ℕ) (t : ℝ)
+  (hN : BerryEsseen.appendixNConf ≤ n) (hatt : BerryEsseen.signedRatio P (n - 1) t = BerryEsseen.extremalConstant n)
+  (hv : BerryEsseen.cE < BerryEsseen.extremalConstant n) (hsupp : P.measure.support ⊆ Set.Icc (-6) 6)
+  (hd : BerryEsseen.scaledDrop BerryEsseen.extremalConstant n ≤ 20 / √↑n) :
+  have μ := MeasureTheory.Measure.map (fun x => BerryEsseen.pE + BerryEsseen.sigmaE * x) P.measure;
+  μ.support ⊆
+      Set.Icc (-BerryEsseen.appendixEtaStar / 2) (BerryEsseen.appendixEtaStar / 2) ∪
+        Set.Icc (1 - BerryEsseen.appendixEtaStar / 2) (1 + BerryEsseen.appendixEtaStar / 2) ∧
+    |μ.real (Set.Icc (1 - BerryEsseen.appendixEtaStar / 2) (1 + BerryEsseen.appendixEtaStar / 2)) - BerryEsseen.pE| <
+      BerryEsseen.appendixEtaStar

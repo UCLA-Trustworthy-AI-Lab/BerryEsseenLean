@@ -1,0 +1,288 @@
+DEEP_KERNEL_TYPES_JSON: [{"passed":true,"premises":["BerryEsseen.ClassicalBerryEsseenBounds","BerryEsseen.PublishedEsseenFixedLawAsymptotic","BerryEsseen.PublishedEsseenMoment","BerryEsseen.PublishedBernoulliBound","BerryEsseen.PublishedNonIIDBound","BerryEsseen.PublishedWassersteinThreeTopology"],"result":"BerryEsseen.MainClaim","target":"BerryEsseen.strict_main_theorem"},{"passed":true,"premises":["BerryEsseen.ClassicalBerryEsseenBounds","BerryEsseen.PublishedEsseenMoment","BerryEsseen.PublishedBernoulliBound","BerryEsseen.PublishedNonIIDBound","BerryEsseen.PublishedNonuniformBound","BerryEsseen.PublishedWassersteinDuality"],"result":"BerryEsseen.ExplicitClaim","target":"BerryEsseen.strict_explicit_theorem"},{"passed":true,"premises":["BerryEsseen.PublishedEsseenFixedLawAsymptotic"],"result":"BerryEsseen.ManuscriptSharpnessClaim","target":"BerryEsseen.strict_sharpness"}]
+structure BerryEsseen.ClassicalBerryEsseenBounds : Prop
+number of parameters: 0
+fields:
+  BerryEsseen.ClassicalBerryEsseenBounds.structural : ∀ (P : BerryEsseen.StandardizedLaw) (n : ℕ),
+      1 ≤ n →
+        ∀ (x : ℝ),
+          BerryEsseen.discrepancy P n x ≤
+            min (0.4690 * BerryEsseen.thirdMoment P) (0.3031 * (BerryEsseen.thirdMoment P + 0.646)) / √↑n
+  BerryEsseen.ClassicalBerryEsseenBounds.remainder : ∀ (P : BerryEsseen.StandardizedLaw) (n : ℕ),
+      1 ≤ n →
+        ∀ (x : ℝ),
+          BerryEsseen.discrepancy P n x ≤
+            BerryEsseen.cE * BerryEsseen.thirdMoment P / √↑n + 2.5786 * BerryEsseen.thirdMoment P ^ 2 / ↑n
+constructor:
+  BerryEsseen.ClassicalBerryEsseenBounds.mk
+    (structural :
+      ∀ (P : BerryEsseen.StandardizedLaw) (n : ℕ),
+        1 ≤ n →
+          ∀ (x : ℝ),
+            BerryEsseen.discrepancy P n x ≤
+              min (0.4690 * BerryEsseen.thirdMoment P) (0.3031 * (BerryEsseen.thirdMoment P + 0.646)) / √↑n)
+    (remainder :
+      ∀ (P : BerryEsseen.StandardizedLaw) (n : ℕ),
+        1 ≤ n →
+          ∀ (x : ℝ),
+            BerryEsseen.discrepancy P n x ≤
+              BerryEsseen.cE * BerryEsseen.thirdMoment P / √↑n + 2.5786 * BerryEsseen.thirdMoment P ^ 2 / ↑n) :
+    BerryEsseen.ClassicalBerryEsseenBounds
+structure BerryEsseen.PublishedEsseenMoment : Prop
+number of parameters: 0
+fields:
+  BerryEsseen.PublishedEsseenMoment.bound : ∀ (P : BerryEsseen.StandardizedLaw) (h : ℝ),
+      BerryEsseen.IsMaximalSpan P h →
+        BerryEsseen.signedThirdMoment P + 3 * h ≤ BerryEsseen.cStar * BerryEsseen.thirdMoment P
+  BerryEsseen.PublishedEsseenMoment.equality : ∀ (P : BerryEsseen.StandardizedLaw) (h : ℝ),
+      BerryEsseen.IsMaximalSpan P h →
+        BerryEsseen.signedThirdMoment P + 3 * h = BerryEsseen.cStar * BerryEsseen.thirdMoment P →
+          P.measure = BerryEsseen.esseenLaw.measure
+constructor:
+  BerryEsseen.PublishedEsseenMoment.mk
+    (bound :
+      ∀ (P : BerryEsseen.StandardizedLaw) (h : ℝ),
+        BerryEsseen.IsMaximalSpan P h →
+          BerryEsseen.signedThirdMoment P + 3 * h ≤ BerryEsseen.cStar * BerryEsseen.thirdMoment P)
+    (equality :
+      ∀ (P : BerryEsseen.StandardizedLaw) (h : ℝ),
+        BerryEsseen.IsMaximalSpan P h →
+          BerryEsseen.signedThirdMoment P + 3 * h = BerryEsseen.cStar * BerryEsseen.thirdMoment P →
+            P.measure = BerryEsseen.esseenLaw.measure) :
+    BerryEsseen.PublishedEsseenMoment
+structure BerryEsseen.PublishedBernoulliBound : Prop
+number of parameters: 0
+fields:
+  BerryEsseen.PublishedBernoulliBound.strict_bound : ∀ p ∈ Set.Ioo 0 1,
+      ∀ (n : ℕ),
+        1 ≤ n → BerryEsseen.binomialKolmogorov p n < BerryEsseen.cE * (p ^ 2 + (1 - p) ^ 2) / √(↑n * p * (1 - p))
+constructor:
+  BerryEsseen.PublishedBernoulliBound.mk
+    (strict_bound :
+      ∀ p ∈ Set.Ioo 0 1,
+        ∀ (n : ℕ),
+          1 ≤ n → BerryEsseen.binomialKolmogorov p n < BerryEsseen.cE * (p ^ 2 + (1 - p) ^ 2) / √(↑n * p * (1 - p))) :
+    BerryEsseen.PublishedBernoulliBound
+structure BerryEsseen.PublishedNonIIDBound : Prop
+number of parameters: 0
+fields:
+  BerryEsseen.PublishedNonIIDBound.bound : ∀ (L : List BerryEsseen.CenteredFourthLaw),
+      L ≠ [] →
+        0 < (BerryEsseen.noiseListSum L).secondMoment →
+          ∀ (t : ℝ),
+            |↑(ProbabilityTheory.cdf (BerryEsseen.noiseListSum L).measure) t -
+                  BerryEsseen.normalCDF (t / √(BerryEsseen.noiseListSum L).secondMoment)| ≤
+              0.5583 * BerryEsseen.noiseListThirdBudget L / √(BerryEsseen.noiseListSum L).secondMoment ^ 3
+constructor:
+  BerryEsseen.PublishedNonIIDBound.mk
+    (bound :
+      ∀ (L : List BerryEsseen.CenteredFourthLaw),
+        L ≠ [] →
+          0 < (BerryEsseen.noiseListSum L).secondMoment →
+            ∀ (t : ℝ),
+              |↑(ProbabilityTheory.cdf (BerryEsseen.noiseListSum L).measure) t -
+                    BerryEsseen.normalCDF (t / √(BerryEsseen.noiseListSum L).secondMoment)| ≤
+                0.5583 * BerryEsseen.noiseListThirdBudget L / √(BerryEsseen.noiseListSum L).secondMoment ^ 3) :
+    BerryEsseen.PublishedNonIIDBound
+structure BerryEsseen.PublishedNonuniformBound : Prop
+number of parameters: 0
+fields:
+  BerryEsseen.PublishedNonuniformBound.bound : ∀ (P : BerryEsseen.StandardizedLaw) (n : ℕ),
+      1 ≤ n → ∀ (x : ℝ), BerryEsseen.normalizedDiscrepancy P n x ≤ 17.36 / (1 + |x| ^ 3)
+constructor:
+  BerryEsseen.PublishedNonuniformBound.mk
+    (bound :
+      ∀ (P : BerryEsseen.StandardizedLaw) (n : ℕ),
+        1 ≤ n → ∀ (x : ℝ), BerryEsseen.normalizedDiscrepancy P n x ≤ 17.36 / (1 + |x| ^ 3)) :
+    BerryEsseen.PublishedNonuniformBound
+structure BerryEsseen.PublishedWassersteinDuality : Prop
+number of parameters: 0
+fields:
+  BerryEsseen.PublishedWassersteinDuality.eq_dual : ∀ (μ ν : MeasureTheory.Measure ℝ),
+      MeasureTheory.IsProbabilityMeasure μ →
+        MeasureTheory.IsProbabilityMeasure ν →
+          MeasureTheory.Integrable (fun x => x) μ →
+            MeasureTheory.Integrable (fun x => x) ν →
+              BerryEsseen.wassersteinOne μ ν = sSup (BerryEsseen.dualTransportValues μ ν)
+constructor:
+  BerryEsseen.PublishedWassersteinDuality.mk
+    (eq_dual :
+      ∀ (μ ν : MeasureTheory.Measure ℝ),
+        MeasureTheory.IsProbabilityMeasure μ →
+          MeasureTheory.IsProbabilityMeasure ν →
+            MeasureTheory.Integrable (fun x => x) μ →
+              MeasureTheory.Integrable (fun x => x) ν →
+                BerryEsseen.wassersteinOne μ ν = sSup (BerryEsseen.dualTransportValues μ ν)) :
+    BerryEsseen.PublishedWassersteinDuality
+structure BerryEsseen.PublishedEsseenFixedLawAsymptotic : Prop
+number of parameters: 0
+fields:
+  BerryEsseen.PublishedEsseenFixedLawAsymptotic.limit : ∀ (P : BerryEsseen.StandardizedLaw) (h : ℝ),
+      BerryEsseen.IsMaximalSpan P h →
+        Filter.Tendsto (fun n => √↑n * sSup (Set.range (BerryEsseen.discrepancy P n))) Filter.atTop
+          (nhds (BerryEsseen.phi0 / 6 * (|BerryEsseen.signedThirdMoment P| + 3 * h)))
+constructor:
+  BerryEsseen.PublishedEsseenFixedLawAsymptotic.mk
+    (limit :
+      ∀ (P : BerryEsseen.StandardizedLaw) (h : ℝ),
+        BerryEsseen.IsMaximalSpan P h →
+          Filter.Tendsto (fun n => √↑n * sSup (Set.range (BerryEsseen.discrepancy P n))) Filter.atTop
+            (nhds (BerryEsseen.phi0 / 6 * (|BerryEsseen.signedThirdMoment P| + 3 * h)))) :
+    BerryEsseen.PublishedEsseenFixedLawAsymptotic
+structure BerryEsseen.PublishedWassersteinThreeTopology : Prop
+number of parameters: 0
+fields:
+  BerryEsseen.PublishedWassersteinThreeTopology.tendsto_iff : ∀ (μ : ℕ → MeasureTheory.ProbabilityMeasure ℝ)
+      (ν : MeasureTheory.ProbabilityMeasure ℝ),
+      (∀ (j : ℕ), MeasureTheory.Integrable (fun x => |x| ^ 3) ↑(μ j)) →
+        MeasureTheory.Integrable (fun x => |x| ^ 3) ↑ν →
+          (Filter.Tendsto (fun j => BerryEsseen.wassersteinThree ↑(μ j) ↑ν) Filter.atTop (nhds 0) ↔
+            Filter.Tendsto μ Filter.atTop (nhds ν) ∧
+              Filter.Tendsto (fun j => ∫ (x : ℝ), |x| ^ 3 ∂↑(μ j)) Filter.atTop (nhds (∫ (x : ℝ), |x| ^ 3 ∂↑ν)))
+constructor:
+  BerryEsseen.PublishedWassersteinThreeTopology.mk
+    (tendsto_iff :
+      ∀ (μ : ℕ → MeasureTheory.ProbabilityMeasure ℝ) (ν : MeasureTheory.ProbabilityMeasure ℝ),
+        (∀ (j : ℕ), MeasureTheory.Integrable (fun x => |x| ^ 3) ↑(μ j)) →
+          MeasureTheory.Integrable (fun x => |x| ^ 3) ↑ν →
+            (Filter.Tendsto (fun j => BerryEsseen.wassersteinThree ↑(μ j) ↑ν) Filter.atTop (nhds 0) ↔
+              Filter.Tendsto μ Filter.atTop (nhds ν) ∧
+                Filter.Tendsto (fun j => ∫ (x : ℝ), |x| ^ 3 ∂↑(μ j)) Filter.atTop (nhds (∫ (x : ℝ), |x| ^ 3 ∂↑ν)))) :
+    BerryEsseen.PublishedWassersteinThreeTopology
+def BerryEsseen.MainClaim : Prop :=
+∃ N, 1 ≤ N ∧ ∀ n ≥ N, ∀ (P : BerryEsseen.StandardizedLaw), BerryEsseen.BoundAt P n
+def BerryEsseen.ExplicitClaim : Prop :=
+∀ n ≥ BerryEsseen.explicitThreshold, ∀ (P : BerryEsseen.StandardizedLaw), BerryEsseen.BoundAt P n
+def BerryEsseen.ManuscriptSharpnessClaim : Prop :=
+∀ c < BerryEsseen.cE,
+  ∀ (N : ℕ), ∃ n, N ≤ n ∧ 1 ≤ n ∧ ∃ x, c < BerryEsseen.normalizedDiscrepancy BerryEsseen.esseenLaw n x
+def BerryEsseen.BoundAt : BerryEsseen.StandardizedLaw → ℕ → Prop :=
+fun P n => ∀ (x : ℝ), BerryEsseen.discrepancy P n x ≤ BerryEsseen.cE * BerryEsseen.thirdMoment P / √↑n
+structure BerryEsseen.StandardizedLaw : Type
+number of parameters: 0
+fields:
+  BerryEsseen.StandardizedLaw.measure : MeasureTheory.Measure ℝ
+  BerryEsseen.StandardizedLaw.probability : MeasureTheory.IsProbabilityMeasure self.measure
+  BerryEsseen.StandardizedLaw.first_integrable : MeasureTheory.Integrable (fun x => x) self.measure
+  BerryEsseen.StandardizedLaw.second_integrable : MeasureTheory.Integrable (fun x => x ^ 2) self.measure
+  BerryEsseen.StandardizedLaw.third_integrable : MeasureTheory.Integrable (fun x => |x| ^ 3) self.measure
+  BerryEsseen.StandardizedLaw.mean_zero : ∫ (x : ℝ), x ∂self.measure = 0
+  BerryEsseen.StandardizedLaw.second_one : ∫ (x : ℝ), x ^ 2 ∂self.measure = 1
+constructor:
+  BerryEsseen.StandardizedLaw.mk (measure : MeasureTheory.Measure ℝ)
+    (probability : MeasureTheory.IsProbabilityMeasure measure)
+    (first_integrable : MeasureTheory.Integrable (fun x => x) measure)
+    (second_integrable : MeasureTheory.Integrable (fun x => x ^ 2) measure)
+    (third_integrable : MeasureTheory.Integrable (fun x => |x| ^ 3) measure) (mean_zero : ∫ (x : ℝ), x ∂measure = 0)
+    (second_one : ∫ (x : ℝ), x ^ 2 ∂measure = 1) : BerryEsseen.StandardizedLaw
+def BerryEsseen.discrepancy : BerryEsseen.StandardizedLaw → ℕ → ℝ → ℝ :=
+fun P n x => |((BerryEsseen.iidSumLaw P.measure n) (Set.Iic (√↑n * x))).toReal - BerryEsseen.normalCDF x|
+def BerryEsseen.cE : ℝ :=
+(3 + √10) / (6 * √(2 * Real.pi))
+def BerryEsseen.explicitThreshold : ℕ :=
+2 * ⌈Real.exp (10 ^ 17)⌉₊
+BerryEsseen.general_signed_smoothing_sup
+  BerryEsseen.manuscriptSignedSmoothing : ∀ (μ : MeasureTheory.Measure ℝ) [MeasureTheory.IsProbabilityMeasure μ]
+  (s : MeasureTheory.SignedMeasure ℝ),
+  ↑s Set.univ = 1 →
+    MeasureTheory.Integrable (fun x => |x|) μ →
+      MeasureTheory.Integrable (fun x => |x|) s.totalVariation →
+        ∀ (M : NNReal),
+          (LipschitzWith M fun x => ↑s (Set.Iic x)) →
+            ∀ (L : ℝ),
+              0 < L →
+                sSup (Set.range fun x => |(μ (Set.Iic x)).toReal - ↑s (Set.Iic x)|) ≤
+                  (1 / 4 *
+                      ∫ (t : ℝ) in Set.Icc (-L) L, ‖MeasureTheory.charFun μ t - BerryEsseen.signedFourier s t‖ / |t|) +
+                    24 * ↑M / L
+fun W =>
+  BerryEsseen.maximal_span_wassersteinThree_jitter_expansion W
+    BerryEsseen.manuscriptSignedSmoothing : BerryEsseen.PublishedWassersteinThreeTopology →
+  ∀ (P : ℕ → BerryEsseen.StandardizedLaw) (Q : BerryEsseen.StandardizedLaw),
+    Filter.Tendsto (fun j => BerryEsseen.wassersteinThree (P j).measure Q.measure) Filter.atTop (nhds 0) →
+      ∀ (n : ℕ → ℕ),
+        Filter.Tendsto n Filter.atTop Filter.atTop →
+          ∀ (h : ℝ),
+            0 ≤ h →
+              (0 < h → BerryEsseen.IsLatticeSpan Q.measure h) →
+                (∀ (d : ℝ), BerryEsseen.IsLatticeSpan Q.measure d → d ≤ h) →
+                  TendstoUniformly (fun j x => √↑(n j) * BerryEsseen.jitterCDFError (P j) (n j) h x) (fun x => 0)
+                    Filter.atTop
+fun W =>
+  BerryEsseen.raw_wassersteinThree_variable_jitter_expansion_at_raw W
+    BerryEsseen.manuscriptSignedSmoothing : BerryEsseen.PublishedWassersteinThreeTopology →
+  ∀ (μj : ℕ → MeasureTheory.ProbabilityMeasure ℝ) (μ : MeasureTheory.ProbabilityMeasure ℝ),
+    (∀ (j : ℕ), MeasureTheory.Integrable (fun x => |x| ^ 3) ↑(μj j)) →
+      MeasureTheory.Integrable (fun x => |x| ^ 3) ↑μ →
+        Filter.Tendsto (fun j => BerryEsseen.wassersteinThree ↑(μj j) ↑μ) Filter.atTop (nhds 0) →
+          0 < BerryEsseen.rawStdDev ↑μ →
+            ∀ (n : ℕ → ℕ),
+              Filter.Tendsto n Filter.atTop Filter.atTop →
+                ∀ (d : ℝ),
+                  (0 ≤ d ∧
+                      (0 < d → BerryEsseen.IsLatticeSpan (↑μ) d) ∧
+                        ∀ (e : ℝ), BerryEsseen.IsLatticeSpan (↑μ) e → e ≤ d) →
+                    ∀ (dj : ℕ → ℝ),
+                      (∀ (j : ℕ), 0 ≤ dj j) →
+                        Filter.Tendsto dj Filter.atTop (nhds d) →
+                          ∀ ε > 0,
+                            ∀ᶠ (j : ℕ) in Filter.atTop,
+                              ∀ (t : ℝ),
+                                |√↑(n j) *
+                                      (↑(ProbabilityTheory.cdf
+                                              ((BerryEsseen.iidSumLaw (↑(μj j)) (n j)).conv
+                                                (BerryEsseen.spanJitter (dj j))))
+                                          t -
+                                        BerryEsseen.edgeworthCDF (n j)
+                                          ((∫ (y : ℝ), (y - BerryEsseen.rawMean ↑(μj j)) ^ 3 ∂↑(μj j)) /
+                                            BerryEsseen.rawStdDev ↑(μj j) ^ 3)
+                                          ((t - ↑(n j) * BerryEsseen.rawMean ↑(μj j)) /
+                                            (BerryEsseen.rawStdDev ↑(μj j) * √↑(n j))))| <
+                                  ε
+fun W =>
+  BerryEsseen.wassersteinThree_jitter_limsup W
+    BerryEsseen.manuscriptSignedSmoothing : BerryEsseen.PublishedWassersteinThreeTopology →
+  ∀ (P : ℕ → BerryEsseen.StandardizedLaw) (Q : BerryEsseen.StandardizedLaw),
+    Filter.Tendsto (fun j => BerryEsseen.wassersteinThree (P j).measure Q.measure) Filter.atTop (nhds 0) →
+      ∀ (n : ℕ → ℕ),
+        Filter.Tendsto n Filter.atTop Filter.atTop →
+          (∀ (j : ℕ), 1 ≤ n j) →
+            ∀ (h : ℝ),
+              0 ≤ h →
+                (0 < h → BerryEsseen.IsLatticeSpan Q.measure h) →
+                  (∀ (d : ℝ), BerryEsseen.IsLatticeSpan Q.measure d → d ≤ h) →
+                    Filter.limsup (fun j => BerryEsseen.scaledSumCDFSup (P j) (n j)) Filter.atTop ≤
+                      (|BerryEsseen.signedThirdMoment Q| + 3 * h) * BerryEsseen.phi0 / 6
+fun W =>
+  BerryEsseen.compact_centered_measure_local_mass W
+    BerryEsseen.manuscriptSignedSmoothing : BerryEsseen.PublishedWassersteinThreeTopology →
+  BerryEsseen.PublishedNonIIDBound →
+    ∀ (K : Set ℝ),
+      IsCompact K →
+        K ⊆ Set.Ioo 0 1 →
+          ∀ (Lstar R a b : ℝ),
+            0 < Lstar →
+              0 ≤ R →
+                a < b →
+                  ∃ ε > 0,
+                    ∃ c > 0,
+                      ∃ N,
+                        1 ≤ N ∧
+                          ∀ (μ ν : MeasureTheory.Measure ℝ),
+                            MeasureTheory.IsProbabilityMeasure μ →
+                              MeasureTheory.IsProbabilityMeasure ν →
+                                ∫ (x : ℝ), x ∂μ = 0 →
+                                  ∫ (x : ℝ), x ∂ν = 0 →
+                                    (∀ᵐ (y : ℝ) ∂μ, |y| ≤ ε) →
+                                      (∀ᵐ (y : ℝ) ∂ν, |y| ≤ ε) →
+                                        ∀ p ∈ K,
+                                          ∀ (n : ℕ),
+                                            N ≤ n →
+                                              Lstar ≤ ↑n * ((1 - p) * ∫ (x : ℝ), x ^ 2 ∂μ + p * ∫ (x : ℝ), x ^ 2 ∂ν) →
+                                                ∀ (x : ℝ),
+                                                  |x - ↑n * p| ≤ R * √↑n →
+                                                    c / √↑n ≤
+                                                      (BerryEsseen.iidSumLaw
+                                                            (BerryEsseen.mixtureMeasure μ
+                                                              (MeasureTheory.Measure.map (fun y => 1 + y) ν) p)
+                                                            n).real
+                                                        (Set.Ioo (x + a) (x + b))

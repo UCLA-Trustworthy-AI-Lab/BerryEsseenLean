@@ -1,0 +1,298 @@
+{
+  "scope": "All 31 named manuscript statement groups. Read each primary endpoint together with its listed conjunct_endpoints; a primary endpoint alone need not state all parts. Semantic correspondence is reviewed against the TeX. Machine type and dependency checks do not read natural-language proofs.",
+  "entries": [
+    {
+      "manuscript_label": "thm:main",
+      "endpoint": "BerryEsseen.strict_main_theorem",
+      "source": "BerryEsseen/StrictResults.lean",
+      "conjunct_endpoints": [
+        {
+          "endpoint": "BerryEsseen.strict_explicit_theorem",
+          "source": "BerryEsseen/StrictResults.lean",
+          "part": "原显式阈值"
+        },
+        {
+          "endpoint": "BerryEsseen.strict_sharpness",
+          "source": "BerryEsseen/StrictResults.lean",
+          "part": "紧随主定理的最优性论证"
+        }
+      ]
+    },
+    {
+      "manuscript_label": "lem:signed-smoothing",
+      "endpoint": "BerryEsseen.manuscript_signed_smoothing_sup",
+      "source": "BerryEsseen/ManuscriptSignedSmoothing.lean",
+      "conjunct_endpoints": []
+    },
+    {
+      "manuscript_label": "lem:jitter",
+      "endpoint": "BerryEsseen.maximal_span_wassersteinThree_jitter_expansion",
+      "source": "BerryEsseen/GeneralJitterExpansion.lean",
+      "conjunct_endpoints": []
+    },
+    {
+      "manuscript_label": "rem:jitter-width",
+      "endpoint": "BerryEsseen.raw_wassersteinThree_variable_jitter_expansion_at_raw",
+      "source": "BerryEsseen/RawJitterWidth.lean",
+      "conjunct_endpoints": []
+    },
+    {
+      "manuscript_label": "cor:jitter-envelopes",
+      "endpoint": "BerryEsseen.wassersteinThree_jitter_envelopes",
+      "source": "BerryEsseen/GeneralWassersteinEnvelopes.lean",
+      "conjunct_endpoints": [
+        {
+          "endpoint": "BerryEsseen.wassersteinThree_jitter_limsup",
+          "source": "BerryEsseen/GeneralWassersteinEnvelopes.lean",
+          "part": "原limsup结论"
+        }
+      ]
+    },
+    {
+      "manuscript_label": "lem:binomial-estimates",
+      "endpoint": "BerryEsseen.manuscript_binomial_estimates",
+      "source": "BerryEsseen/ManuscriptBinomialLemma.lean",
+      "conjunct_endpoints": []
+    },
+    {
+      "manuscript_label": "prop:clusters",
+      "endpoint": "BerryEsseen.manuscript_two_interval_cluster_stability",
+      "source": "BerryEsseen/ManuscriptClusters.lean",
+      "conjunct_endpoints": []
+    },
+    {
+      "manuscript_label": "lem:one-sided-loss",
+      "endpoint": "BerryEsseen.manuscript_one_sided_loss",
+      "source": "BerryEsseen/ManuscriptOneSidedLoss.lean",
+      "conjunct_endpoints": []
+    },
+    {
+      "manuscript_label": "lem:small-cluster-variance",
+      "endpoint": "BerryEsseen.manuscript_small_cluster_variance_original_parameters",
+      "source": "BerryEsseen/ManuscriptSmallVarianceOriginalParameters.lean",
+      "conjunct_endpoints": []
+    },
+    {
+      "manuscript_label": "lem:two-cluster-local-mass",
+      "endpoint": "BerryEsseen.compact_centered_measure_local_mass",
+      "source": "BerryEsseen/GeneralTwoClusterLocalMass.lean",
+      "conjunct_endpoints": []
+    },
+    {
+      "manuscript_label": "lem:accumulated-cluster-variance",
+      "endpoint": "BerryEsseen.general_cluster_macroscopic_gap",
+      "source": "BerryEsseen/GeneralAccumulatedVariance.lean",
+      "conjunct_endpoints": [
+        {
+          "endpoint": "BerryEsseen.accumulated_cluster_variance_tendsto_zero",
+          "source": "BerryEsseen/GeneralAccumulatedVarianceCorollary.lean",
+          "part": "原Consequently结论"
+        }
+      ]
+    },
+    {
+      "manuscript_label": "lem:attainment",
+      "endpoint": "BerryEsseen.manuscript_extremal_attainment_full",
+      "source": "BerryEsseen/Attainment.lean",
+      "conjunct_endpoints": []
+    },
+    {
+      "manuscript_label": "lem:selection",
+      "endpoint": "BerryEsseen.manuscript_harmonic_selection",
+      "source": "BerryEsseen/ManuscriptSelection.lean",
+      "conjunct_endpoints": []
+    },
+    {
+      "manuscript_label": "lem:influence",
+      "endpoint": "BerryEsseen.contamination_influence",
+      "source": "BerryEsseen/RawInfluence.lean",
+      "conjunct_endpoints": [
+        {
+          "endpoint": "BerryEsseen.influence_nonpos_at_extremizer",
+          "source": "BerryEsseen/VariationalExtremizer.lean",
+          "part": "全域非正"
+        },
+        {
+          "endpoint": "BerryEsseen.influence_contact_at_extremizer",
+          "source": "BerryEsseen/VariationalExtremizer.lean",
+          "part": "支撑上的零接触"
+        },
+        {
+          "endpoint": "BerryEsseen.influence_contact_equation",
+          "source": "BerryEsseen/VariationalExtremizer.lean",
+          "part": "原接触等式"
+        }
+      ]
+    },
+    {
+      "manuscript_label": "lem:gaussian-expansion",
+      "endpoint": "BerryEsseen.gaussianHn_uniform_remainder",
+      "source": "BerryEsseen/GaussianCancellation.lean",
+      "conjunct_endpoints": [
+        {
+          "endpoint": "BerryEsseen.gaussianHn_global_bound",
+          "source": "BerryEsseen/GaussianCancellation.lean",
+          "part": "全域三次项加线性余项界"
+        },
+        {
+          "endpoint": "BerryEsseen.gaussianHn_uniform_limit",
+          "source": "BerryEsseen/GaussianCancellation.lean",
+          "part": "紧集一致极限"
+        }
+      ]
+    },
+    {
+      "manuscript_label": "prop:bounded-extremizers",
+      "endpoint": "BerryEsseen.manuscript_bounded_extremizing_sequence",
+      "source": "BerryEsseen/BoundedExtremizers.lean",
+      "conjunct_endpoints": []
+    },
+    {
+      "manuscript_label": "lem:limit-extremizer",
+      "endpoint": "BerryEsseen.selected_extremizer_wassersteinThree_subsequence",
+      "source": "BerryEsseen/GeneralSupportLimits.lean",
+      "conjunct_endpoints": []
+    },
+    {
+      "manuscript_label": "lem:support-interval",
+      "endpoint": "BerryEsseen.extremizer_support_limit_interval_general",
+      "source": "BerryEsseen/GeneralSupportLimits.lean",
+      "conjunct_endpoints": []
+    },
+    {
+      "manuscript_label": "lem:support-separation",
+      "endpoint": "BerryEsseen.extremizer_support_limit_separation_general",
+      "source": "BerryEsseen/GeneralSupportLimits.lean",
+      "conjunct_endpoints": []
+    },
+    {
+      "manuscript_label": "lem:effective-selection",
+      "endpoint": "BerryEsseen.effective_selection",
+      "source": "BerryEsseen/EffectiveSelection.lean",
+      "conjunct_endpoints": []
+    },
+    {
+      "manuscript_label": "lem:effective-low-frequency",
+      "endpoint": "BerryEsseen.effectiveLowFrequencyIntegral_bound",
+      "source": "BerryEsseen/EffectiveLowFrequencyIntegral.lean",
+      "conjunct_endpoints": [
+        {
+          "endpoint": "BerryEsseen.effective_charFun_edgeworth_low_frequency",
+          "source": "BerryEsseen/EffectiveLowFrequency.lean",
+          "part": "原0.61与0.048逐点误差界"
+        }
+      ]
+    },
+    {
+      "manuscript_label": "lem:effective-near-lattice",
+      "endpoint": "BerryEsseen.effective_near_lattice",
+      "source": "BerryEsseen/EffectiveNearLattice.lean",
+      "conjunct_endpoints": []
+    },
+    {
+      "manuscript_label": "lem:effective-cluster-jitter",
+      "endpoint": "BerryEsseen.effective_cluster_jitter",
+      "source": "BerryEsseen/EffectiveClusterJitter.lean",
+      "conjunct_endpoints": []
+    },
+    {
+      "manuscript_label": "lem:effective-binomial",
+      "endpoint": "BerryEsseen.manuscript_effective_binomial_branches",
+      "source": "BerryEsseen/ManuscriptBinomialTheorem.lean",
+      "conjunct_endpoints": [
+        {
+          "endpoint": "BerryEsseen.manuscript_effective_binomial_mass_sup",
+          "source": "BerryEsseen/ManuscriptBinomialTheorem.lean",
+          "part": "任意整数质量上确界"
+        },
+        {
+          "endpoint": "BerryEsseen.manuscript_effective_binomial_integer_central",
+          "source": "BerryEsseen/ManuscriptBinomialTheorem.lean",
+          "part": "任意整数中央支"
+        },
+        {
+          "endpoint": "BerryEsseen.manuscript_effective_binomial_integer_wide",
+          "source": "BerryEsseen/ManuscriptBinomialTheorem.lean",
+          "part": "任意整数宽区间支"
+        },
+        {
+          "endpoint": "BerryEsseen.manuscript_effective_binomial_constant_lower",
+          "source": "BerryEsseen/ManuscriptBinomialTheorem.lean",
+          "part": "原常数下界"
+        }
+      ]
+    },
+    {
+      "manuscript_label": "lem:effective-small-variance",
+      "endpoint": "BerryEsseen.manuscript_effective_small_variance",
+      "source": "BerryEsseen/ManuscriptEffectiveSmallVariance.lean",
+      "conjunct_endpoints": [
+        {
+          "endpoint": "BerryEsseen.manuscript_effective_small_variance_positive",
+          "source": "BerryEsseen/ManuscriptEffectiveSmallVariance.lean",
+          "part": "原明确量化gap"
+        }
+      ]
+    },
+    {
+      "manuscript_label": "lem:effective-local-mass",
+      "endpoint": "BerryEsseen.manuscript_effective_local_mass",
+      "source": "BerryEsseen/ManuscriptLocalMass.lean",
+      "conjunct_endpoints": []
+    },
+    {
+      "manuscript_label": "prop:effective-clusters",
+      "endpoint": "BerryEsseen.manuscript_effective_cluster_stability",
+      "source": "BerryEsseen/ManuscriptEffectiveClusters.lean",
+      "conjunct_endpoints": [
+        {
+          "endpoint": "BerryEsseen.manuscript_effective_interval_stability_support",
+          "source": "BerryEsseen/ManuscriptExplicitTheorem.lean",
+          "part": "原双区间与两种参数的结论"
+        }
+      ]
+    },
+    {
+      "manuscript_label": "lem:effective-lattice-stability",
+      "endpoint": "BerryEsseen.effective_lattice_stability",
+      "source": "BerryEsseen/EffectiveLatticeStability.lean",
+      "conjunct_endpoints": []
+    },
+    {
+      "manuscript_label": "lem:effective-global-jitter",
+      "endpoint": "BerryEsseen.effective_global_jitter",
+      "source": "BerryEsseen/EffectiveGlobalJitter.lean",
+      "conjunct_endpoints": []
+    },
+    {
+      "manuscript_label": "lem:effective-identification",
+      "endpoint": "BerryEsseen.effective_identification_with_global_jitter",
+      "source": "BerryEsseen/EffectiveIdentification.lean",
+      "conjunct_endpoints": []
+    },
+    {
+      "manuscript_label": "prop:effective-confinement",
+      "endpoint": "BerryEsseen.manuscript_effective_full_support",
+      "source": "BerryEsseen/ManuscriptConfinement.lean",
+      "conjunct_endpoints": []
+    }
+  ],
+  "additional_conjunct_endpoints": [
+    "BerryEsseen.strict_explicit_theorem",
+    "BerryEsseen.strict_sharpness",
+    "BerryEsseen.wassersteinThree_jitter_limsup",
+    "BerryEsseen.accumulated_cluster_variance_tendsto_zero",
+    "BerryEsseen.influence_nonpos_at_extremizer",
+    "BerryEsseen.influence_contact_at_extremizer",
+    "BerryEsseen.influence_contact_equation",
+    "BerryEsseen.gaussianHn_global_bound",
+    "BerryEsseen.gaussianHn_uniform_limit",
+    "BerryEsseen.effective_charFun_edgeworth_low_frequency",
+    "BerryEsseen.manuscript_effective_binomial_mass_sup",
+    "BerryEsseen.manuscript_effective_binomial_integer_central",
+    "BerryEsseen.manuscript_effective_binomial_integer_wide",
+    "BerryEsseen.manuscript_effective_binomial_constant_lower",
+    "BerryEsseen.manuscript_effective_small_variance_positive",
+    "BerryEsseen.manuscript_effective_interval_stability_support"
+  ]
+}
